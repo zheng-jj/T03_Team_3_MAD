@@ -11,14 +11,21 @@
         android:id="@+id/include"
         layout="@layout/container_for_mainactivity">
     </include>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_above="@+id/bottomBar"
+        android:layout_marginBottom="-1dp"
+        android:background="#2a4d69" />
     <com.roughike.bottombar.BottomBar
-        android:background="#e7eff6 "
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        app:bb_tabXmlResource="@xml/bottombar_tabs"
+        android:background="#e7eff6"
+        android:outlineAmbientShadowColor="#FFFFFF"
+        app:bb_activeTabColor="#4b86b4"
         app:bb_inActiveTabColor="#63ace5"
-        app:bb_activeTabColor="#4b86b4">
-    </com.roughike.bottombar.BottomBar>
+        app:bb_tabXmlResource="@xml/bottombar_tabs"></com.roughike.bottombar.BottomBar>
 </RelativeLayout>
