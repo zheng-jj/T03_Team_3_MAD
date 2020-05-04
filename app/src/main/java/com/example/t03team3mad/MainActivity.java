@@ -15,20 +15,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         starthomefragment();
-        Button change = findViewById(R.id.change);
-        change.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startuserfragment();
-            }
-        });
-        Button back = findViewById(R.id.change2);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                starthomefragment();
-            }
-        });
     }
     private void starthomefragment(){
         Log.v(TAG, "home fragment launched");
