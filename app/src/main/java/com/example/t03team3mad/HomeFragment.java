@@ -15,13 +15,6 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-        Button follow = view.findViewById(R.id.follow1);
-        follow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.v(TAG,"Follow button clicked");
-            }
-        });
         return view;
     }
 

@@ -1,97 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".HomeFragment">
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="85dp"
-        android:layout_height="95dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="42dp"
-        tools:srcCompat="@tools:sample/avatars" />
-    <Button
-        android:id="@+id/allreviews"
-        style="@android:style/Widget.Holo.Button"
+    <TextView android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="239dp"
-        android:layout_marginTop="216dp"
-        android:text="View All Reviews Made"
-        android:textSize="14dp" />
-
-    <Button
-        android:id="@+id/follow1"
-        style="@android:style/Widget.Holo.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="298dp"
-        android:layout_marginTop="44dp"
-        android:text="Follow"
-        android:textSize="14dp" />
-
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="113dp"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="44dp"
-        android:text="user name" />
-
-    <TextView
-        android:id="@+id/userDescription"
-        android:layout_width="231dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="106dp"
-        android:text="user name" />
-
-    <TextView
-        android:id="@+id/pastreviews"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="215dp"
-        android:text="Past Reviews" />
-
-    <ScrollView
-        android:id="@+id/userReviews"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="250dp"></ScrollView>
-
-    <TextView
-        android:id="@+id/favouritebooks"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="550dp"
-        android:text="Favourite Books" />
-
-    <com.synnapps.carouselview.CarouselView
-        android:id="@+id/favouritebookslist"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="585dp"
-        app:fillColor="#FFFFFFFF"
-        app:pageColor="#00000000"
-        app:radius="6dp"
-        app:slideInterval="3000"
-        app:strokeColor="#FF777777"
-        app:strokeWidth="1dp">
-    </com.synnapps.carouselview.CarouselView>
+        android:text="This is home fragment">
+    </TextView>
 </FrameLayout>
