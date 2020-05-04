@@ -32,4 +32,28 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("UserFragment");
         transaction.commit();
     }
+    private void authorprofilefragment(){
+        Log.v(TAG, "authorprofile fragment launched");
+        authorprofileFragment authorprofile = new authorprofileFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,authorprofile,"authorprofileFragment");
+        transaction.addToBackStack("authorprofileFragment");
+        transaction.commit();
+    }
+    private void bookdisplayfragment(){
+        Log.v(TAG, "bookdisplay fragment launched");
+        bookdisplayFragment bookdisplay = new bookdisplayFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,bookdisplay,"bookdisplayFragment");
+        transaction.addToBackStack("bookdisplayFragment");
+        transaction.commit();
+    }
+    private void reviewpagefragment(){
+        Log.v(TAG, "reviewpage fragment launched");
+        reviewpageFragment reviewpage = new reviewpageFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
+        transaction.addToBackStack("reviewpageFragment");
+        transaction.commit();
+    }
 }
