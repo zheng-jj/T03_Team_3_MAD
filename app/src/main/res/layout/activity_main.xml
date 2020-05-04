@@ -12,10 +12,13 @@
         layout="@layout/container_for_mainactivity">
     </include>
     <com.roughike.bottombar.BottomBar
+        android:background="#e7eff6 "
         android:id="@+id/bottomBar"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
-        app:bb_tabXmlResource="@xml/bottombar_tabs">
+        app:bb_tabXmlResource="@xml/bottombar_tabs"
+        app:bb_inActiveTabColor="#63ace5"
+        app:bb_activeTabColor="#4b86b4">
     </com.roughike.bottombar.BottomBar>
 </RelativeLayout>
