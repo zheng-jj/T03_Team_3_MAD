@@ -19,14 +19,14 @@ public class MainActivity extends AppCompatActivity {
         change.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startuserfragment();
+                authorprofilefragment();
             }
         });
         Button back = findViewById(R.id.change2);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                starthomefragment();
+                reviewpagefragment();
             }
         });
     }
@@ -44,6 +44,30 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,fragment,"HomeFragment");
         transaction.addToBackStack("UserFragment");
+        transaction.commit();
+    }
+    private void authorprofilefragment(){
+        Log.v(TAG, "authorprofile fragment launched");
+        authorprofileFragment authorprofile = new authorprofileFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,authorprofile,"authorprofileFragment");
+        transaction.addToBackStack("authorprofileFragment");
+        transaction.commit();
+    }
+    private void bookdisplayfragment(){
+        Log.v(TAG, "bookdisplay fragment launched");
+        bookdisplayFragment bookdisplay = new bookdisplayFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,bookdisplay,"bookdisplayFragment");
+        transaction.addToBackStack("bookdisplayFragment");
+        transaction.commit();
+    }
+    private void reviewpagefragment(){
+        Log.v(TAG, "reviewpage fragment launched");
+        reviewpageFragment reviewpage = new reviewpageFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
+        transaction.addToBackStack("reviewpageFragment");
         transaction.commit();
     }
 }
