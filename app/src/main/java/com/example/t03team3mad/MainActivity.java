@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
                     startsearchbarfragment();
                 }
                 if (tabId == R.id.tab_feed) {
-                    startsLoginfragment();
+                    //startsLoginfragment();
                 }
                 if (tabId == R.id.tab_profile) {
-                    startRegisterfragment();
+                    //startRegisterfragment();
                 }
 
             }
