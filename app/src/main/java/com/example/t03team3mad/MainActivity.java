@@ -106,4 +106,13 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("RegistrationPage");
         transaction.commit();
     }
+
+    private void startbookinfofragment(){
+        Log.v(TAG, "bookinfo fragment launched");
+        bookinfoFragment bookinfo= new bookinfoFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,bookinfo,"bookinfoFragment");
+        transaction.addToBackStack("bookinfoFragment");
+        transaction.commit();
+    }
 }
