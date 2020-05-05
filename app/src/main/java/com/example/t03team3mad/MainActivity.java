@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
                     starthomefragment();
                 }
                 if (tabId == R.id.tab_search) {
+                    startsearchbarfragment();
                 }
                 if (tabId == R.id.tab_feed) {
                 }
@@ -75,6 +76,15 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
         transaction.addToBackStack("reviewpageFragment");
+        transaction.commit();
+    }
+
+    private void startsearchbarfragment(){
+        Log.v(TAG, "searchbar fragment launched");
+        searchbarFragment searchbar = new searchbarFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,searchbar,"searchbarFragment");
+        transaction.addToBackStack("searchbarFragment");
         transaction.commit();
     }
 }
