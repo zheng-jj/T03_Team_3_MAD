@@ -4,26 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_gravity="center"
    android:gravity="center"
     tools:context=".RegistrationPage">
 
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="30dp"
+        android:layout_marginTop="70dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="70dp"
         android:orientation="vertical">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Register"
             android:textSize="60dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
+
         <EditText
             android:id="@+id/EnterName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Name"
             android:inputType="textPersonName"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/EnterEmail"
@@ -31,7 +42,7 @@
             android:layout_height="wrap_content"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
 
         <EditText
             android:id="@+id/EnterPassword"
@@ -58,10 +69,9 @@
             android:layout_gravity="center"
             android:layout_margin="20dp"
             android:background="@color/colorPrimaryDark"
-            android:stateListAnimator="@null"
             android:text="Register"
             android:textAllCaps="false"
-            android:textSize="20dp"/>
+            android:textSize="20dp" />
     </LinearLayout>
 
 </RelativeLayout>

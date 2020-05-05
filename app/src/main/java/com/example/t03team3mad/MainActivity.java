@@ -32,10 +32,12 @@ public class MainActivity extends AppCompatActivity {
                     startsearchbarfragment();
                 }
                 if (tabId == R.id.tab_feed) {
+                    startsLoginfragment();
                 }
                 if (tabId == R.id.tab_profile) {
-                    startauthorprofilefragment();
+                    startRegisterfragment();
                 }
+
             }
         });
     }
@@ -86,6 +88,22 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,searchbar,"searchbarFragment");
         transaction.addToBackStack("searchbarFragment");
+        transaction.commit();
+    }
+    private void startsLoginfragment(){
+        Log.v(TAG, "searchbar fragment launched");
+        LoginPage Login = new LoginPage();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,Login,"LoginPage");
+        transaction.addToBackStack("LoginPage");
+        transaction.commit();
+    }
+    private void startRegisterfragment(){
+        Log.v(TAG, "Register fragment launched");
+        RegistrationPage Register= new RegistrationPage();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,Register,"RegistrationPage");
+        transaction.addToBackStack("RegistrationPage");
         transaction.commit();
     }
 }
