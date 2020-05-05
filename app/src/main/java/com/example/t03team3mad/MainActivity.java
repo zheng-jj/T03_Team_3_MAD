@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
                 if (tabId == R.id.tab_feed) {
                 }
                 if (tabId == R.id.tab_profile) {
+                    startauthorprofilefragment();
                 }
             }
         });
