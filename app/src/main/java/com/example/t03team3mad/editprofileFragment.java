@@ -10,11 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-public class HomeFragment extends Fragment {
+public class editprofileFragment extends Fragment {
     private static final String TAG = "HomeFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_home,container,false);
+        View view = inflater.inflate(R.layout.fragment_editprofile,container,false);
         return view;
     }
 }

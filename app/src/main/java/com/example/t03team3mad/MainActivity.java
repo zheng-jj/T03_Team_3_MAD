@@ -25,19 +25,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             //enter the fragment function based on what is clicked(after yall done)
             public void onTabSelected(@IdRes int tabId) {
-                if (tabId == R.id.tab_home) {
-                    starthomefragment();
-                }
-                if (tabId == R.id.tab_search) {
-                    startauthorprofilefragment();
-                }
-                if (tabId == R.id.tab_feed) {
-                    startsLoginfragment();
-                }
-                if (tabId == R.id.tab_profile) {
-                    startRegisterfragment();
-                }
-
+            if (tabId == R.id.tab_home) {
+                starthomefragment();
+            }
+            if (tabId == R.id.tab_search) {
+                startauthorprofilefragment();
+            }
+            if (tabId == R.id.tab_feed) {
+                startsLoginfragment();
+            }
+            if (tabId == R.id.tab_profile) {
+                starteditprofilefragment();
+            }
             }
         });
     }
@@ -113,6 +112,14 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,bookinfo,"bookinfoFragment");
         transaction.addToBackStack("bookinfoFragment");
+        transaction.commit();
+    }
+    private void starteditprofilefragment(){
+        Log.v(TAG, "edit profile fragment launched");
+        editprofileFragment editFragment= new editprofileFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,editFragment,"editprofileFragment");
+        transaction.addToBackStack("editprofileFragment");
         transaction.commit();
     }
 }

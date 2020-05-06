@@ -23,7 +23,6 @@ public class authorprofileFragment extends Fragment {
         databaseAccess.open();
         name.setText(databaseAccess.getElement("NAME","Author","Name","J. K. Rowling"));
         databaseAccess.close();
-
         return view;
     }
 }
