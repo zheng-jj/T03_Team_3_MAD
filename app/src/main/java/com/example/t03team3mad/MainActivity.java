@@ -29,13 +29,13 @@ public class MainActivity extends AppCompatActivity {
                     starthomefragment();
                 }
                 if (tabId == R.id.tab_search) {
-                    startsearchbarfragment();
+                    startauthorprofilefragment();
                 }
                 if (tabId == R.id.tab_feed) {
-                    //startsLoginfragment();
+                    startsLoginfragment();
                 }
                 if (tabId == R.id.tab_profile) {
-                    //startRegisterfragment();
+                    startRegisterfragment();
                 }
 
             }

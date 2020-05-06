@@ -4,93 +4,101 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="85dp"
-        android:layout_height="95dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="42dp">
-    </ImageView>
-    <Button
-        android:id="@+id/allreviews"
-        style="@android:style/Widget.Holo.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="239dp"
-        android:layout_marginTop="216dp"
-        android:text="View All Reviews Made"
-        android:textSize="14dp" />
-
-    <Button
-        android:id="@+id/follow1"
-        style="@android:style/Widget.Holo.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="298dp"
-        android:layout_marginTop="44dp"
-        android:text="Follow"
-        android:textSize="14dp" />
-
-    <TextView
-        android:id="@+id/userName"
-        android:layout_width="113dp"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="44dp"
-        android:text="user name" />
-
-    <TextView
-        android:id="@+id/userDescription"
-        android:layout_width="231dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="136dp"
-        android:layout_marginTop="106dp"
-        android:text="user name" />
-
-    <TextView
-        android:id="@+id/pastreviews"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="215dp"
-        android:text="Past Reviews" />
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="85dp"
+            android:layout_height="95dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="42dp">
+        </ImageView>
+        <Button
+            android:id="@+id/allreviews"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="239dp"
+            android:layout_marginTop="216dp"
+            android:text="View All Reviews Made"
+            android:textSize="14dp" />
 
-    <ScrollView
-        android:id="@+id/userReviews"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="250dp"></ScrollView>
+        <Button
+            android:id="@+id/follow1"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="298dp"
+            android:layout_marginTop="44dp"
+            android:text="Follow"
+            android:textSize="14dp" />
 
-    <TextView
-        android:id="@+id/favouritebooks"
-        android:layout_width="match_parent"
-        android:layout_height="35dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="550dp"
-        android:text="Favourite Books" />
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="113dp"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="44dp"
+            android:text="user name" />
 
-    <com.synnapps.carouselview.CarouselView
-        android:id="@+id/favouritebookslist"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginStart="0dp"
-        android:layout_marginTop="585dp"
-        app:fillColor="#FFFFFFFF"
-        app:pageColor="#00000000"
-        app:radius="6dp"
-        app:slideInterval="3000"
-        app:strokeColor="#FF777777"
-        app:strokeWidth="1dp">
-    </com.synnapps.carouselview.CarouselView>
+        <TextView
+            android:id="@+id/userDescription"
+            android:layout_width="231dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="106dp"
+            android:text="user name" />
+
+        <TextView
+            android:id="@+id/pastreviews"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="215dp"
+            android:text="Past Reviews" />
+
+        <ScrollView
+            android:id="@+id/userReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="250dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userreviewprofile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:scrollbars="horizontal" />
+        </ScrollView>
+
+        <TextView
+            android:layout_below="@id/userReviews"
+            android:id="@+id/favouritebooks"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:text="Favourite Books" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/favouritebooks"
+            android:id="@+id/favbooksprofile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"/>
+    </RelativeLayout>
 </FrameLayout>
