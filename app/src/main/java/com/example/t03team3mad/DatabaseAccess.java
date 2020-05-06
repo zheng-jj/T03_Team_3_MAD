@@ -10,7 +10,10 @@ public class DatabaseAccess {
     private SQLiteDatabase db;
     private static DatabaseAccess instance;
     private Cursor temp = null;
+    private Cursor count = null;
     String output;
+    String output2;
+    Integer out;
     private DatabaseAccess (Context context){
         this.openHelper = new DatabaseOpenHelper(context);
 
@@ -37,6 +40,16 @@ public class DatabaseAccess {
         }
         return output;
     }
+    public String getCount(String column,String Table){
+        count = db.rawQuery ("select count(" + column +") from " + Table ,new  String[]{} );
+        while(count.moveToNext()){
+            output2 = count.getString(0);
+
+
+        }
+        return output2;
+    }
+
 
 
 
