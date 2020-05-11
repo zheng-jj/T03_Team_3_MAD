@@ -16,7 +16,6 @@ public class DatabaseAccess {
     Integer out;
     private DatabaseAccess (Context context){
         this.openHelper = new DatabaseOpenHelper(context);
-
     }
     public static DatabaseAccess getInstance(Context context){
         if(instance == null){
