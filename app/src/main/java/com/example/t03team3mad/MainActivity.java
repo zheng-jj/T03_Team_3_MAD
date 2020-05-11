@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
                 startsLoginfragment();
             }
             if (tabId == R.id.tab_profile) {
-                starteditprofilefragment();
+                startRegisterfragment();
             }
             }
         });
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
     private void startRegisterfragment(){
+
         Log.v(TAG, "Register fragment launched");
         RegistrationPage Register= new RegistrationPage();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
