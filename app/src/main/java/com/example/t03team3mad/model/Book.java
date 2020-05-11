@@ -48,4 +48,13 @@ public class Book {
     public void setIsbn(String new1Name) {
         this.isbn = new1Name;
     }
+
+    public Book(String title, String author, String about, String genre, String publish, String bisbn) {
+        booktitle = title;
+        bookauthor = author;
+        bookabout = about;
+        bookgenre = genre;
+        pdate = publish;
+        isbn = bisbn;
+    }
 }
