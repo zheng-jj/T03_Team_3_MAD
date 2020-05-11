@@ -52,23 +52,23 @@ public class RegisterPage extends AppCompatActivity {
                     Toast.makeText(RegisterPage.this, "Name Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if (email.equals(""))
+                if (email.equals(""))
                 {
                     Toast.makeText(RegisterPage.this, "Email Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                else if (password.equals(""))
+                if (password.equals(""))
                 {
                     Toast.makeText(RegisterPage.this, "Password Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if (confirmPassword.equals(""))//Check for empty Inputs
+                if (confirmPassword.equals(""))//Check for empty Inputs
                 {
                     Toast.makeText(RegisterPage.this, "Confirm Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                else if (!confirmPassword.equals(password))
+                if (!confirmPassword.equals(password))
                 {
                     Toast.makeText(RegisterPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
                     return;
