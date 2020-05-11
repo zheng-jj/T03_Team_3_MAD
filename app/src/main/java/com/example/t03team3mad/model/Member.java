@@ -1,11 +1,11 @@
-package com.example.t03team3mad;
+package com.example.t03team3mad.model;
 
-public class member{
+public class Member {
     private String Name;
     private String Email;
     private String Password;
 
-        public member(){}
+    public Member(){}
 
     public String getName() {
         return Name;
@@ -31,3 +31,5 @@ public class member{
         Password = password;
     }
 }
+
+

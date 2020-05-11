@@ -4,6 +4,7 @@ import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -90,21 +91,15 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
     private void startsLoginfragment(){
-        Log.v(TAG, "searchbar fragment launched");
-        LoginPage Login = new LoginPage();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,Login,"LoginPage");
-        transaction.addToBackStack("LoginPage");
-        transaction.commit();
+        Log.v(TAG, "Login Page launched");
+        Intent Login= new Intent(getApplicationContext(),LoginPage.class);
+        startActivity(Login);
     }
     private void startRegisterfragment(){
 
-        Log.v(TAG, "Register fragment launched");
-        RegistrationPage Register= new RegistrationPage();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,Register,"RegistrationPage");
-        transaction.addToBackStack("RegistrationPage");
-        transaction.commit();
+        Log.v(TAG, "Register Page launched");
+        Intent register= new Intent(getApplicationContext(),RegisterPage.class);
+        startActivity(register);
     }
 
     private void startbookinfofragment(){
