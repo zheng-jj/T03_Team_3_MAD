@@ -39,11 +39,10 @@ public class fragment_user extends Fragment{
         users.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
         AdapterUserMain useradapter  = new AdapterUserMain(loadAllusers());
-        //set the recyclerview object to its adapter
+        //jj- set the recyclerview object to its adapter
         users.setAdapter(useradapter);
         return view;
     }
-    //jj
     public List<User> loadAllusers()
     {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
