@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 starthomefragment();
             }
             if (tabId == R.id.tab_search) {
-                startauthorprofilefragment();
+                startsearchbarfragment();
             }
             if (tabId == R.id.tab_feed) {
                 startsLoginfragment();
@@ -83,12 +83,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startsearchbarfragment(){
-        Log.v(TAG, "searchbar fragment launched");
-        searchbarFragment searchbar = new searchbarFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,searchbar,"searchbarFragment");
-        transaction.addToBackStack("searchbarFragment");
-        transaction.commit();
+        Log.v(TAG, "Search Bar launched");
+        Intent searchbar= new Intent(getApplicationContext(),SearchPage.class);
+        startActivity(searchbar);
     }
     private void startsLoginfragment(){
         Log.v(TAG, "Login Page launched");
