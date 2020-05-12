@@ -30,7 +30,6 @@ public class LoginPage extends AppCompatActivity {
         LoginButton=findViewById(R.id.LoginButton);
         RegisterButton=findViewById(R.id.Register);
         Auth = FirebaseAuth.getInstance();
-
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,8 +64,6 @@ public class LoginPage extends AppCompatActivity {
 
                     }
                 });
-
-
             }
         });
         RegisterButton.setOnClickListener(new View.OnClickListener() {

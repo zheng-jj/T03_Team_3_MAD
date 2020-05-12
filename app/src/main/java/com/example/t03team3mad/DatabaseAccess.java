@@ -1,9 +1,14 @@
 package com.example.t03team3mad;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import com.example.t03team3mad.model.User;
 
 public class DatabaseAccess {
     private SQLiteOpenHelper openHelper;
@@ -11,6 +16,7 @@ public class DatabaseAccess {
     private static DatabaseAccess instance;
     private Cursor temp = null;
     private Cursor count = null;
+    private Cursor cursor = null;
     String output;
     String output2;
     Integer out;
@@ -43,13 +49,22 @@ public class DatabaseAccess {
         count = db.rawQuery ("select count(" + column +") from " + Table ,new  String[]{} );
         while(count.moveToNext()){
             output2 = count.getString(0);
-
-
         }
         return output2;
     }
-
-
-
-
+    public List<User> loadalluserlist() {
+        List<User> mUserlist = new ArrayList<User>(){};
+        Integer amountofusers =Integer.valueOf(getCount("IDU","USER"));
+        cursor = db.rawQuery("Select * From USER",new  String[]{});
+        cursor.moveToFirst();
+        do {
+            String name = cursor.getString(cursor.getColumnIndex("NAME"));
+            String des = cursor.getString(cursor.getColumnIndex("ABOUT"));
+            String books = cursor.getString(cursor.getColumnIndex("ISBN"));
+            int idu =Integer.valueOf(cursor.getString(cursor.getColumnIndex("IDU")));
+            User usertoaddtolist = new User(idu,name,books,des);
+            mUserlist.add(usertoaddtolist);
+            }while (cursor.moveToNext());
+        return  mUserlist;
+    }
 }

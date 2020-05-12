@@ -79,8 +79,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:scrollbars="horizontal" />
+                android:layout_centerVertical="true"/>
+                //android:scrollbars="horizontal"
         </ScrollView>
 
         <TextView

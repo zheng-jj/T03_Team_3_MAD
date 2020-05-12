@@ -10,12 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+
         <ImageView
+            android:id="@+id/bookimage"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.8"
             android:contentDescription="TODO"></ImageView>
+
         <TextView
+            android:id="@+id/bookname"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="0.2"></TextView>
