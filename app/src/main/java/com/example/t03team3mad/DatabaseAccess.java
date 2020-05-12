@@ -52,6 +52,7 @@ public class DatabaseAccess {
         }
         return output2;
     }
+    //jj- this method is used to load the users into a list and returns the list(create one for each table so can load into recyclerview)
     public List<User> loadalluserlist() {
         List<User> mUserlist = new ArrayList<User>(){};
         Integer amountofusers =Integer.valueOf(getCount("IDU","USER"));

@@ -26,10 +26,11 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
         TextView userDes;
         ImageView userPic;
         ViewHolder(View itemView) {
+            //takes the cardview from parameters
             super(itemView);
-            //load card view layout to be used
+            //jj-finds the cardview from the layout
             cardView = (CardView)itemView.findViewById(R.id.userCardView);
-            //get the widget id and assign them to local variable
+            //jj-get the widget id and assign them to local variable
             userName = (TextView)itemView.findViewById(R.id.username);
             userDes = (TextView)itemView.findViewById(R.id.userdes);
             userPic = (ImageView)itemView.findViewById(R.id.userpic);
@@ -42,16 +43,18 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
     public AdapterUserMain.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        //Complete the card view for users
+        //jj-Complete the card view for users
         View contactView = inflater.inflate(R.layout.usercardview, parent, false);
+        //jj-calls the function VIEWHOLDER with the cardview view in the parameters
         ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }
     @Override
     public void onBindViewHolder(AdapterUserMain.ViewHolder viewHolder, int position) {
+        //jj-sets text to the different widgets in the cardviews
         viewHolder.userName.setText(mUserlist.get(position).getUsername());
         viewHolder.userDes.setText(mUserlist.get(position).getUserabout());
-        //this needs to change to the corrosponding user profile picture
+        //jj-this needs to change to the corrosponding user profile picture
         viewHolder.userPic.setImageResource(R.drawable.demo_user_pic);
     }
     @Override
