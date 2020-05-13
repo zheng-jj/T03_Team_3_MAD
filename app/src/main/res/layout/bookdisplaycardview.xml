@@ -14,17 +14,13 @@
         <ImageView
             android:id="@+id/bookimage"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8"
+            android:layout_height="160dp"
             android:contentDescription="TODO"></ImageView>
-
         <TextView
+            android:layout_below="@id/bookimage"
+            android:gravity="center"
             android:id="@+id/bookname"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"></TextView>
-    </LinearLayout>
-
-
-
+            android:layout_height="wrap_content"></TextView>
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

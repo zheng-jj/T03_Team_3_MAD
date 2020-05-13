@@ -27,13 +27,13 @@ public class MainActivity extends AppCompatActivity {
             //enter the fragment function based on what is clicked(after yall done)
             public void onTabSelected(@IdRes int tabId) {
             if (tabId == R.id.tab_home) {
-                startuserfragment();
+                starthomefragment();
             }
             if (tabId == R.id.tab_search) {
                 startsearchbarfragment();
             }
             if (tabId == R.id.tab_feed) {
-                starthomefragment();
+                startuserfragment();
             }
             if (tabId == R.id.tab_profile) {
                 startauthorprofilefragment();
