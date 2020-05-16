@@ -11,6 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
+            android:layout_marginTop="10dp"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -19,12 +20,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_below="@id/genrestext"
             android:id="@+id/genrelistrecyclerview"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:scrollbars="horizontal" />
         <TextView
+            android:layout_marginTop="10dp"
             android:layout_below="@id/genrelistrecyclerview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -34,12 +36,13 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recommendbookrecyclerview"
             android:layout_below="@id/recommendedtext"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:scrollbars="horizontal" />
         <TextView
+            android:layout_marginTop="10dp"
             android:layout_below="@id/recommendbookrecyclerview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,7 +52,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popularbookrecyclerview"
             android:layout_below="@id/popularbookstext"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
