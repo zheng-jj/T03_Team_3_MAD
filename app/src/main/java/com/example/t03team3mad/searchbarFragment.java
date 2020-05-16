@@ -57,8 +57,6 @@ public class searchbarFragment extends Fragment {
         ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,arrayList);
         listviewitem.setAdapter(arrayAdapter);
     }
-
-
 }
 
 

@@ -55,7 +55,7 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
         viewHolder.userName.setText(mUserlist.get(position).getUsername());
         viewHolder.userDes.setText(mUserlist.get(position).getUserabout());
         //jj-this needs to change to the corrosponding user profile picture
-        viewHolder.userPic.setImageResource(R.drawable.demo_user_pic);
+        viewHolder.userPic.setImageResource(R.drawable.demo_user_profile_pic);
     }
     @Override
     public int getItemCount() {
