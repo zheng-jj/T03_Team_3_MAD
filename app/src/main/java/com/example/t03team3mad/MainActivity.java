@@ -82,10 +82,19 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private void startsearchbarfragment(){
+    private void startsearchbaractivity(){
         Log.v(TAG, "Search Bar launched");
         Intent searchbar= new Intent(getApplicationContext(),SearchPage.class);
         startActivity(searchbar);
+    }
+
+    private void startsearchbarfragment(){
+        Log.v(TAG, "searchbar fragment launched");
+        searchbarFragment searchbar = new searchbarFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,searchbar,"searchbarFragment");
+        transaction.addToBackStack("searchbarFragment");
+        transaction.commit();
     }
     private void startsLoginfragment(){
         Log.v(TAG, "Login Page launched");

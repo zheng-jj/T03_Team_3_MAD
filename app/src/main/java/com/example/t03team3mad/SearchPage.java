@@ -19,19 +19,7 @@ public class SearchPage extends AppCompatActivity {
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
-                DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getApplicationContext());
-                databaseAccess.open();
-                String authorname = databaseAccess.getElement("NAME","Author","Name",query);
-                if (authorname != null){
-                    String authorid = databaseAccess.getElement("ID","Author","Name",query);
-                    int aid = Integer.parseInt(authorid);
-                    String authorabout = databaseAccess.getElement("ABOUT","Author","Name",query);
-                    Author author1 = new Author(aid, authorname, authorabout);
-                    System.out.println("works");
-                }
-
-                databaseAccess.close();
+                doMySearch(query);
                 return false;
             }
 
@@ -41,7 +29,13 @@ public class SearchPage extends AppCompatActivity {
             }
         });
 
-
-
     }
+
+    public void doMySearch(String query){
+        System.out.println(query);
+    }
+
+
+
 }
+

@@ -49,6 +49,14 @@ public class Book {
         this.isbn = new1Name;
     }
 
+    private String nullbook;
+    public String getNullbook() {
+        return isbn;
+    }
+    public void setNullbook(String new1Name) {
+        this.nullbook = new1Name;
+    }
+
 
     public Book(String title, String author, String about, String genre, String publish, String bisbn) {
         booktitle = title;
