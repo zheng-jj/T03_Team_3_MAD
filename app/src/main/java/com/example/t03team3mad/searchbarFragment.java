@@ -11,6 +11,8 @@ import android.widget.SearchView;
 
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
@@ -24,13 +26,13 @@ public class searchbarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_searchbar,container,false);
+        final View view = inflater.inflate(R.layout.fragment_searchbar,container,false);
         SearchView searchbar = view.findViewById(R.id.searchView);
-        listviewitem = view.findViewById(R.id.listView);
+
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                doMySearch(query);
+                doMySearch(query, view);
                 return false;
             }
 
@@ -42,8 +44,9 @@ public class searchbarFragment extends Fragment {
         return view;
         }
     //qh - takes the search query and displays them (can search for author and books)
-    public void doMySearch(String query){
+    public void doMySearch(String query, View view){
         ArrayList<String> arrayList = new ArrayList<>();
+        ArrayList<String> descriptionList = new ArrayList<>();
         System.out.println(query);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         databaseAccess.open();
@@ -52,16 +55,22 @@ public class searchbarFragment extends Fragment {
         databaseAccess.close();
         for (Book var : searchbooks)
         {
-            arrayList.add(var.getBooktitle()+" \n(Book)");
+            arrayList.add(var.getBooktitle()+" (Book)");
+            descriptionList.add(var.getBookabout());
             System.out.println(var.getBooktitle());
         }
         for (Author var : searchauthor)
         {
-            arrayList.add(var.getAuthorname()+" \n(Author)");
+            arrayList.add(var.getAuthorname()+" (Author)");
+            descriptionList.add(var.getAuthorabout());
             System.out.println(var.getAuthorname());
         }
-        ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,arrayList);
-        listviewitem.setAdapter(arrayAdapter);
+
+        RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
+        LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
+        searchresults.setLayoutManager(searchlayout);
+        AdapterSearch searchadapter  = new AdapterSearch(arrayList,descriptionList);
+        searchresults.setAdapter(searchadapter);
     }
 }
 

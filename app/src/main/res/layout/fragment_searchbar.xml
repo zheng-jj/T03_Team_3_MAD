@@ -14,14 +14,16 @@
             android:layout_width="match_parent"
             android:layout_height="90dp"
             />
-        <ListView
-            android:id="@+id/listView"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchrecycler"
             android:layout_below="@id/searchView"
             android:layout_width="match_parent"
-            android:layout_height="5000dp">
+            android:layout_height="match_parent" />
 
-        </ListView>
     </RelativeLayout>
+
+
 
 
 </FrameLayout>
