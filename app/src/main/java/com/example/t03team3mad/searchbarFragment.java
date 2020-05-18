@@ -41,18 +41,24 @@ public class searchbarFragment extends Fragment {
         });
         return view;
         }
-    //qh - takes the search query and displays them (currently only display results for books
+    //qh - takes the search query and displays them (can search for author and books)
     public void doMySearch(String query){
         ArrayList<String> arrayList = new ArrayList<>();
         System.out.println(query);
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         databaseAccess.open();
         List<Book> searchbooks = databaseAccess.searchbook(query);
+        List<Author> searchauthor = databaseAccess.searchAuthor(query);
         databaseAccess.close();
         for (Book var : searchbooks)
         {
             arrayList.add(var.getBooktitle()+" \n(Book)");
             System.out.println(var.getBooktitle());
+        }
+        for (Author var : searchauthor)
+        {
+            arrayList.add(var.getAuthorname()+" \n(Author)");
+            System.out.println(var.getAuthorname());
         }
         ArrayAdapter arrayAdapter = new ArrayAdapter(getActivity(),android.R.layout.simple_list_item_1,arrayList);
         listviewitem.setAdapter(arrayAdapter);

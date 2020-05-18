@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 
@@ -106,5 +107,22 @@ public class DatabaseAccess {
             } while (c.moveToNext());
         }
         return booklist;
+    }
+
+    //qh - method to search author in the database
+    public List<Author> searchAuthor(String query) {
+        List<Author> authorList = new ArrayList<Author>();
+        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE TRIM(NAME) LIKE '%" + query + "%'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String ida = c.getString(0);
+                String name = c.getString(1);
+                String about = c.getString(2);
+                Author author1 = new Author(Integer.parseInt(ida),name,about);
+                authorList.add(author1);
+                System.out.println(author1.getAuthorname());
+            } while (c.moveToNext());
+        }
+        return authorList;
     }
 }
