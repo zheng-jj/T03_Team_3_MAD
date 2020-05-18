@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class searchbarFragment extends Fragment {
         databaseAccess.open();
         List<Book> searchbooks = databaseAccess.searchbook(query);
         List<Author> searchauthor = databaseAccess.searchAuthor(query);
+        List<User> searchUser = databaseAccess.searchUser(query);
         databaseAccess.close();
         for (Book var : searchbooks)
         {
@@ -64,6 +66,12 @@ public class searchbarFragment extends Fragment {
             arrayList.add(var.getAuthorname()+" (Author)");
             descriptionList.add(var.getAuthorabout());
             System.out.println(var.getAuthorname());
+        }
+        for (User var : searchUser)
+        {
+            arrayList.add(var.getUsername()+" (User)");
+            descriptionList.add(var.getUserabout());
+            System.out.println(var.getUsername());
         }
 
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);

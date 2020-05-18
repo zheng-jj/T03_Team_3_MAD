@@ -125,4 +125,22 @@ public class DatabaseAccess {
         }
         return authorList;
     }
+
+    //qh - method to search user in the database
+    public List<User> searchUser(String query) {
+        List<User> userList = new ArrayList<User>();
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE TRIM(NAME) LIKE '%" + query + "%'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String idu = c.getString(0);
+                String name = c.getString(1);
+                String isbn = c.getString(2);
+                String about = c.getString(3);
+                User user1 = new User(Integer.parseInt(idu),name,isbn,about);
+                userList.add(user1);
+                System.out.println(user1.getUsername());
+            } while (c.moveToNext());
+        }
+        return userList;
+    }
 }
