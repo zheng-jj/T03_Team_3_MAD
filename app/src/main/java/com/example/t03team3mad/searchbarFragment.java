@@ -30,6 +30,7 @@ public class searchbarFragment extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_searchbar,container,false);
         SearchView searchbar = view.findViewById(R.id.searchView);
 
+        //qh - simple search
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -44,17 +45,19 @@ public class searchbarFragment extends Fragment {
         });
         return view;
         }
-    //qh - takes the search query and displays them (can search for author and books)
+    //qh - takes the search query and displays them (can search for author , books and users)
     public void doMySearch(String query, View view){
         ArrayList<String> arrayList = new ArrayList<>();
         ArrayList<String> descriptionList = new ArrayList<>();
         System.out.println(query);
+        //qh - opens database to create the object lists
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         databaseAccess.open();
         List<Book> searchbooks = databaseAccess.searchbook(query);
         List<Author> searchauthor = databaseAccess.searchAuthor(query);
         List<User> searchUser = databaseAccess.searchUser(query);
         databaseAccess.close();
+        //qh - adds name and description of book, author and user to arraylist
         for (Book var : searchbooks)
         {
             arrayList.add(var.getBooktitle()+" (Book)");
@@ -73,7 +76,7 @@ public class searchbarFragment extends Fragment {
             descriptionList.add(var.getUserabout());
             System.out.println(var.getUsername());
         }
-
+        //qh - puts all the results into recycler view to display
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
