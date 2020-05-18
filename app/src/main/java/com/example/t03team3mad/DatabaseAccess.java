@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -7,12 +8,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 
 public class DatabaseAccess {
+    private static final String TAG = "DatabaseAccess";
     private SQLiteOpenHelper openHelper;
     private SQLiteDatabase db;
     private static DatabaseAccess instance;
@@ -89,6 +92,7 @@ public class DatabaseAccess {
         return  mBooklist;
     }
 
+
     //qh - method to search books in the database
     public List<Book> searchbook(String query) {
         List<Book> booklist = new ArrayList<Book>();
@@ -142,5 +146,38 @@ public class DatabaseAccess {
             } while (c.moveToNext());
         }
         return userList;
+    }
+    //jj - loads all books the user favourited
+    public List<Book> loaduserbooklist(int userid) {
+        List<Book> userbooklist = new ArrayList<Book>();
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+userid, new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String isbn = c.getString(2);
+                List<String> listisbn = Arrays.asList(isbn.split(","));
+                for (String tempisbn:listisbn
+                     ) {
+                    Log.v(TAG,tempisbn);
+                    userbooklist.add(searchbookbyisbn(tempisbn));
+                }
+            } while (c.moveToNext());
+        }
+        return userbooklist;
+    }
+    //jj - search book by isbn
+    public Book searchbookbyisbn(String isbn) {
+        Book book1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE ISBN =="+isbn, new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String title = c.getString(0);
+                String ida = c.getString(1);
+                String about = c.getString(2);
+                String genre = c.getString(3);
+                String pdate = c.getString(4);
+                book1 = new Book(title, ida, about, genre, pdate, isbn);
+            } while (c.moveToNext());
+        }
+        return book1;
     }
 }
