@@ -52,6 +52,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         }
     //qh - takes the search query and displays them (can search for author , books and users)
     public void doMySearch(String query, View view){
+        searchClassList.clear();
         System.out.println(query);
         //qh - opens database to create the object lists
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
