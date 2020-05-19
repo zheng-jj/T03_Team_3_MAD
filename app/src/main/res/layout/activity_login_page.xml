@@ -79,9 +79,9 @@
             android:layout_gravity="center"
             android:layout_margin="10dp"
             android:background="@color/colorPrimaryDark"
-            android:stateListAnimator="@null"
             android:text="Login"
             android:textAllCaps="false"
+            android:stateListAnimator="@null"
             android:textSize="20dp"></Button>
     </LinearLayout>
 </RelativeLayout>
