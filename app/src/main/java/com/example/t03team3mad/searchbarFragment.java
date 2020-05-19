@@ -135,10 +135,10 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
             fragment_user nextFrag= new fragment_user();
             Bundle bundle = new Bundle();
-            bundle.putParcelable("currentuser", currentuser);  // Key, value
+            bundle.putParcelable("searchuser", currentuser);  // Key, value
             nextFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                    .replace(R.id.mainactivitycontainer, nextFrag, "findUser")
                     .addToBackStack(null)
                     .commit();
 

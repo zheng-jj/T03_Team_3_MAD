@@ -29,10 +29,17 @@ public class fragment_user extends Fragment{
         //jj- inflates the fragment into the container for the fragment
         View view = inflater.inflate(R.layout.fragment_user,container,false);
 
-        //jj - obtains which user to display
-        //jj - User usertoView = (User) savedInstanceState.getParcelable("Object");
+        //jj - obtains which user to displayBundle bundle = this.getArguments();
+        Bundle bundle = this.getArguments();
+        User usertoView = null;
+        if (bundle != null) {
+            usertoView = bundle.getParcelable("searchuser");
+        }
+        if (usertoView==null){
+            Log.v(TAG,"no user object received");
+        }
         //jj - this variable is temporary
-        User usertoView = new User(2,"JIONG JIE","9780439362139;9781338132083","hey this is jj");
+        //User usertoView = new User(2,"JIONG JIE","9780439362139;9781338132083","hey this is jj");
         Log.v(TAG, usertoView.getUsername());
         int userid = usertoView.getUseridu();
 
@@ -105,11 +112,5 @@ public class fragment_user extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            User receiveduser = bundle.getParcelable("currentuser"); // Key
-            System.out.println(receiveduser.getUsername());
-        }
     }
 }
