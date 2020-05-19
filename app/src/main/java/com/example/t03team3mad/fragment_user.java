@@ -2,6 +2,7 @@ package com.example.t03team3mad;
 
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
@@ -98,5 +100,16 @@ public class fragment_user extends Fragment{
         Name.setText(user.getUsername());
         Desc.setText(user.getUserabout());
         Pic.setImageResource(R.drawable.demo_user_profile_pic);
+    }
+    //qh -- the user object that is passed here
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            User receiveduser = bundle.getParcelable("currentuser"); // Key
+            System.out.println(receiveduser.getUsername());
+        }
     }
 }

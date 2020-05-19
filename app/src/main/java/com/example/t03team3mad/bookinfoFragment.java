@@ -7,7 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.t03team3mad.model.Book;
 
 public class bookinfoFragment extends Fragment {
     private static final String TAG = "bookinfoFragment";
@@ -24,4 +27,16 @@ public class bookinfoFragment extends Fragment {
         databaseAccess.close();
         return view;
     }
+    //qh -- the book object that is passed here
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Book receivedbook = bundle.getParcelable("currentbook"); // Key
+            System.out.println(receivedbook.getBooktitle());
+        }
+    }
 }
+

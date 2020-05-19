@@ -7,7 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+
+import com.example.t03team3mad.model.Author;
+import com.example.t03team3mad.model.Book;
 
 public class authorprofileFragment extends Fragment {
 
@@ -24,5 +28,16 @@ public class authorprofileFragment extends Fragment {
         name.setText(databaseAccess.getElement("NAME","Author","Name","J. K. Rowling"));
         databaseAccess.close();
         return view;
+    }
+    //qh -- the author object that is passed here
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Author receivedauthor = bundle.getParcelable("currentauthor"); // Key
+            System.out.println(receivedauthor.getAuthorname());
+        }
     }
 }

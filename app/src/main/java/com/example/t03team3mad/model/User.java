@@ -1,8 +1,31 @@
 package com.example.t03team3mad.model;
 
-public class User {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class User implements Parcelable {
 
     private int useridu;
+
+    protected User(Parcel in) {
+        useridu = in.readInt();
+        username = in.readString();
+        userisbn = in.readString();
+        userabout = in.readString();
+    }
+
+    public static final Creator<User> CREATOR = new Creator<User>() {
+        @Override
+        public User createFromParcel(Parcel in) {
+            return new User(in);
+        }
+
+        @Override
+        public User[] newArray(int size) {
+            return new User[size];
+        }
+    };
+
     public int getUseridu() {
         return useridu;
     }
@@ -39,5 +62,18 @@ public class User {
         username = name;
         userisbn = isbn;
         userabout = about;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(useridu);
+        dest.writeString(username);
+        dest.writeString(userisbn);
+        dest.writeString(userabout);
     }
 }

@@ -2,6 +2,7 @@ package com.example.t03team3mad;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,19 +12,23 @@ import android.widget.SearchView;
 
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class searchbarFragment extends Fragment {
+public class searchbarFragment extends Fragment implements AdapterSearch.OnSearchListener {
     private static final String TAG = "searchbarFragment";
     ListView listviewitem;
+    List<SearchClass> searchClassList = new ArrayList<SearchClass>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,8 +52,6 @@ public class searchbarFragment extends Fragment {
         }
     //qh - takes the search query and displays them (can search for author , books and users)
     public void doMySearch(String query, View view){
-        ArrayList<String> arrayList = new ArrayList<>();
-        ArrayList<String> descriptionList = new ArrayList<>();
         System.out.println(query);
         //qh - opens database to create the object lists
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
@@ -60,29 +63,88 @@ public class searchbarFragment extends Fragment {
         //qh - adds name and description of book, author and user to arraylist
         for (Book var : searchbooks)
         {
-            arrayList.add(var.getBooktitle()+" (Book)");
-            descriptionList.add(var.getBookabout());
             System.out.println(var.getBooktitle());
+            SearchClass searchClass = new SearchClass(var.getBooktitle(),var.getBookabout(),"Book");
+            searchClassList.add(searchClass);
         }
         for (Author var : searchauthor)
         {
-            arrayList.add(var.getAuthorname()+" (Author)");
-            descriptionList.add(var.getAuthorabout());
             System.out.println(var.getAuthorname());
+            SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author");
+            searchClassList.add(searchClass);
         }
         for (User var : searchUser)
         {
-            arrayList.add(var.getUsername()+" (User)");
-            descriptionList.add(var.getUserabout());
             System.out.println(var.getUsername());
+            SearchClass searchClass = new SearchClass(var.getUsername(),var.getUserabout(),"User");
+            searchClassList.add(searchClass);
         }
         //qh - puts all the results into recycler view to display
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
-        AdapterSearch searchadapter  = new AdapterSearch(arrayList,descriptionList);
+        AdapterSearch searchadapter  = new AdapterSearch(searchClassList,this);
         searchresults.setAdapter(searchadapter);
     }
+
+    //qh - when clicking search item
+    @Override
+    public void onSearchClick(int position) {
+        SearchClass currentsearchobject = searchClassList.get(position);
+
+        //qh -- if object clicked is a book
+        if (currentsearchobject.getSearchClass() == "Book"){
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            databaseAccess.open();
+            Book currentbook = databaseAccess.searchbookbytitle(currentsearchobject.getSearchName());
+            databaseAccess.close();
+
+            bookinfoFragment nextFrag= new bookinfoFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("currentbook", currentbook);  // Key, value
+            nextFrag.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit();
+
+        }
+        // qh -- if object clicked is author
+        if (currentsearchobject.getSearchClass() == "Author"){
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            databaseAccess.open();
+            Author currentauthor = databaseAccess.searchauthorbytitle(currentsearchobject.getSearchName());
+            databaseAccess.close();
+
+            authorprofileFragment nextFrag= new authorprofileFragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("currentauthor", currentauthor);  // Key, value
+            nextFrag.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit();
+        }
+        //qh -- if object clicked is user
+        if (currentsearchobject.getSearchClass() == "User"){
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            databaseAccess.open();
+            User currentuser = databaseAccess.searchuserbyname(currentsearchobject.getSearchName());
+            databaseAccess.close();
+
+            fragment_user nextFrag= new fragment_user();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("currentuser", currentuser);  // Key, value
+            nextFrag.setArguments(bundle);
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                    .addToBackStack(null)
+                    .commit();
+
+        }
+    }
+
+
 }
 
 

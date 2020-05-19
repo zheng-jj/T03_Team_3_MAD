@@ -180,4 +180,49 @@ public class DatabaseAccess {
         }
         return book1;
     }
+    //qh - search book by title
+    public Book searchbookbytitle(String title) {
+        Book book1 = null;
+        System.out.println("debug1");
+        Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE TITLE = '"+title+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                System.out.println("debug2");
+                String ida = c.getString(1);
+                String about = c.getString(2);
+                String genre = c.getString(3);
+                String pdate = c.getString(4);
+                String isbn = c.getString(5);
+                book1 = new Book(title, ida, about, genre, pdate, isbn);
+            } while (c.moveToNext());
+        }
+        return book1;
+    }
+
+    public Author searchauthorbytitle(String name) {
+        Author author1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE NAME ='"+name+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String ida = c.getString(0);
+                String about = c.getString(2);
+                author1 = new Author(Integer.parseInt(ida), name,about);
+            } while (c.moveToNext());
+        }
+        return author1;
+    }
+
+    public User searchuserbyname(String name) {
+        User user1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE NAME ='"+name+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String idu = c.getString(0);
+                String isbn = c.getString(2);
+                String about = c.getString(3);
+                user1 = new User(Integer.parseInt(idu),name,isbn,about);
+            } while (c.moveToNext());
+        }
+        return user1;
+    }
 }

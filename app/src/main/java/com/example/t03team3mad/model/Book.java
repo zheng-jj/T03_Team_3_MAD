@@ -1,7 +1,33 @@
 package com.example.t03team3mad.model;
 
-public class Book {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Book implements Parcelable {
     private String booktitle;
+
+    protected Book(Parcel in) {
+        booktitle = in.readString();
+        bookauthor = in.readString();
+        bookabout = in.readString();
+        bookgenre = in.readString();
+        pdate = in.readString();
+        isbn = in.readString();
+        nullbook = in.readString();
+    }
+
+    public static final Creator<Book> CREATOR = new Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
+
     public String getBooktitle() {
         return booktitle;
     }
@@ -65,5 +91,21 @@ public class Book {
         bookgenre = genre;
         pdate = publish;
         isbn = bisbn;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(booktitle);
+        dest.writeString(bookauthor);
+        dest.writeString(bookabout);
+        dest.writeString(bookgenre);
+        dest.writeString(pdate);
+        dest.writeString(isbn);
+        dest.writeString(nullbook);
     }
 }

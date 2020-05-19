@@ -13,50 +13,62 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.SearchClass;
 
 public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder>
 {
     List<String> search = new ArrayList<String>(){};
     List<String> des = new ArrayList<String>(){};
-
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    List<SearchClass> searchlist = new ArrayList<SearchClass>(){};
+    private OnSearchListener mOnSearchListener;
+    //qh -- uses onclicklistener to click
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
         TextView searchname;
         ImageView searchpic;
         TextView searchdes;
-        ViewHolder(View itemView) {
+        OnSearchListener onSearchListener;
+        ViewHolder(View itemView, OnSearchListener onSearchListener) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.searchCardView);
 
             searchname = (TextView)itemView.findViewById(R.id.titleview);
             searchdes = (TextView)itemView.findViewById(R.id.descriptionview);
             searchpic = (ImageView)itemView.findViewById(R.id.searchImage);
+            this.onSearchListener = onSearchListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onSearchListener.onSearchClick(getAdapterPosition());
         }
     }
-    public AdapterSearch(List<String> searchauthor,List<String> searchdes) {
+    public interface OnSearchListener {
+        void onSearchClick(int position);
+    }
 
-        this.search = searchauthor;
-        this.des = searchdes;
+    public AdapterSearch(List<SearchClass> searchList, OnSearchListener onSearchListener) {
+        this.mOnSearchListener = onSearchListener;
+        this.searchlist = searchList;
     }
     @Override
     public AdapterSearch.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.searchcardview, parent, false);
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder = new ViewHolder(contactView, mOnSearchListener);
         return viewHolder;
     }
     @Override
     public void onBindViewHolder(AdapterSearch.ViewHolder viewHolder, int position) {
-        //jj-sets text to the different widgets in the cardviews
-        viewHolder.searchname.setText(search.get(position));
-        viewHolder.searchdes.setText(des.get(position));
-        //jj-this needs to change to the corrosponding user profile picture
+        viewHolder.searchname.setText(searchlist.get(position).getSearchName());
+        viewHolder.searchdes.setText(searchlist.get(position).getSearchDes());
         viewHolder.searchpic.setImageResource(R.drawable.demo_user_profile_pic);
     }
     @Override
     public int getItemCount() {
-        return search.size();
+        return searchlist.size();
     }
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
