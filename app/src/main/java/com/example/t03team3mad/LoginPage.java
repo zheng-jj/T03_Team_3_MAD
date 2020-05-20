@@ -7,20 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class LoginPage extends AppCompatActivity {
     EditText EnterEmail,EnterPassword;
@@ -28,7 +26,11 @@ public class LoginPage extends AppCompatActivity {
     TextView RegisterButton;
     FirebaseAuth Auth;
     SharedPreferences Auto_login;
+    FirebaseUser user;
+    String uid;
     DatabaseReference databaseReference;
+    ProgressBar progressBar;
+
     private static final String TAG = "LoginPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +39,17 @@ public class LoginPage extends AppCompatActivity {
         EnterEmail=findViewById(R.id.EnterEmail);
         EnterPassword=findViewById(R.id.EnterPassword);
         LoginButton=findViewById(R.id.LoginButton);
+        Auth=FirebaseAuth.getInstance();
         RegisterButton=findViewById(R.id.Register);
+        user=FirebaseAuth.getInstance().getCurrentUser();
+        uid=user.getUid();
+        final ProgressBar progressBar =  findViewById(R.id.progressBar);
+        databaseReference= FirebaseDatabase.getInstance().getReference();
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
+
         //Auto_login.edit().putBoolean("logged",false).apply();
         //^ if wan test again
+
         if(Auto_login.getBoolean("logged",false)){
             Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
             startActivity(MainActivity);
@@ -71,21 +80,24 @@ public class LoginPage extends AppCompatActivity {
                     Toast.makeText(LoginPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                progressBar.setVisibility(View.VISIBLE);
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            progressBar.setVisibility(View.INVISIBLE);
                             Log.v(TAG,"Successfully Logged In");
                             Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-                            Bundle UserDetails=new Bundle();
                             Auto_login.edit().putBoolean("logged",true).apply(); //User is Logged in until he log out
+                            Bundle bundle=new Bundle();
+                            bundle.putString("User_UID",uid);
                             Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
+                            MainActivity.putExtra("User_UID",bundle);
                             startActivity(MainActivity);
                             finish();
                         }
                         else {
-
+                            progressBar.setVisibility(View.INVISIBLE);
                             Log.v(TAG,"Login Failed");
                             Toast.makeText(LoginPage.this, "Login Failed", Toast.LENGTH_LONG).show();
                         }
