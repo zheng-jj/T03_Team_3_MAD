@@ -3,9 +3,11 @@ package com.example.t03team3mad;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.t03team3mad.model.Member;
@@ -25,6 +27,8 @@ public class RegisterPage extends AppCompatActivity {
     FirebaseAuth Auth;
     DatabaseReference databaseReference;
     Member member;
+    ProgressBar progressBar;
+    private static final String TAG = "RegisterPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +38,7 @@ public class RegisterPage extends AppCompatActivity {
         EnterPassword=findViewById(R.id.EnterPassword);
         ConfirmPassword=findViewById(R.id.ConfirmPassword);
         RegisterButton=findViewById(R.id.RegisterButton);
+        final ProgressBar progressBar =  findViewById(R.id.progressBar);
         Auth = FirebaseAuth.getInstance();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         member = new Member();
@@ -49,31 +54,37 @@ public class RegisterPage extends AppCompatActivity {
                 //Check for empty Inputs
                 if (name.equals(""))
                 {
+                    Log.v(TAG,"Name Required");
                     Toast.makeText(RegisterPage.this, "Name Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (email.equals(""))
                 {
+                    Log.v(TAG,"Email Required");
                     Toast.makeText(RegisterPage.this, "Email Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (password.equals(""))
                 {
+                    Log.v(TAG,"Password Required");
                     Toast.makeText(RegisterPage.this, "Password Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (confirmPassword.equals(""))//Check for empty Inputs
                 {
+                    Log.v(TAG,"Confirm Password");
                     Toast.makeText(RegisterPage.this, "Confirm Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!confirmPassword.equals(password))
+                if (!confirmPassword.equals(password))//Confirm password
                 {
+                    Log.v(TAG,"Password Do Not Match");
                     Toast.makeText(RegisterPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else{
+                    progressBar.setVisibility(View.VISIBLE);
                     //Authentication
                     Auth.createUserWithEmailAndPassword(email, confirmPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -84,12 +95,15 @@ public class RegisterPage extends AppCompatActivity {
                                 member.setEmail(EnterEmail.getText().toString());
                                 member.setPassword(EnterPassword.getText().toString());
                                 databaseReference.push().setValue(member);
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Log.v(TAG,"Registration Succesfully");
                                 Toast.makeText(RegisterPage.this, "Registration Succesfully", Toast.LENGTH_SHORT).show();
                                 Intent login=new Intent(RegisterPage.this, LoginPage.class);
                                 startActivity(login);
                                 finish();
                             }
                             else {
+                                progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterPage.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
                             }
                         }

@@ -33,10 +33,10 @@ public class MainActivity extends AppCompatActivity {
                 startsearchbarfragment();
             }
             if (tabId == R.id.tab_feed) {
-                startuserfragment();
+                startsLoginPage();
             }
             if (tabId == R.id.tab_profile) {
-                startauthorprofilefragment();
+                startuserfragment();
             }
             }
         });
@@ -96,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("searchbarFragment");
         transaction.commit();
     }
-    private void startsLoginfragment(){
+    private void startsLoginPage(){
         Log.v(TAG, "Login Page launched");
         Intent Login= new Intent(getApplicationContext(),LoginPage.class);
         startActivity(Login);
     }
-    private void startRegisterfragment(){
+    private void startRegisterPage(){
 
         Log.v(TAG, "Register Page launched");
         Intent register= new Intent(getApplicationContext(),RegisterPage.class);
