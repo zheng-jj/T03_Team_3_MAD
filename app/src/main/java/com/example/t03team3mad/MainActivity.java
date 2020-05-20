@@ -10,17 +10,30 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.t03team3mad.model.User;
 import com.roughike.bottombar.*;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private User loggedinuser = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         starthomefragment();
 
-        //this is the code to navigate using the bottom navigation bar
+        Intent intent = getIntent();
+        //jj - receives which user is currently logged in from the login activity
+        Bundle receivedloggedin = intent.getBundleExtra("loginUser");
+        if(receivedloggedin!=null) {
+            loggedinuser = receivedloggedin.getParcelable("loginUserObject");
+        }
+        if(loggedinuser == null)
+        {
+            Log.v(TAG,"no logged in user received");
+        }
+
+        //jj - this is the code to navigate using the bottom navigation bar
         BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -49,9 +62,18 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("HomeFragment");
         transaction.commit();
     }
+    //jj - starts user fragment based on what is to be displayed
     private void startuserfragment(){
         Log.v(TAG, "user fragment launched");
+        //fake data generated
+        loggedinuser = new User(2,"JIONG JIE","9780439362139;9781338132083","hey this is jj");
         fragment_user fragment = new fragment_user();
+        //jj- bundle to be moved to fragment
+        Bundle bundle = new Bundle();
+        //places the currently logged in user into bundle
+        bundle.putParcelable("loggedin", loggedinuser);
+        fragment.setArguments(bundle);
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,fragment,"HomeFragment");
         transaction.addToBackStack("UserFragment");

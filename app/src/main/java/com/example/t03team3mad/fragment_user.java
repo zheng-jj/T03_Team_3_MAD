@@ -32,9 +32,15 @@ public class fragment_user extends Fragment{
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
         User usertoView = null;
-        if (bundle != null) {
+        if (bundle.getParcelable("searchuser") != null) {
             usertoView = bundle.getParcelable("searchuser");
         }
+
+        //checks if the user is viewing his own profile
+        if (bundle.getParcelable("loggedin") != null){
+            usertoView = bundle.getParcelable("loggedin");
+        }
+
         if (usertoView==null){
             Log.v(TAG,"no user object received");
         }
