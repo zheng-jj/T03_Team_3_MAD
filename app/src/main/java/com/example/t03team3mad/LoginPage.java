@@ -89,6 +89,11 @@ public class LoginPage extends AppCompatActivity {
                             Log.v(TAG,"Successfully Logged In");
                             Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
                             uid=user.getUid();
+                            //jj-  this is temporary
+                            uid="1";
+
+                            //jj- this shows the id u are sending me
+                            Log.v(TAG, "the user id sent= "+ user.getUid());
                             Auto_login.edit().putBoolean("logged",true).apply(); //User is Logged in until he log out
                             Bundle bundle=new Bundle();
                             bundle.putString("User_UID",uid);
