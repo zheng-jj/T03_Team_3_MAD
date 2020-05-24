@@ -30,12 +30,12 @@ public class MainActivity extends AppCompatActivity {
         Bundle receivedloggedin = intent.getBundleExtra("User_UID");
 
         if(receivedloggedin!=null) {
+            Log.v(TAG,"logged in user received");
             String loggedinuserID = receivedloggedin.getString("User_UID");
             DatabaseAccess DBaccess = DatabaseAccess.getInstance(this.getApplicationContext());
             DBaccess.open();
             loggedinuser =  DBaccess.searchuserbyid(loggedinuserID);
             DBaccess.close();
-
         }
         if(loggedinuser == null)
         {
