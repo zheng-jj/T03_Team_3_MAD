@@ -199,12 +199,12 @@ public class DatabaseAccess {
         return book1;
     }
 
-    public Author searchauthorbytitle(String name) {
+    public Author searchauthorbyida(String ida) {
         Author author1 = null;
-        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE NAME ='"+name+"'", new String[]{});
+        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE IDA == "+ida , new String[]{});
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
-                String ida = c.getString(0);
+                String name = c.getString(1);
                 String about = c.getString(2);
                 author1 = new Author(Integer.parseInt(ida), name,about);
             } while (c.moveToNext());
@@ -218,6 +218,20 @@ public class DatabaseAccess {
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
                 String idu = c.getString(0);
+                String isbn = c.getString(2);
+                String about = c.getString(3);
+                user1 = new User(Integer.parseInt(idu),name,isbn,about);
+            } while (c.moveToNext());
+        }
+        return user1;
+    }
+
+    public User searchuserbyid(String idu) {
+        User user1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+idu, new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String name = c.getString(1);
                 String isbn = c.getString(2);
                 String about = c.getString(3);
                 user1 = new User(Integer.parseInt(idu),name,isbn,about);

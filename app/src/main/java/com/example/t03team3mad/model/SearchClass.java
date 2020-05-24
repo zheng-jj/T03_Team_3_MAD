@@ -25,9 +25,19 @@ public class SearchClass {
         this.searchClass = newsearchClass;
     }
 
-    public SearchClass (String name, String des, String searchclass){
+    private String id;
+    public String getId() {
+        return id;
+    }
+    public void setId(String newid) {
+        this.id = newid;
+    }
+
+    public SearchClass (String name, String des, String searchclass, String newid){
         searchName = name;
         searchDes = des;
         searchClass = searchclass;
+        id = newid;
+
     }
 }

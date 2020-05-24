@@ -65,19 +65,19 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         for (Book var : searchbooks)
         {
             System.out.println(var.getBooktitle());
-            SearchClass searchClass = new SearchClass(var.getBooktitle(),var.getBookabout(),"Book");
+            SearchClass searchClass = new SearchClass(var.getBooktitle(),var.getBookabout(),"Book",String.valueOf(var.getIsbn()));
             searchClassList.add(searchClass);
         }
         for (Author var : searchauthor)
         {
             System.out.println(var.getAuthorname());
-            SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author");
+            SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author",String.valueOf(var.getAuthorid()));
             searchClassList.add(searchClass);
         }
         for (User var : searchUser)
         {
             System.out.println(var.getUsername());
-            SearchClass searchClass = new SearchClass(var.getUsername(),var.getUserabout(),"User");
+            SearchClass searchClass = new SearchClass(var.getUsername(),var.getUserabout(),"User",String.valueOf(var.getUseridu()));
             searchClassList.add(searchClass);
         }
         //qh - puts all the results into recycler view to display
@@ -97,7 +97,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         if (currentsearchobject.getSearchClass() == "Book"){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            Book currentbook = databaseAccess.searchbookbytitle(currentsearchobject.getSearchName());
+            Book currentbook = databaseAccess.searchbookbyisbn(currentsearchobject.getId());
             databaseAccess.close();
 
             bookinfoFragment nextFrag= new bookinfoFragment();
@@ -114,7 +114,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         if (currentsearchobject.getSearchClass() == "Author"){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            Author currentauthor = databaseAccess.searchauthorbytitle(currentsearchobject.getSearchName());
+            Author currentauthor = databaseAccess.searchauthorbyida(currentsearchobject.getId());
             databaseAccess.close();
 
             authorprofileFragment nextFrag= new authorprofileFragment();
@@ -130,7 +130,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         if (currentsearchobject.getSearchClass() == "User"){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            User currentuser = databaseAccess.searchuserbyname(currentsearchobject.getSearchName());
+            User currentuser = databaseAccess.searchuserbyid(currentsearchobject.getId());
             databaseAccess.close();
 
             fragment_user nextFrag= new fragment_user();
