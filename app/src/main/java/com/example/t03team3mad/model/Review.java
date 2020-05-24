@@ -8,6 +8,21 @@ public class Review {
     public void setReviewidu(int newReviewidu) {
         this.reviewidu = newReviewidu;
     }
+    private String uname;
+    public String getUname(){
+        return uname;
+    }
+    public void setUName(String newUname){
+        this.reviewtext = newUname;
+    }
+    private String reviewTitle;
+    public String getReviewTitle(){
+        return reviewTitle;
+    }
+    public void setReviewTitle(String newReviewTitle){
+        this.reviewtext = newReviewTitle;
+    }
+
 
     private int reviewidr;
     public int getReviewidr() {
@@ -33,10 +48,12 @@ public class Review {
         this.reviewisbn = newReviewisbn;
     }
 
-    public Review (int idu, int idr, String text, String isbn) {
+    public Review (int idu, int idr,String username,String title, String text, String isbn) {
         reviewidu = idu;
         reviewidr = idr;
         reviewtext = text;
         reviewisbn = isbn;
+        uname  =  username;
+        reviewTitle  = title;
     }
 }

@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 startsLoginPage();
             }
             if (tabId == R.id.tab_profile) {
-                startuserfragment();
+//                startreviewpagefragment();
             }
             }
         });
@@ -103,14 +103,14 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("bookdisplayFragment");
         transaction.commit();
     }
-    private void startreviewpagefragment(){
-        Log.v(TAG, "reviewpage fragment launched");
-        reviewpageFragment reviewpage = new reviewpageFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
-        transaction.addToBackStack("reviewpageFragment");
-        transaction.commit();
-    }
+//    private void startreviewpagefragment(){
+//        Log.v(TAG, "reviewpage fragment launched");
+//        reviewpageFragment reviewpage = new reviewpageFragment();
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
+//        transaction.addToBackStack("reviewpageFragment");
+//        transaction.commit();
+//    }
 
     private void startsearchbaractivity(){
         Log.v(TAG, "Search Bar launched");
