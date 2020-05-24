@@ -27,23 +27,27 @@ public class fragment_user extends Fragment{
     List<Book> userBooklist = null;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //jj- inflates the fragment into the container for the fragment
-        View view = inflater.inflate(R.layout.fragment_user,container,false);
-
+        View view;
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
         User usertoView = null;
         if (bundle.getParcelable("searchuser") != null) {
+            //jj- inflates the fragment into the container for the fragment
+            view = inflater.inflate(R.layout.fragment_user,container,false);
             usertoView = bundle.getParcelable("searchuser");
         }
 
         //checks if the user is viewing his own profile
-        if (bundle.getParcelable("loggedin") != null){
+        else if (bundle.getParcelable("loggedin") != null){
+            //jj- inflates the fragment into the container for the fragment
+            view = inflater.inflate(R.layout.fragment_user,container,false);
             usertoView = bundle.getParcelable("loggedin");
+
         }
 
-        if (usertoView==null){
-            Log.v(TAG,"no user object received");
+        else{
+            //jj- inflates the fragment into the container for the fragment
+            view = inflater.inflate(R.layout.fragment_user,container,false);
             //jj - this variable is temporary
             usertoView = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
