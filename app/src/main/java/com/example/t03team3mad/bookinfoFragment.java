@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -18,13 +19,28 @@ public class bookinfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bookinfo,container,false);
-        TextView name = view.findViewById(R.id.textView4);
-        // EXAMPLE TO EXTRACT INFORMATION
-        // SELECT (column) FROM (table) WHERE (condition_column) = (condition)
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        databaseAccess.open();
-        name.setText(databaseAccess.getCount("Title","Book"));
-        databaseAccess.close();
+        TextView title = view.findViewById(R.id.titleview);
+        TextView synopsis = view.findViewById(R.id.synopsis);
+        TextView releasedate = view.findViewById(R.id.releasedateview);
+        TextView genre = view.findViewById(R.id.genreview);
+        TextView author= view.findViewById(R.id.authorview);
+        ImageView image = view.findViewById(R.id.imageView2);
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            Book receivedbook = bundle.getParcelable("currentbook"); // Key
+            System.out.println(receivedbook.getBooktitle());
+            System.out.println(receivedbook.getBooktitle());
+            System.out.println(receivedbook.getBooktitle());
+
+            title.setText(receivedbook.getBooktitle());
+            synopsis.setText(receivedbook.getBookabout());
+            releasedate.setText(receivedbook.getPdate());
+            genre.setText(receivedbook.getBookgenre());
+            author.setText(receivedbook.getBookauthor());
+            image.setImageResource(R.drawable.demo_user_profile_pic);
+        }
+
         return view;
     }
     //qh -- the book object that is passed here
@@ -32,11 +48,6 @@ public class bookinfoFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            Book receivedbook = bundle.getParcelable("currentbook"); // Key
-            System.out.println(receivedbook.getBooktitle());
-        }
     }
 }
 
