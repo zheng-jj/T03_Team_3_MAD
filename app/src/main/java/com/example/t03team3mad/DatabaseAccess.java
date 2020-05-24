@@ -58,6 +58,9 @@ public class DatabaseAccess {
         }
         return output2;
     }
+
+
+
     //jj- this method is used to load the users into a list and returns the list(create one for each table so can load into recyclerview)
     public List<User> loadalluserlist() {
         List<User> mUserlist = new ArrayList<User>(){};
@@ -199,7 +202,20 @@ public class DatabaseAccess {
         return book1;
     }
 
-    public Author searchauthorbytitle(String name) {
+    public Author searchauthorbyida(String ida) {
+        Author author1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE IDA =="+ida, new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String name = c.getString(1);
+                String about = c.getString(2);
+                author1 = new Author(Integer.parseInt(ida), name,about);
+            } while (c.moveToNext());
+        }
+        return author1;
+    }
+
+    public Author searchauthorbyname(String name) {
         Author author1 = null;
         Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE NAME ='"+name+"'", new String[]{});
         if (c.moveToFirst() && c.getCount() >= 1) {
@@ -225,15 +241,16 @@ public class DatabaseAccess {
         }
         return user1;
     }
-    public User searchuserbyid(String id) {
+
+    public User searchuserbyid(String idu) {
         User user1 = null;
-        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU ='"+id+"'", new String[]{});
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+idu, new String[]{});
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
                 String name = c.getString(1);
                 String isbn = c.getString(2);
                 String about = c.getString(3);
-                user1 = new User(Integer.parseInt(id),name,isbn,about);
+                user1 = new User(Integer.parseInt(idu),name,isbn,about);
             } while (c.moveToNext());
         }
         return user1;
@@ -243,4 +260,26 @@ public class DatabaseAccess {
         List<Review> userreviews = new ArrayList<>();
         return userreviews;
     }
+    public List<Review> extractreviewbybook(String ISBN) {
+        List<Review> mReviewlist = new ArrayList<Review>() {
+        };
+        temp = db.rawQuery("Select * From Reviews ", new String[]{});
+        temp.moveToFirst();
+        do {
+
+            String idus = temp.getString(0);
+            String idrs = temp.getString(1);
+            String review = temp.getString(2);
+            String uname = getElement("Name", "USER", "IDU", idus);
+            String title = getElement("Title", "Book", "ISBN", ISBN);
+            Review review1 = new Review(Integer.parseInt(idus),Integer.parseInt(idrs) , uname, title, review, ISBN);
+            mReviewlist.add(review1);
+
+        }while (temp.moveToNext());
+
+
+        return mReviewlist;
+    }
+
+
 }
