@@ -4,7 +4,7 @@ public class Member {
     private String Name;
     private String Email;
     private String Password;
-
+    private String ID;
     public Member(){}
 
     public String getName() {
@@ -30,6 +30,7 @@ public class Member {
     public void setPassword(String password) {
         Password = password;
     }
+
 }
 
 

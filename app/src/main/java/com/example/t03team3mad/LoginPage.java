@@ -3,6 +3,7 @@ package com.example.t03team3mad;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +18,14 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.Objects;
+
 
 public class LoginPage extends AppCompatActivity {
     EditText EnterEmail,EnterPassword;
@@ -30,7 +37,6 @@ public class LoginPage extends AppCompatActivity {
     String uid;
     DatabaseReference databaseReference;
     ProgressBar progressBar;
-
     private static final String TAG = "LoginPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +47,8 @@ public class LoginPage extends AppCompatActivity {
         LoginButton=findViewById(R.id.LoginButton);
         Auth=FirebaseAuth.getInstance();
         RegisterButton=findViewById(R.id.Register);
-        user=FirebaseAuth.getInstance().getCurrentUser();
-
-        final ProgressBar progressBar =  findViewById(R.id.progressBar);
-        databaseReference= FirebaseDatabase.getInstance().getReference();
+        progressBar =  findViewById(R.id.progressBar);
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
 
         Auto_login.edit().putBoolean("logged",false).apply();
@@ -80,27 +84,39 @@ public class LoginPage extends AppCompatActivity {
                     Toast.makeText(LoginPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                user=Auth.getCurrentUser();
+                uid=Auth.getCurrentUser().getUid();
                 progressBar.setVisibility(View.VISIBLE);
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             progressBar.setVisibility(View.INVISIBLE);
+                            Auto_login.edit().putBoolean("logged",true).apply(); //User is Logged in until he log out
                             Log.v(TAG,"Successfully Logged In");
                             Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-                            uid=user.getUid();
-                            //jj-  this is temporary
-                            uid="1";
 
-                            //jj- this shows the id u are sending me
-                            Log.v(TAG, "the user id sent= "+ user.getUid());
-                            Auto_login.edit().putBoolean("logged",true).apply(); //User is Logged in until he log out
-                            Bundle bundle=new Bundle();
-                            bundle.putString("User_UID",uid);
-                            Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
-                            MainActivity.putExtra("User_UID",bundle);
-                            startActivity(MainActivity);
-                            finish();
+                            databaseReference.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                                        String userid=snapshot.getKey();
+                                        //Toast.makeText(LoginPage.this,userid,Toast.LENGTH_LONG).show();
+                                        Log.v(TAG, "the user id sent= "+ userid);
+                                        Bundle bundle=new Bundle();
+                                        bundle.putString("User_UID",userid);
+                                        Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
+                                        MainActivity.putExtra("User_UID",bundle);
+                                        startActivity(MainActivity);
+                                        finish();
+                                    }
+                                }
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
+                            });
+
+
                         }
                         else {
                             progressBar.setVisibility(View.INVISIBLE);
