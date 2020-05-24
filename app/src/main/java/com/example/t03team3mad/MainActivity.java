@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private void startuserfragment(){
         Log.v(TAG, "user fragment launched");
         //fake data generated
-        loggedinuser = new User(2,"JIONG JIE","9780439362139;9781338132083","hey this is jj");
         fragment_user fragment = new fragment_user();
         //jj- bundle to be moved to fragment
         Bundle bundle = new Bundle();
