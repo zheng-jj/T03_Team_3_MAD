@@ -225,4 +225,17 @@ public class DatabaseAccess {
         }
         return user1;
     }
+    public User searchuserbyid(String id) {
+        User user1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU ='"+id+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String name = c.getString(1);
+                String isbn = c.getString(2);
+                String about = c.getString(3);
+                user1 = new User(Integer.parseInt(id),name,isbn,about);
+            } while (c.moveToNext());
+        }
+        return user1;
+    }
 }

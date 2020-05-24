@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 import com.roughike.bottombar.*;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -24,9 +27,15 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         //jj - receives which user is currently logged in from the login activity
-        Bundle receivedloggedin = intent.getBundleExtra("loginUser");
+        Bundle receivedloggedin = intent.getBundleExtra("User_UID");
+
         if(receivedloggedin!=null) {
-            loggedinuser = receivedloggedin.getParcelable("loginUserObject");
+            String loggedinuserID = receivedloggedin.getString("User_UID");
+            DatabaseAccess DBaccess = DatabaseAccess.getInstance(this.getApplicationContext());
+            DBaccess.open();
+            loggedinuser =  DBaccess.searchuserbyid(loggedinuserID);
+            DBaccess.close();
+
         }
         if(loggedinuser == null)
         {
