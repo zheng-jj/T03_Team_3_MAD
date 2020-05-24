@@ -201,10 +201,23 @@ public class DatabaseAccess {
 
     public Author searchauthorbyida(String ida) {
         Author author1 = null;
-        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE IDA == "+ida , new String[]{});
+        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE IDA =="+ida, new String[]{});
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
                 String name = c.getString(1);
+                String about = c.getString(2);
+                author1 = new Author(Integer.parseInt(ida), name,about);
+            } while (c.moveToNext());
+        }
+        return author1;
+    }
+
+    public Author searchauthorbyname(String name) {
+        Author author1 = null;
+        Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE NAME ='"+name+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String ida = c.getString(0);
                 String about = c.getString(2);
                 author1 = new Author(Integer.parseInt(ida), name,about);
             } while (c.moveToNext());

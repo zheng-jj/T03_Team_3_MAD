@@ -114,7 +114,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         if (currentsearchobject.getSearchClass() == "Author"){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            Author currentauthor = databaseAccess.searchauthorbyida(currentsearchobject.getId());
+            Author currentauthor = databaseAccess.searchauthorbyname(currentsearchobject.getSearchName());
             databaseAccess.close();
 
             authorprofileFragment nextFrag= new authorprofileFragment();
