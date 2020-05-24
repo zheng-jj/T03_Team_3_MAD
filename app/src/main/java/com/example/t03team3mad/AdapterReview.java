@@ -52,6 +52,7 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
         viewHolder.uReview.setText(mReviewlist.get(position).getReviewtext());
         viewHolder.uPic.setImageResource(R.drawable.demo_user_profile_pic);
     }
+
     @Override
     public int getItemCount() {
         return mReviewlist.size();
