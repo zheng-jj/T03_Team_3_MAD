@@ -42,12 +42,12 @@ public class LoginPage extends AppCompatActivity {
         Auth=FirebaseAuth.getInstance();
         RegisterButton=findViewById(R.id.Register);
         user=FirebaseAuth.getInstance().getCurrentUser();
-        uid=user.getUid();
+
         final ProgressBar progressBar =  findViewById(R.id.progressBar);
         databaseReference= FirebaseDatabase.getInstance().getReference();
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
 
-        //Auto_login.edit().putBoolean("logged",false).apply();
+        Auto_login.edit().putBoolean("logged",false).apply();
         //^ if wan test again
 
         if(Auto_login.getBoolean("logged",false)){
@@ -88,6 +88,7 @@ public class LoginPage extends AppCompatActivity {
                             progressBar.setVisibility(View.INVISIBLE);
                             Log.v(TAG,"Successfully Logged In");
                             Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
+                            uid=user.getUid();
                             Auto_login.edit().putBoolean("logged",true).apply(); //User is Logged in until he log out
                             Bundle bundle=new Bundle();
                             bundle.putString("User_UID",uid);
