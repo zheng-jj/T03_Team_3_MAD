@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
 
 public class DatabaseAccess {
@@ -79,13 +80,14 @@ public class DatabaseAccess {
         Integer amountofusers =Integer.valueOf(getCount("IDU","USER"));
         cursor = db.rawQuery("Select * From Book",new  String[]{});
         cursor.moveToFirst();
+        Log.v(TAG,"im here " + Integer.toString(cursor.getCount()) );
         do {
-            String title = cursor.getString(cursor.getColumnIndex("TITLE"));
-            String author = cursor.getString(cursor.getColumnIndex("AUTHOR"));
-            String about = cursor.getString(cursor.getColumnIndex("ABOUT"));
-            String genre = cursor.getString(cursor.getColumnIndex("GENRE"));
-            String pdate = cursor.getString(cursor.getColumnIndex("PDATE"));
-            String isbn = cursor.getString(cursor.getColumnIndex("ISBN"));
+            String title = cursor.getString(0);
+            String author = cursor.getString(1);
+            String about = cursor.getString(2);
+            String genre = cursor.getString(3);
+            String pdate = cursor.getString(4);
+            String isbn = cursor.getString(5);
             Book booktoaddtolist = new Book(title,author,about,genre,pdate,isbn);
             mBooklist.add(booktoaddtolist);
         }while (cursor.moveToNext());
@@ -138,36 +140,33 @@ public class DatabaseAccess {
             do {
                 String idu = c.getString(0);
                 String name = c.getString(1);
-                String isbn = c.getString(2);
-                String about = c.getString(3);
+                String isbn = c.getString(3);
+                String about = c.getString(2);
                 User user1 = new User(Integer.parseInt(idu),name,isbn,about);
                 userList.add(user1);
-                System.out.println(user1.getUsername());
+                Log.v(TAG, "search"+user1.getUsername());
+                Log.v(TAG, user1.getUserisbn());
             } while (c.moveToNext());
         }
         return userList;
     }
     //jj - loads all books the user favourited
-    public List<Book> loaduserbooklist(int userid) {
+    public List<Book> loaduserbooklist(User user) {
         List<Book> userbooklist = new ArrayList<Book>();
-        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+userid, new String[]{});
-        if (c.moveToFirst() && c.getCount() >= 1) {
-            do {
-                String isbn = c.getString(2);
-                List<String> listisbn = Arrays.asList(isbn.split(","));
-                for (String tempisbn:listisbn
-                     ) {
-                    Log.v(TAG,tempisbn);
-                    userbooklist.add(searchbookbyisbn(tempisbn));
-                }
-            } while (c.moveToNext());
+        String[] userisbn = user.getUserisbn().split(";");
+        for(String isbn:userisbn){
+            Log.v(TAG,"-"+isbn+"-");}
+        for(String isbn:userisbn){
+            Book temp = searchbookbyisbn(isbn);
+            Log.v(TAG,temp.toString());
+            userbooklist.add(temp);
         }
         return userbooklist;
     }
     //jj - search book by isbn
     public Book searchbookbyisbn(String isbn) {
         Book book1 = null;
-        Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE ISBN =="+isbn, new String[]{});
+        Cursor c = db.rawQuery("SELECT * FROM Book WHERE ISBN == '"+isbn+"'", new String[]{});
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
                 String title = c.getString(0);
@@ -176,6 +175,7 @@ public class DatabaseAccess {
                 String genre = c.getString(3);
                 String pdate = c.getString(4);
                 book1 = new Book(title, ida, about, genre, pdate, isbn);
+                Log.v(TAG,"book created here "+title+isbn);
             } while (c.moveToNext());
         }
         return book1;
@@ -218,8 +218,8 @@ public class DatabaseAccess {
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
                 String idu = c.getString(0);
-                String isbn = c.getString(2);
-                String about = c.getString(3);
+                String isbn = c.getString(3);
+                String about = c.getString(2);
                 user1 = new User(Integer.parseInt(idu),name,isbn,about);
             } while (c.moveToNext());
         }
@@ -237,5 +237,10 @@ public class DatabaseAccess {
             } while (c.moveToNext());
         }
         return user1;
+    }
+
+    public List<Review> loaduserreviews(User user) {
+        List<Review> userreviews = new ArrayList<>();
+        return userreviews;
     }
 }

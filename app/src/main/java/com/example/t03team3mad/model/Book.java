@@ -108,4 +108,7 @@ public class Book implements Parcelable {
         dest.writeString(isbn);
         dest.writeString(nullbook);
     }
+    public String ToString(){
+        return booktitle+isbn;
+    }
 }

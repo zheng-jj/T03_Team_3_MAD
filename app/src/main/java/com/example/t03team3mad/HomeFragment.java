@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -22,7 +23,7 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-
+        Log.v(TAG,"first recycler");
         //load main popularbooks recyclerview
         RecyclerView popularbooks = (RecyclerView)view.findViewById(R.id.popularbookrecyclerview);
         //jj-layout manager linear layout manager manages the position of the recyclerview items
@@ -34,6 +35,7 @@ public class HomeFragment extends Fragment {
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
 
+        Log.v(TAG,"second recycler");
         //load recommended books recyclerview
         //do the same for another recycler view recommendedbooks
         RecyclerView recommended = (RecyclerView)view.findViewById(R.id.recommendbookrecyclerview);
