@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,14 +41,14 @@ public class fragment_user extends Fragment{
         //checks if the user is viewing his own profile
         else if (bundle.getParcelable("loggedin") != null){
             //jj- inflates the fragment into the container for the fragment
-            view = inflater.inflate(R.layout.fragment_user,container,false);
+            view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
             usertoView = bundle.getParcelable("loggedin");
 
         }
 
         else{
             //jj- inflates the fragment into the container for the fragment
-            view = inflater.inflate(R.layout.fragment_user,container,false);
+            view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
             //jj - this variable is temporary
             usertoView = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
@@ -56,6 +57,28 @@ public class fragment_user extends Fragment{
         int userid = usertoView.getUseridu();
         //jj - loads user into layout
         loaduserintoview(view,usertoView);
+
+        //onclick listener to edit profile
+        Button editprofile = view.findViewById(R.id.edit);
+        final User finalUsertoView = usertoView;
+        editprofile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("UserToEdit", finalUsertoView);
+                Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
+                fragment_editUser fragment_editUser = new fragment_editUser();
+                fragment_editUser.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+
+
+
 
         //jj - sets list that will hold user's favourite books and all the reviews he made
         List<Review> userReviewlist = new ArrayList<Review>(){};
@@ -91,6 +114,9 @@ public class fragment_user extends Fragment{
 //        AdapterUserMain useradapter  = new AdapterUserMain(loadAllusers());
 //        //jj- set the recyclerview object to its adapter
 //        users.setAdapter(useradapter);
+
+        //jj-removes the arguements so that i will get the reason why this page is loaded
+        this.getArguments().clear();
         return view;
     }
 //    public List<User> loadAllusers()

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/userPic"
+            android:layout_width="85dp"
+            android:layout_height="95dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="31dp"
+            android:layout_marginTop="42dp">
+        </ImageView>
+        <Button
+            android:id="@+id/allreviews"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="239dp"
+            android:layout_marginTop="216dp"
+            android:text="View All Reviews Made"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/edit"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="98dp"
+            android:layout_height="34dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="150dp"
+            android:text="Edit Profile"
+            android:textSize="14dp" />
+
+        <Button
+            android:id="@+id/logout"
+            style="@android:style/Widget.Holo.Button"
+            android:layout_width="95dp"
+            android:layout_height="36dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="306dp"
+            android:layout_marginTop="13dp"
+            android:text="Log Out"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="113dp"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="44dp"
+            android:text="user name" />
+
+        <TextView
+            android:id="@+id/userDescription"
+            android:layout_width="231dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="106dp"
+            android:text="user name" />
+
+        <TextView
+            android:id="@+id/pastreviews"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="215dp"
+            android:text="Past Reviews" />
+
+        <ScrollView
+            android:id="@+id/userReviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="250dp">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/userreviewprofile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"/>
+                //android:scrollbars="horizontal"
+        </ScrollView>
+
+        <TextView
+            android:layout_below="@id/userReviews"
+            android:id="@+id/favouritebooks"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            android:text="Favourite Books" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/favouritebooks"
+            android:id="@+id/favbookslist"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"/>
+    </RelativeLayout>
+</FrameLayout>
