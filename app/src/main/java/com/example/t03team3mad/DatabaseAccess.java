@@ -161,7 +161,6 @@ public class DatabaseAccess {
             Log.v(TAG,"-"+isbn+"-");}
         for(String isbn:userisbn){
             Book temp = searchbookbyisbn(isbn);
-            Log.v(TAG,temp.toString());
             userbooklist.add(temp);
         }
         return userbooklist;
@@ -248,8 +247,8 @@ public class DatabaseAccess {
         if (c.moveToFirst() && c.getCount() >= 1) {
             do {
                 String name = c.getString(1);
-                String isbn = c.getString(2);
-                String about = c.getString(3);
+                String isbn = c.getString(3);
+                String about = c.getString(2);
                 user1 = new User(Integer.parseInt(idu),name,isbn,about);
             } while (c.moveToNext());
         }
