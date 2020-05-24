@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 startsLoginPage();
             }
             if (tabId == R.id.tab_profile) {
-                startuserfragment();
+                startreviewpagefragment();
             }
             }
         });

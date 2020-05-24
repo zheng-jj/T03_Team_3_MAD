@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
 
 public class DatabaseAccess {
@@ -57,6 +58,9 @@ public class DatabaseAccess {
         }
         return output2;
     }
+
+
+
     //jj- this method is used to load the users into a list and returns the list(create one for each table so can load into recyclerview)
     public List<User> loadalluserlist() {
         List<User> mUserlist = new ArrayList<User>(){};
@@ -238,4 +242,26 @@ public class DatabaseAccess {
         }
         return user1;
     }
+    public List<Review> extractreviewbybook(String ISBN) {
+        List<Review> mReviewlist = new ArrayList<Review>() {
+        };
+        temp = db.rawQuery("Select * From Reviews ", new String[]{});
+        temp.moveToFirst();
+        do {
+
+            String idus = temp.getString(0);
+            String idrs = temp.getString(1);
+            String review = temp.getString(2);
+            String uname = getElement("Name", "USER", "IDU", idus);
+            String title = getElement("Title", "Book", "ISBN", ISBN);
+            Review review1 = new Review(Integer.parseInt(idus),Integer.parseInt(idrs) , uname, title, review, ISBN);
+            mReviewlist.add(review1);
+
+        }while (temp.moveToNext());
+
+
+        return mReviewlist;
+    }
+
+
 }

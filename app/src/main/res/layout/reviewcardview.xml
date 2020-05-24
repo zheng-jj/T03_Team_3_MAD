@@ -5,14 +5,16 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_width="match_parent"
-    android:layout_height="100dp">
+    android:layout_height="100dp"
+    android:id="@+id/rcview">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <ImageView
             android:layout_width="90dp"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:id="@+id/uimg"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +27,8 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_weight="0.8"
-                    android:layout_height="match_parent"></TextView>
+                    android:layout_height="match_parent"
+                    android:id="@+id/uname"></TextView>
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="0.2"
@@ -37,7 +40,8 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="0.7">
+                android:layout_weight="0.7"
+                android:id="@+id/ureview">
 
             </TextView>
         </LinearLayout>
