@@ -74,7 +74,7 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
                 .addToBackStack(null)
                 .commit();
 
-        
+
 
     }
 }
