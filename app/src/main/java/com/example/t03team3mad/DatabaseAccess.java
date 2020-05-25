@@ -118,6 +118,26 @@ public class DatabaseAccess {
         return booklist;
     }
 
+    //qh - method to search books in the database
+    public List<Book> searchauthorbook(String query) {
+        List<Book> booklist = new ArrayList<Book>();
+        Cursor c = db.rawQuery("SELECT * FROM Book WHERE IDA == '"+query+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String title = c.getString(0);
+                String ida = c.getString(1);
+                String about = c.getString(2);
+                String genre = c.getString(3);
+                String pdate = c.getString(4);
+                String isbn = c.getString(5);
+                Book book1 = new Book(title, ida, about, genre, pdate, isbn);
+                booklist.add(book1);
+                System.out.println(book1.getBooktitle());
+            } while (c.moveToNext());
+        }
+        return booklist;
+    }
+
     //qh - method to search author in the database
     public List<Author> searchAuthor(String query) {
         List<Author> authorList = new ArrayList<Author>();
@@ -134,6 +154,7 @@ public class DatabaseAccess {
         }
         return authorList;
     }
+
 
     //qh - method to search user in the database
     public List<User> searchUser(String query) {
