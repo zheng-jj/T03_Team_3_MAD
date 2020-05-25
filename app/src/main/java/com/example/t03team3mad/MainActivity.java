@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         //jj- bundle to be moved to fragment
         Bundle bundle = new Bundle();
         //places the currently logged in user into bundle
+        loggedinuser = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         bundle.putParcelable("loggedin", loggedinuser);
         fragment.setArguments(bundle);
 

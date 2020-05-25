@@ -27,7 +27,7 @@ public class bookinfoFragment extends Fragment {
         ImageView image = view.findViewById(R.id.imageView2);
 
         Bundle bundle = this.getArguments();
-        if (bundle != null) {
+        if (bundle.getParcelable("currentbook") != null) {
             Book receivedbook = bundle.getParcelable("currentbook"); // Key
             System.out.println(receivedbook.getBooktitle());
             System.out.println(receivedbook.getBooktitle());

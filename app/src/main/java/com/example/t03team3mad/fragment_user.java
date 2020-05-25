@@ -33,9 +33,12 @@ public class fragment_user extends Fragment{
         Bundle bundle = this.getArguments();
         User usertoView = null;
         if (bundle.getParcelable("searchuser") != null) {
+            Log.v(TAG,"showing search user profile");
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_user,container,false);
             usertoView = bundle.getParcelable("searchuser");
+            //jj-removes the arguements so that i will get the reason why this page is loaded
+            this.getArguments().putParcelable("searchuser",null);
         }
 
         //checks if the user is viewing his own profile
@@ -43,7 +46,24 @@ public class fragment_user extends Fragment{
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
             usertoView = bundle.getParcelable("loggedin");
-
+            //onclick listener to edit profile
+            Button editprofile = view.findViewById(R.id.edit);
+            final User finalUsertoView = usertoView;
+            Log.v(TAG,"showing current user profile");
+            editprofile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("UserToEdit", finalUsertoView);
+                    Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
+                    fragment_editUser fragment_editUser = new fragment_editUser();
+                    fragment_editUser.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
         }
 
         else{
@@ -57,29 +77,6 @@ public class fragment_user extends Fragment{
         int userid = usertoView.getUseridu();
         //jj - loads user into layout
         loaduserintoview(view,usertoView);
-
-        //onclick listener to edit profile
-        Button editprofile = view.findViewById(R.id.edit);
-        final User finalUsertoView = usertoView;
-        editprofile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("UserToEdit", finalUsertoView);
-                Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
-                fragment_editUser fragment_editUser = new fragment_editUser();
-                fragment_editUser.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
-
-
-
-
-
         //jj - sets list that will hold user's favourite books and all the reviews he made
         List<Review> userReviewlist = new ArrayList<Review>(){};
 
@@ -116,7 +113,6 @@ public class fragment_user extends Fragment{
 //        users.setAdapter(useradapter);
 
         //jj-removes the arguements so that i will get the reason why this page is loaded
-        this.getArguments().clear();
         return view;
     }
 //    public List<User> loadAllusers()
