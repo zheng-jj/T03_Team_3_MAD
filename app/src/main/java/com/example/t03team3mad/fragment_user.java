@@ -69,6 +69,7 @@ public class fragment_user extends Fragment{
         else{
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
+            Log.v(TAG,"No user received, creating demo user object");
             //jj - this variable is temporary
             usertoView = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
