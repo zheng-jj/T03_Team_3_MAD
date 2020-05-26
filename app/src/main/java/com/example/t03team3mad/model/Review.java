@@ -23,6 +23,13 @@ public class Review {
         this.reviewtext = newReviewTitle;
     }
 
+    private String bookName;
+    public String getBookName(){
+        return bookName;
+    }
+    public void setBookName(String newbookName){
+        this.bookName = newbookName;
+    }
 
     private int reviewidr;
     public int getReviewidr() {

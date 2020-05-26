@@ -71,10 +71,10 @@
             android:padding="5dp"
             android:text="Past Reviews" />
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/userReviews"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:layout_marginStart="0dp"
             android:padding="5dp"
             android:layout_marginTop="250dp">
@@ -82,10 +82,8 @@
                 android:id="@+id/userreviewprofile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"/>
-                //android:scrollbars="horizontal"
-        </ScrollView>
+                android:scrollbars="vertical"/>
+        </androidx.core.widget.NestedScrollView>
 
         <TextView
             android:layout_below="@id/userReviews"

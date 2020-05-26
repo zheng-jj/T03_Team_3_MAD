@@ -279,10 +279,26 @@ public class DatabaseAccess {
         }
         return user1;
     }
-
+    //gets all the reviews a user has written
     public List<Review> loaduserreviews(User user) {
-        List<Review> userreviews = new ArrayList<>();
-        return userreviews;
+        List<Review> mReviewlist = new ArrayList<Review>() {};
+        temp = db.rawQuery("Select * From Reviews WHERE IDU = '"+user.getUseridu()+"'", new String[]{});
+        temp.moveToFirst();
+        do {
+            String idus = temp.getString(0);
+            String idrs = temp.getString(1);
+            String review = temp.getString(2);
+            String ISBN = temp.getString(3);
+            String uname = user.getUsername();
+            String title = searchbookbyisbn(ISBN).getBooktitle();
+            String bookname = searchbookbyisbn(ISBN).getBooktitle();
+            Review reviewobj = new Review(Integer.parseInt(idus),Integer.parseInt(idrs) , uname, title, review, ISBN);
+            reviewobj.setBookName(bookname);
+            mReviewlist.add(reviewobj);
+        }while (temp.moveToNext());
+
+
+        return mReviewlist;
     }
     public List<Review> extractreviewbybook(String ISBN) {
         List<Review> mReviewlist = new ArrayList<Review>() {

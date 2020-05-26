@@ -107,7 +107,19 @@ public class fragment_user extends Fragment{
         //jj- set the recyclerview object to its adapter
         favouritebooks.setAdapter(bookadapter);
 
+        //list of reviews made by this user
+        List<Review> reviewsByUser = loaduserreviews(usertoView);
 
+        //jj - load user reviews recyclerview
+        RecyclerView pastReviews = (RecyclerView) view.findViewById(R.id.userreviewprofile);
+        //jj-layout manager linear layout manager manages the position of the recyclerview items
+        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+        //jj-set the recyclerview's manager to the previously created manager
+        pastReviews.setLayoutManager(llm2);
+        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+        AdapterReviewForUSer reviewadapter = new AdapterReviewForUSer(reviewsByUser);
+        //jj- set the recyclerview object to its adapter
+        pastReviews.setAdapter(reviewadapter);
 
 //        //jj- follow buttom(NOT YET IMPLEMENTED)
 //        Button follow = view.findViewById(R.id.follow1);
@@ -145,7 +157,7 @@ public class fragment_user extends Fragment{
         DBaccess.open();
         List<Book> userbooklist = DBaccess.loaduserbooklist(user);
         DBaccess.close();
-        Log.v(TAG,"list is loaded");
+        Log.v(TAG,"fav book list is loaded");
         return userbooklist;
     }
     //jj- get user reviews made
@@ -154,7 +166,7 @@ public class fragment_user extends Fragment{
         DBaccess.open();
         List<Review> userreviewlist = DBaccess.loaduserreviews(user);
         DBaccess.close();
-        Log.v(TAG,"list is loaded");
+        Log.v(TAG,"review list is loaded");
         return userreviewlist;
     }
     //jj - Loads the user information into the layout
