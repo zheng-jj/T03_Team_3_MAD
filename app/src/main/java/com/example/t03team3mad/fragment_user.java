@@ -62,6 +62,21 @@ public class fragment_user extends Fragment{
                             .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
                             .addToBackStack(null)
                             .commit();
+                    }
+            });
+            Button following = view.findViewById(R.id.viewfollowing);
+            following.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("UserToEdit", finalUsertoView);
+                    Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
+                    fragment_userFollowing fragment_userFollowing = new fragment_userFollowing();
+                    fragment_userFollowing.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.mainactivitycontainer, fragment_userFollowing, "viewFollowing")
+                            .addToBackStack(null)
+                            .commit();
                 }
             });
         }
@@ -71,7 +86,7 @@ public class fragment_user extends Fragment{
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
             Log.v(TAG,"No user received, creating demo user object");
             //jj - this variable is temporary
-            usertoView = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
+            usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
 
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());

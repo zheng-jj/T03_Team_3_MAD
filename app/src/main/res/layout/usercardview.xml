@@ -6,36 +6,28 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:orientation="vertical"
-    android:weightSum="100"
     app:cardElevation="0dp">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:weightSum="100">
-
+        android:orientation="vertical">
         <ImageView
             android:id="@+id/userpic"
-            android:layout_width="126dp"
+            android:layout_width="100dp"
             android:layout_height="match_parent" />
+        <TextView
+            android:layout_toRightOf="@id/userpic"
+            android:id="@+id/username"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="5dp" />
 
-        <LinearLayout
+        <TextView
+            android:layout_toRightOf="@id/userpic"
+            android:layout_below="@id/username"
+            android:id="@+id/userdes"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:weightSum="100">
-
-            <TextView
-                android:id="@+id/username"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:padding="5dp" />
-
-            <TextView
-                android:id="@+id/userdes"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="5dp" />
-        </LinearLayout>
-    </LinearLayout>
+            android:padding="5dp" />
+    </RelativeLayout>
 </androidx.cardview.widget.CardView>

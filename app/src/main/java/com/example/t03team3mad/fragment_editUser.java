@@ -41,7 +41,6 @@ public class fragment_editUser extends Fragment{
         //jj - loads user into layout
         if(usertoEdit!=null) {
             loaduserintoview(view, usertoEdit);
-            this.getArguments().clear();
         }
 
         //jj - load favourite user books recyclerview

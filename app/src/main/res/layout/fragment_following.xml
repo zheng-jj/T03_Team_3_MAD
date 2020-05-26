@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/edituserbook"
+    android:id="@+id/following"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".HomeFragment">
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/edituserbookrecycler"
+            android:id="@+id/followerrecycler"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="0.8">
         </androidx.recyclerview.widget.RecyclerView>
     </androidx.appcompat.widget.LinearLayoutCompat>
-
 </FrameLayout>

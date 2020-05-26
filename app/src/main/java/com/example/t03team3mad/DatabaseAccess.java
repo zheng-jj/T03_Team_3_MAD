@@ -320,7 +320,22 @@ public class DatabaseAccess {
             return true;
         }
     }
-
+    //jj- gets the list of users the user is following and returns them in a list
+    public List<User> getUserFollowing(String UID){
+        Log.v(TAG,"get list of users following for user "+UID);
+        List<User> mUserlist = new ArrayList<User>(){};
+        cursor = db.rawQuery("Select * From USER WHERE IDU = '"+UID+"'",new  String[]{});
+        cursor.moveToFirst();
+        do {
+            String following = cursor.getString(4);
+            List<String> listOffollowingUsersID = Arrays.asList(following.split(";"));
+            for(String followingID : listOffollowingUsersID){
+                Log.v(TAG,"Following user's ID "+followingID);
+                mUserlist.add(searchuserbyid(followingID));
+            }
+        }while (cursor.moveToNext());
+        return mUserlist;
+    }
 
 
 }
