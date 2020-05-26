@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         if(loggedinuser == null)
         {
             Log.v(TAG,"no logged in user received");
+            //startsLoginPage();
         }
 
         //jj - this is the code to navigate using the bottom navigation bar

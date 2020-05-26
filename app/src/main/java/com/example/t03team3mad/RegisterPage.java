@@ -2,14 +2,15 @@ package com.example.t03team3mad;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-
 import com.example.t03team3mad.model.Member;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,7 +29,7 @@ public class RegisterPage extends AppCompatActivity {
     DatabaseReference databaseReference;
     Member member;
     ProgressBar progressBar;
-    private static final String TAG = "RegisterPage";
+   private static final String TAG = "RegisterPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,10 +39,11 @@ public class RegisterPage extends AppCompatActivity {
         EnterPassword=findViewById(R.id.EnterPassword);
         ConfirmPassword=findViewById(R.id.ConfirmPassword);
         RegisterButton=findViewById(R.id.RegisterButton);
-        final ProgressBar progressBar =  findViewById(R.id.progressBar);
+        progressBar =  findViewById(R.id.progressBar);
         Auth = FirebaseAuth.getInstance();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         member = new Member();
+
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ShowToast")
             @Override
@@ -90,27 +92,44 @@ public class RegisterPage extends AppCompatActivity {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             //check whether register of user is successful or not
-                            if (task.isSuccessful()) {
+                            if (!task.isSuccessful()) {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(RegisterPage.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
+
+                            }
+
+                            else {
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
                                 member.setPassword(EnterPassword.getText().toString());
                                 databaseReference.push().setValue(member);
                                 progressBar.setVisibility(View.INVISIBLE);
+                                String UniqueKey=databaseReference.push().getKey();
+                               Boolean test=insertUser( UniqueKey, EnterName.toString(),"Welcome"+EnterName.toString(),null ,null);
+                                Log.v(TAG,"Inserted Succesfully");
                                 Log.v(TAG,"Registration Succesfully");
                                 Toast.makeText(RegisterPage.this, "Registration Succesfully", Toast.LENGTH_SHORT).show();
                                 Intent login=new Intent(RegisterPage.this, LoginPage.class);
                                 startActivity(login);
                                 finish();
+
                             }
-                            else {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(RegisterPage.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
-                            }
+
                         }
+                        public boolean insertUser(String key,String idu,String about,String favouriteb,String following) {
+                            DatabaseAccess DBaccess = DatabaseAccess.getInstance(RegisterPage.this.getApplicationContext());
+                            DBaccess.open();
+                            boolean success = DBaccess.addData(key, idu, about, favouriteb, following);
+                            DBaccess.close();
+                            return success;
+                        }
+
                     });
+
                 }
             }
         });
+
     }
 
 }

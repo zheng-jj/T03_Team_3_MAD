@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -23,6 +24,7 @@ public class DatabaseAccess {
     private Cursor temp = null;
     private Cursor count = null;
     private Cursor cursor = null;
+    private Cursor insert = null;
     String output;
     String output2;
     Integer out;
@@ -300,6 +302,23 @@ public class DatabaseAccess {
 
         return mReviewlist;
     }
+    public boolean addData(String idu,String Name,String about, String favouriteb,String following){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("IDU",idu);
+        contentValues.put("NAME",Name);
+        contentValues.put("ABOUT",about);
+        contentValues.put("FAVOURITEB",favouriteb);
+        contentValues.put("Following",following);
+
+        long result = db.insert("USER",null,contentValues);
+        if (result== -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 
 
 }

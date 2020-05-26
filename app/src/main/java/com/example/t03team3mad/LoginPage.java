@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.cert.TrustAnchor;
 import java.util.Objects;
 
 
@@ -51,7 +52,7 @@ public class LoginPage extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
 
-        Auto_login.edit().putBoolean("logged",false).apply();
+        //Auto_login.edit().putBoolean("logged", false).apply();
         //^ if wan test again
 
         if(Auto_login.getBoolean("logged",false)){
