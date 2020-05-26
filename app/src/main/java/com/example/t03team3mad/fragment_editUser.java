@@ -54,7 +54,23 @@ public class fragment_editUser extends Fragment{
         AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoEdit));
         //jj- set the recyclerview object to its adapter
         favouritebooks.setAdapter(bookadapter);
-
+        //onclick listener for button to edit user favourite books
+        Button editBooks = view.findViewById(R.id.allfavbooks);
+        final User finalUsertoEdit = usertoEdit;
+        editBooks.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment_editUserBooks fragment_editUserBooks = new fragment_editUserBooks();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("UserToEdit", finalUsertoEdit);
+                Log.v(TAG,"user sending to editBooks = "+ finalUsertoEdit.getUsername());
+                fragment_editUserBooks.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainactivitycontainer, fragment_editUserBooks, "editUserBooks")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
 
         return view;
     }

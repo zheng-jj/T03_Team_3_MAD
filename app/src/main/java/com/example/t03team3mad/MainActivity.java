@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         starthomefragment();
-
         Intent intent = getIntent();
         //jj - receives which user is currently logged in from the login activity
         Bundle receivedloggedin = intent.getBundleExtra("User_UID");
@@ -147,14 +146,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,bookinfo,"bookinfoFragment");
         transaction.addToBackStack("bookinfoFragment");
-        transaction.commit();
-    }
-    private void starteditprofilefragment(){
-        Log.v(TAG, "edit profile fragment launched");
-        editprofileFragment editFragment= new editprofileFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,editFragment,"editprofileFragment");
-        transaction.addToBackStack("editprofileFragment");
         transaction.commit();
     }
 }

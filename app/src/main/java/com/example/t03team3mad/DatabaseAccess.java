@@ -70,10 +70,11 @@ public class DatabaseAccess {
         cursor = db.rawQuery("Select * From USER",new  String[]{});
         cursor.moveToFirst();
         do {
-            String name = cursor.getString(cursor.getColumnIndex("NAME"));
-            String des = cursor.getString(cursor.getColumnIndex("ABOUT"));
-            String books = cursor.getString(cursor.getColumnIndex("ISBN"));
-            int idu =Integer.valueOf(cursor.getString(cursor.getColumnIndex("IDU")));
+            String name = cursor.getString(1);
+            String des = cursor.getString(2);
+            String books = cursor.getString(3);
+            int idu =Integer.parseInt(cursor.getString(0));
+            Log.v(TAG,Integer.toString(idu));
             User usertoaddtolist = new User(idu,name,books,des);
             mUserlist.add(usertoaddtolist);
             }while (cursor.moveToNext());
