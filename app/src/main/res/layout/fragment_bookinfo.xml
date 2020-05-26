@@ -9,14 +9,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <TextView
             android:id="@+id/titleview"
             android:layout_width="366dp"
             android:layout_height="77dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="4dp"
             android:paddingLeft='15dp'
             android:text="TITLE"
-            android:textSize="30dp"
+            android:textSize="25dp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.488"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +30,7 @@
             android:layout_width="142dp"
             android:layout_height="216dp"
             android:layout_marginStart="28dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="52dp"
             app:layout_constraintBottom_toTopOf="@+id/authorview"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -37,6 +39,7 @@
             android:layout_width="160dp"
             android:layout_height="45dp"
             android:layout_marginStart="20dp"
+            android:layout_marginBottom="4dp"
             android:text="Author"
             android:textSize="15dp"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
@@ -46,43 +49,45 @@
             android:id="@+id/ratingview"
             android:layout_width="162dp"
             android:layout_height="74dp"
-            android:layout_marginTop="36dp"
+            android:layout_marginTop="12dp"
             android:layout_marginEnd="20dp"
-            android:paddingLeft='30dp'
+            android:layout_marginBottom="20dp"
+            android:paddingLeft='10dp'
             android:text="Rating"
             android:textSize="30dp"
             app:layout_constraintBottom_toTopOf="@+id/releasedateview"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.517"
+            app:layout_constraintHorizontal_bias="0.568"
             app:layout_constraintStart_toEndOf="@+id/imageView2"
             app:layout_constraintTop_toBottomOf="@+id/titleview"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/genreview"
-            android:layout_width="162dp"
-            android:layout_height="74dp"
-            android:layout_marginEnd="20dp"
-            android:paddingLeft='30dp'
+            android:layout_width="163dp"
+            android:layout_height="68dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginBottom="76dp"
+            android:paddingLeft='10dp'
             android:text="Genre"
             android:textSize="10dp"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.517"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
         <TextView
             android:id="@+id/releasedateview"
-            android:layout_width="162dp"
-            android:layout_height="74dp"
+            android:layout_width="165dp"
+            android:layout_height="52dp"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:paddingLeft='30dp'
+            android:layout_marginBottom="24dp"
+            android:paddingLeft='10dp'
             android:text="Date"
-            android:textSize="30dp"
+            android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/genreview"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.52"
+            app:layout_constraintHorizontal_bias="0.607"
             app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
         <TextView
@@ -97,6 +102,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.444"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/buttontobeused"
+            android:layout_width="86dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="60dp"
+            android:layout_marginBottom="8dp"
+            android:text="Button"
+            app:layout_constraintBottom_toTopOf="@+id/synopsis"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.811"
+            app:layout_constraintStart_toEndOf="@+id/authorview"
+            app:layout_constraintTop_toBottomOf="@+id/genreview"
+            app:layout_constraintVertical_bias="0.619" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
