@@ -17,7 +17,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="98dp"
+        android:layout_marginTop="150dp"
         android:layout_marginEnd="30dp"
         android:layout_marginBottom="43dp"
         android:orientation="vertical">
@@ -25,8 +25,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:textSize="60dp"
+            android:layout_marginBottom="70dp"
+            android:text="Member Login"
+            android:textSize="50dp"
+            android:layout_gravity="center"
             android:textStyle="bold" />
 
         <EditText
@@ -81,7 +83,8 @@
             android:background="@color/colorPrimaryDark"
             android:text="Login"
             android:textAllCaps="false"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            />
 
         <ProgressBar
             android:id="@+id/progressBar"
