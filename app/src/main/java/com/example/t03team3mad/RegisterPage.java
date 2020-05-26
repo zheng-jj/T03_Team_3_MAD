@@ -16,8 +16,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +32,7 @@ public class RegisterPage extends AppCompatActivity {
     DatabaseReference databaseReference;
     Member member;
     ProgressBar progressBar;
+    long maxid=0;
    private static final String TAG = "RegisterPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,20 @@ public class RegisterPage extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         member = new Member();
 
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists())
+                {
+                    maxid=dataSnapshot.getChildrenCount();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("ShowToast")
             @Override
@@ -91,7 +109,7 @@ public class RegisterPage extends AppCompatActivity {
                     Auth.createUserWithEmailAndPassword(email, confirmPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                            //check whether register of user is successful or not
+                                //check whether register of user is successful or not
                             if (!task.isSuccessful()) {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(RegisterPage.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
@@ -102,19 +120,17 @@ public class RegisterPage extends AppCompatActivity {
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
                                 member.setPassword(EnterPassword.getText().toString());
-                                databaseReference.push().setValue(member);
+                                String id= String.valueOf(maxid+4);
                                 progressBar.setVisibility(View.INVISIBLE);
-                                String UniqueKey=databaseReference.push().getKey();
-                               Boolean test=insertUser( UniqueKey, EnterName.toString(),"Welcome"+EnterName.toString(),null ,null);
-                                Log.v(TAG,"Inserted Succesfully");
-                                Log.v(TAG,"Registration Succesfully");
-                                Toast.makeText(RegisterPage.this, "Registration Succesfully", Toast.LENGTH_SHORT).show();
+                                databaseReference.child(id).setValue(member);
+                               Boolean test=insertUser( id, EnterName.getText().toString(),"About",null ,null);
+                                Log.v(TAG,"Inserted Successfully");
+                                Log.v(TAG,"Registration Successfully");
+                                Toast.makeText(RegisterPage.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
                                 Intent login=new Intent(RegisterPage.this, LoginPage.class);
                                 startActivity(login);
                                 finish();
-
                             }
-
                         }
                         public boolean insertUser(String key,String idu,String about,String favouriteb,String following) {
                             DatabaseAccess DBaccess = DatabaseAccess.getInstance(RegisterPage.this.getApplicationContext());
