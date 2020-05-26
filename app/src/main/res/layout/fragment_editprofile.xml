@@ -12,6 +12,8 @@
         android:layout_height="wrap_content">
 
         <ImageButton
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"
             android:id="@+id/newprofileimg"
             android:layout_width="85dp"
             android:layout_height="95dp"
