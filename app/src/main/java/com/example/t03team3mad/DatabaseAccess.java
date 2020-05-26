@@ -172,7 +172,6 @@ public class DatabaseAccess {
                 User user1 = new User(Integer.parseInt(idu),name,isbn,about);
                 userList.add(user1);
                 Log.v(TAG, "search"+user1.getUsername());
-                Log.v(TAG, user1.getUserisbn());
             } while (c.moveToNext());
         }
         return userList;
@@ -180,12 +179,14 @@ public class DatabaseAccess {
     //jj - loads all books the user favourited
     public List<Book> loaduserbooklist(User user) {
         List<Book> userbooklist = new ArrayList<Book>();
-        String[] userisbn = user.getUserisbn().split(";");
-        for(String isbn:userisbn){
-            Log.v(TAG,"-"+isbn+"-");}
-        for(String isbn:userisbn){
-            Book temp = searchbookbyisbn(isbn);
-            userbooklist.add(temp);
+        if(user.getUserisbn()!=null){
+            String[] userisbn = user.getUserisbn().split(";");
+            for(String isbn:userisbn){
+                Log.v(TAG,"-"+isbn+"-");}
+            for(String isbn:userisbn){
+                Book temp = searchbookbyisbn(isbn);
+                userbooklist.add(temp);
+            }
         }
         return userbooklist;
     }
