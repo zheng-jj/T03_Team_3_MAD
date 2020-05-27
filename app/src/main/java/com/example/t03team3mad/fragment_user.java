@@ -71,7 +71,7 @@ public class fragment_user extends Fragment{
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("UserToEdit", finalUsertoView);
                     Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
-                    fragment_userFollowing fragment_userFollowing = new fragment_userFollowing();
+                    fragment_userfollowing fragment_userFollowing = new fragment_userfollowing();
                     fragment_userFollowing.setArguments(bundle);
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.mainactivitycontainer, fragment_userFollowing, "viewFollowing")

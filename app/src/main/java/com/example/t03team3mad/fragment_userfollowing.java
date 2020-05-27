@@ -16,7 +16,7 @@ import com.example.t03team3mad.model.User;
 
 import java.util.List;
 
-public class fragment_userFollowing extends Fragment {
+public class fragment_userfollowing extends Fragment {
     private static final String TAG = "userfollowingFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
