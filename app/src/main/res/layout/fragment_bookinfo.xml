@@ -17,7 +17,7 @@
             android:layout_marginTop="4dp"
             android:paddingLeft='15dp'
             android:text="TITLE"
-            android:textSize="25dp"
+            android:textSize="20dp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.488"

@@ -40,6 +40,12 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
             about.setText(receivedauthor.getAuthorabout());
             image.setImageResource(R.drawable.demo_user_profile_pic);
 
+            //QH = SETS IMAGE FROM STRING
+            String filename = "author" + receivedauthor.getAuthorid();
+            int id = getResources().getIdentifier(filename, "drawable", getActivity().getPackageName());
+            System.out.println(id);
+            image.setImageResource(id);
+
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
             booklist = databaseAccess.searchauthorbook(String.valueOf(receivedauthor.getAuthorid()));
@@ -49,7 +55,7 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
             RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.published);
             LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
             searchresults.setLayoutManager(searchlayout);
-            AdapterAuthor searchadapter  = new AdapterAuthor(booklist,this);
+            AdapterAuthor searchadapter  = new AdapterAuthor(booklist,this, this.getContext());
             searchresults.setAdapter(searchadapter);
         }
 

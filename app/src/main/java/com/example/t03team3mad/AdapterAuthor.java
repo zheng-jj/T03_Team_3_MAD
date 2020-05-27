@@ -1,6 +1,7 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,9 @@ import java.util.List;
 public class AdapterAuthor extends RecyclerView.Adapter<AdapterAuthor.ViewHolder> {
     List<Book> booklist1 = new ArrayList<Book>(){};
     private AdapterAuthor.OnSearchListener mOnSearchListener;
+    //QH- THIS IS IMPORTANT TO SET IMAGE FROM STRING
+    private Context context;
+
     //qh -- uses onclicklistener to click
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
@@ -33,6 +37,7 @@ public class AdapterAuthor extends RecyclerView.Adapter<AdapterAuthor.ViewHolder
             authorbookname = (TextView)itemView.findViewById(R.id.authorbooktitle);
             authorbookdes = (TextView)itemView.findViewById(R.id.authorbookdes);
             authorbookpic = (ImageView)itemView.findViewById(R.id.authorbookimage);
+
             this.onSearchListener = onSearchListener;
             itemView.setOnClickListener(this);
         }
@@ -46,9 +51,10 @@ public class AdapterAuthor extends RecyclerView.Adapter<AdapterAuthor.ViewHolder
         void onSearchClick(int position);
     }
 
-    public AdapterAuthor(List<Book> bookList, OnSearchListener onSearchListener) {
+    public AdapterAuthor(List<Book> bookList, OnSearchListener onSearchListener, Context context) {
         this.mOnSearchListener = onSearchListener;
         this.booklist1 = bookList;
+        this.context = context;
     }
     @Override
     public AdapterAuthor.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -62,8 +68,16 @@ public class AdapterAuthor extends RecyclerView.Adapter<AdapterAuthor.ViewHolder
     public void onBindViewHolder(AdapterAuthor.ViewHolder viewHolder, int position) {
         viewHolder.authorbookname.setText(booklist1.get(position).getBooktitle());
         viewHolder.authorbookdes.setText(booklist1.get(position).getBookabout());
-        viewHolder.authorbookpic.setImageResource(R.drawable.demo_user_profile_pic);
+
+        //QH = SETS IMAGE FROM STRING
+        String filename = "book" + booklist1.get(position).getIsbn();
+        int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
+        System.out.println(id);
+        viewHolder.authorbookpic.setImageResource(id);
+
     }
+
+
     @Override
     public int getItemCount() {
         return booklist1.size();

@@ -38,7 +38,12 @@ public class bookinfoFragment extends Fragment {
             releasedate.setText(receivedbook.getPdate());
             genre.setText(receivedbook.getBookgenre());
             author.setText(receivedbook.getBookauthor());
-            image.setImageResource(R.drawable.demo_user_profile_pic);
+
+            //QH = SETS IMAGE FROM STRING
+            String filename = "book" + receivedbook.getIsbn();
+            int id = getResources().getIdentifier(filename, "drawable", getActivity().getPackageName());
+            System.out.println(id);
+            image.setImageResource(id);
         }
 
         return view;

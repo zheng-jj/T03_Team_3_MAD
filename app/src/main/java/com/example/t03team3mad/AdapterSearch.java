@@ -12,8 +12,10 @@ import java.util.List;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.SearchClass;
+import com.example.t03team3mad.model.User;
 
 public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder>
 {
@@ -21,6 +23,9 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
     List<String> des = new ArrayList<String>(){};
     List<SearchClass> searchlist = new ArrayList<SearchClass>(){};
     private OnSearchListener mOnSearchListener;
+    //QH- THIS IS IMPORTANT TO SET IMAGE FROM STRING
+    private Context context;
+
     //qh -- uses onclicklistener to click
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
@@ -48,9 +53,10 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         void onSearchClick(int position);
     }
 
-    public AdapterSearch(List<SearchClass> searchList, OnSearchListener onSearchListener) {
+    public AdapterSearch(List<SearchClass> searchList, OnSearchListener onSearchListener, Context context) {
         this.mOnSearchListener = onSearchListener;
         this.searchlist = searchList;
+        this.context = context;
     }
     @Override
     public AdapterSearch.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -64,7 +70,50 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
     public void onBindViewHolder(AdapterSearch.ViewHolder viewHolder, int position) {
         viewHolder.searchname.setText(searchlist.get(position).getSearchName());
         viewHolder.searchdes.setText(searchlist.get(position).getSearchDes());
-        viewHolder.searchpic.setImageResource(R.drawable.demo_user_profile_pic);
+
+        //SET IMAGE BASED ON CLASS
+        //qh -- if object clicked is a book
+        if (searchlist.get(position).getSearchClass() == "Book"){
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
+            databaseAccess.open();
+            Book currentbook = databaseAccess.searchbookbyisbn(searchlist.get(position).getId());
+            databaseAccess.close();
+
+            //QH = SETS IMAGE FROM STRING
+            String filename = "book" + currentbook.getIsbn();
+            int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
+            System.out.println(id);
+            viewHolder.searchpic.setImageResource(id);
+        }
+
+        //qh -- if object clicked is a author
+        if (searchlist.get(position).getSearchClass() == "Author"){
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
+            databaseAccess.open();
+            Author currentauthor = databaseAccess.searchauthorbyida(searchlist.get(position).getId());
+            databaseAccess.close();
+
+            //QH = SETS IMAGE FROM STRING
+            String filename = "author" + currentauthor.getAuthorid();
+            int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
+            System.out.println(id);
+            viewHolder.searchpic.setImageResource(id);
+        }
+
+        //qh -- if object clicked is a user
+        if (searchlist.get(position).getSearchClass() == "User"){
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
+            databaseAccess.open();
+            User currentuser = databaseAccess.searchuserbyid(searchlist.get(position).getId());
+            databaseAccess.close();
+
+            //QH = SETS IMAGE FROM STRING
+            String filename = "user" + currentuser.getUseridu();
+            int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
+            System.out.println(id);
+            viewHolder.searchpic.setImageResource(id);
+        }
+
     }
     @Override
     public int getItemCount() {

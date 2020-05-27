@@ -177,6 +177,12 @@ public class fragment_user extends Fragment{
         Name.setText(user.getUsername());
         Desc.setText(user.getUserabout());
         Pic.setImageResource(R.drawable.demo_user_profile_pic);
+
+        //QH = SETS IMAGE FROM STRING
+        String filename = "user" + user.getUseridu();
+        int id = getResources().getIdentifier(filename, "drawable", getActivity().getPackageName());
+        System.out.println(id);
+        Pic.setImageResource(id);
     }
     //qh -- the user object that is passed here
     @Override

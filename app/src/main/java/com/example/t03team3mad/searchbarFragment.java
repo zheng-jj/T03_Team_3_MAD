@@ -84,7 +84,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
-        AdapterSearch searchadapter  = new AdapterSearch(searchClassList,this);
+        AdapterSearch searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
         searchresults.setAdapter(searchadapter);
     }
 
