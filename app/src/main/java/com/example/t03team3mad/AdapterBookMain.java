@@ -20,34 +20,54 @@ import com.example.t03team3mad.model.Book;
 public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHolder>
 {
     List<Book> mBooklist = new ArrayList<Book>(){};
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    AdapterBookMain.OnBookMainListener monBookMainListener;
+    private Context context;
+
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cardView;
         TextView bookName;
         ImageView bookPic;
-        ViewHolder(View itemView) {
+        AdapterBookMain.OnBookMainListener onBookMainListener;
+        ViewHolder(View itemView, OnBookMainListener onBookMainListener) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.bookCardView);
             //jj-get the widget id and assign them to local variable
             bookName = (TextView)itemView.findViewById(R.id.bookname);
             bookPic = (ImageView)itemView.findViewById(R.id.bookimage);
+
+            this.onBookMainListener = onBookMainListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onBookMainListener.onBookMainClick(getAdapterPosition());
         }
     }
-    public AdapterBookMain(List<Book> mBooklist) {
+    public AdapterBookMain(List<Book> mBooklist , OnBookMainListener onBookMainListener, Context context) {
+
         this.mBooklist = mBooklist;
+        this.monBookMainListener = onBookMainListener;
+        this.context = context;
     }
     @Override
     public AdapterBookMain.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.bookdisplaycardview, parent, false);
-        ViewHolder viewHolder = new ViewHolder(contactView);
+        ViewHolder viewHolder = new ViewHolder(contactView, monBookMainListener);
         return viewHolder;
     }
     @Override
     public void onBindViewHolder(AdapterBookMain.ViewHolder viewHolder, int position) {
         viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
         //jj-this needs to change to the corrosponding user profile picture
-        viewHolder.bookPic.setImageResource(R.drawable.demo_book_pic);
+
+        //QH = SETS IMAGE FROM STRING
+        String filename = "book" + mBooklist.get(position).getIsbn();
+        int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
+        System.out.println(id);
+        viewHolder.bookPic.setImageResource(id);
     }
     @Override
     public int getItemCount() {
@@ -55,5 +75,9 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
     }
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+    //qh-- interface for click
+    public interface OnBookMainListener {
+        void onBookMainClick(int position);
     }
 }

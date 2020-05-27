@@ -18,8 +18,9 @@ import com.example.t03team3mad.model.User;
 
 import java.util.List;
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMainListener {
     private static final String TAG = "HomeFragment";
+    List<Book> newbooklist;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
@@ -31,7 +32,7 @@ public class HomeFragment extends Fragment {
         //jj-set the recyclerview's manager to the previously created manager
         popularbooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter  = new AdapterBookMain(loadAllBooks());
+        AdapterBookMain bookadapter  = new AdapterBookMain(loadAllBooks(),this,this.getContext());
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
 
@@ -43,7 +44,7 @@ public class HomeFragment extends Fragment {
         //jj-set the recyclerview's manager to the previously created manager
         recommended.setLayoutManager(llm2);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter2  = new AdapterBookMain(loadAllBooks());
+        AdapterBookMain bookadapter2  = new AdapterBookMain(loadAllBooks(),this,this.getContext());
         //jj- set the recyclerview object to its adapter
         recommended.setAdapter(bookadapter2);
         return view;
@@ -53,8 +54,22 @@ public class HomeFragment extends Fragment {
     {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();
-        List<Book> mBooklist = DBaccess.loadallbooklist();
+        newbooklist = DBaccess.loadallbooklist();
         DBaccess.close();
-        return mBooklist;
+        return newbooklist;
+    }
+
+    @Override
+    public void onBookMainClick(int position) {
+        Book currentbook = newbooklist.get(position);
+
+        bookinfoFragment nextFrag= new bookinfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("currentbook", currentbook);  // Key, value
+        nextFrag.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
     }
 }
