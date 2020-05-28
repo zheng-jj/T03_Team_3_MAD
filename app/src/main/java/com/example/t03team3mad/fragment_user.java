@@ -1,5 +1,8 @@
 package com.example.t03team3mad;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -19,6 +22,7 @@ import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,6 +92,16 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             //jj - this variable is temporary
             usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
+
+        //button to logout(i exited the app to make it easier)
+        final Button logout = view.findViewById(R.id.logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
+            }
+        });
+
 
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
