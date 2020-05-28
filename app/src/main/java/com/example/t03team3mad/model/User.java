@@ -54,7 +54,7 @@ public class User implements Parcelable {
         return userabout;
     }
     public void setUserabout(String newUserabout) {
-        this.username = newUserabout;
+        this.userabout = newUserabout;
     }
 
     public User(int idu, String name, String isbn, String about) {

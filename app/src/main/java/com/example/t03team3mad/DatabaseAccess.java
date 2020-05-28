@@ -268,14 +268,19 @@ public class DatabaseAccess {
 
     public User searchuserbyid(String idu) {
         User user1 = null;
-        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+idu, new String[]{});
-        if (c.moveToFirst() && c.getCount() >= 1) {
-            do {
-                String name = c.getString(1);
-                String isbn = c.getString(3);
-                String about = c.getString(2);
-                user1 = new User(Integer.parseInt(idu),name,isbn,about);
-            } while (c.moveToNext());
+        try {
+            Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU = "+idu, new String[]{});
+            if (c.moveToFirst() && c.getCount() >= 1) {
+                do {
+                    String name = c.getString(1);
+                    String isbn = c.getString(3);
+                    String about = c.getString(2);
+                    user1 = new User(Integer.parseInt(idu),name,isbn,about);
+                } while (c.moveToNext());
+            }
+        }
+        catch (Exception e){
+            Log.v(TAG,"Error search user by id");
         }
         return user1;
     }
@@ -306,7 +311,6 @@ public class DatabaseAccess {
         temp = db.rawQuery("Select * From Reviews ", new String[]{});
         temp.moveToFirst();
         do {
-
             String idus = temp.getString(0);
             String idrs = temp.getString(1);
             String review = temp.getString(2);
@@ -342,16 +346,47 @@ public class DatabaseAccess {
         List<User> mUserlist = new ArrayList<User>(){};
         cursor = db.rawQuery("Select * From USER WHERE IDU = '"+UID+"'",new  String[]{});
         cursor.moveToFirst();
-        do {
-            String following = cursor.getString(4);
-            List<String> listOffollowingUsersID = Arrays.asList(following.split(";"));
-            for(String followingID : listOffollowingUsersID){
-                Log.v(TAG,"Following user's ID "+followingID);
-                mUserlist.add(searchuserbyid(followingID));
-            }
-        }while (cursor.moveToNext());
+        try {
+            do {
+                String following = cursor.getString(4);
+                List<String> listOffollowingUsersID = Arrays.asList(following.split(";"));
+                Log.v(TAG, Integer.toString(listOffollowingUsersID.size()));
+                if (listOffollowingUsersID.size() > 0) {
+                    for (String followingID : listOffollowingUsersID) {
+                        Log.v(TAG, "Following user's ID " + followingID);
+                        mUserlist.add(searchuserbyid(followingID));
+                    }
+                }
+            } while (cursor.moveToNext());
+        }
+        catch (Exception e){
+            Log.v(TAG,"User has no followings");
+        }
         return mUserlist;
     }
+    //jj- edit user data in database
+    //jj- just use this part if u need to change database
+    public void editUserData(User user){
+        String dbformattedFollowing = "";
+        List<User> followings = getUserFollowing(Integer.toString(user.getUseridu()));
+        Log.v(TAG,Integer.toString(followings.size()));
+        for(User following : followings)
+        {
+            dbformattedFollowing.concat(";");
+            dbformattedFollowing.concat(Integer.toString(following.getUseridu()));
+        }
 
+        ContentValues cv = new ContentValues();
+        cv.put("NAME",user.getUsername());
+        cv.put("ABOUT",user.getUserabout());
+        cv.put("FAVOURITEB",user.getUserisbn());
+        if(dbformattedFollowing.equals("")){
+            cv.putNull("FOLLOWING");
+        }
+        else {
+            cv.put("FOLLOWING", dbformattedFollowing);
+        }
+        db.update("USER", cv, "IDU="+Integer.toString(user.getUseridu()), null);
+    }
 
 }

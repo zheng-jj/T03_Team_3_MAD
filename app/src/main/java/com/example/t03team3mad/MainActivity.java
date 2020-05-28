@@ -80,7 +80,10 @@ public class MainActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         //places the currently logged in user into bundle
         Log.v(TAG,"Creating user in main activity(in place of recieved user from login)");
-        loggedinuser = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
+        DatabaseAccess DBaccess = DatabaseAccess.getInstance(this.getApplicationContext());
+        DBaccess.open();
+        loggedinuser =  DBaccess.searchuserbyid("1");
+        DBaccess.close();
         bundle.putParcelable("loggedin", loggedinuser);
         fragment.setArguments(bundle);
 

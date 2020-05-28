@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -71,6 +72,29 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
             }
         });
 
+        //edits user and refreshes the fragment
+        Button saveEdits = view.findViewById(R.id.savechanges);
+        final User finalUsertoEdit1 = usertoEdit;
+        saveEdits.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View mainview = v.getRootView();
+                EditText Name = mainview.findViewById(R.id.editName);
+                EditText Desc = mainview.findViewById(R.id.editDes);
+                finalUsertoEdit1.setUsername(Name.getText().toString());
+                finalUsertoEdit1.setUserabout(Desc.getText().toString());
+                Log.v(TAG,"new user name: "+finalUsertoEdit1.getUsername()+" New user desc: "+finalUsertoEdit1.getUserabout());
+                DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+                DBaccess.open();
+                DBaccess.editUserData(finalUsertoEdit1);
+                DBaccess.close();
+                Fragment edituserfragment= getFragmentManager().findFragmentByTag("editUser");
+                final FragmentTransaction refreshthisfragment = getFragmentManager().beginTransaction();
+                refreshthisfragment.detach(edituserfragment);
+                refreshthisfragment.attach(edituserfragment);
+                refreshthisfragment.commit();
+            }
+        });
         return view;
     }
 //    public List<User> loadAllusers()
