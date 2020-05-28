@@ -71,7 +71,8 @@ public class RegisterPage extends AppCompatActivity {
                 password = EnterPassword.getText().toString();
                 name = EnterName.getText().toString();
                 confirmPassword = ConfirmPassword.getText().toString();
-                //Check for empty Inputs
+                //Chris - Verification for inputs
+                  //Chris - Check for empty Inputs
                 if (name.equals(""))
                 {
                     Log.v(TAG,"Name Required");
@@ -80,24 +81,31 @@ public class RegisterPage extends AppCompatActivity {
                 }
                 if (email.equals(""))
                 {
-                    Log.v(TAG,"Email Required");
+                    Log.v(TAG,"Email Required");//Chris - Check for empty Inputs
                     Toast.makeText(RegisterPage.this, "Email Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                if (password.equals(""))
+                if (password.equals(""))//Chris - Check for empty Inputs
                 {
                     Log.v(TAG,"Password Required");
                     Toast.makeText(RegisterPage.this, "Password Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (confirmPassword.equals(""))//Check for empty Inputs
+                if (password.length() < 6)//Chris - for exception to not appear
+                {
+                    Log.v(TAG,"Password is must be at least contain 6 characters");
+                    Toast.makeText(RegisterPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (confirmPassword.equals(""))//Chris - Check for empty Inputs
                 {
                     Log.v(TAG,"Confirm Password");
                     Toast.makeText(RegisterPage.this, "Confirm Password", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (!confirmPassword.equals(password))//Confirm password
+
+                if (!confirmPassword.equals(password))//Chris - Confirm password
                 {
                     Log.v(TAG,"Password Do Not Match");
                     Toast.makeText(RegisterPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
@@ -109,29 +117,38 @@ public class RegisterPage extends AppCompatActivity {
                     Auth.createUserWithEmailAndPassword(email, confirmPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                                //check whether register of user is successful or not
+                                //Chris - check whether register of user is successful or not
                             if (!task.isSuccessful()) {
                                 progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(RegisterPage.this, "Registration Failed" + task.getException(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterPage.this, "Your email has already in use", Toast.LENGTH_SHORT).show();
 
                             }
 
                             else {
+                                //Chris - Register is sucessful,saving user details
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
                                 member.setPassword(EnterPassword.getText().toString());
+
+                                //Chris -  Customised user id
                                 String id= String.valueOf(maxid+4);
                                 progressBar.setVisibility(View.INVISIBLE);
+
+                                //Chris - Add the user to firebase database
                                 databaseReference.child(id).setValue(member);
+
+                                //Chris - Insert to local database
                                Boolean test=insertUser( id, EnterName.getText().toString(),"About",null ,null);
                                 Log.v(TAG,"Inserted Successfully");
                                 Log.v(TAG,"Registration Successfully");
                                 Toast.makeText(RegisterPage.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
+                                //Go to login page after user successfully registered
                                 Intent login=new Intent(RegisterPage.this, LoginPage.class);
                                 startActivity(login);
                                 finish();
                             }
                         }
+                        //Chris - Method to insert to local database
                         public boolean insertUser(String key,String idu,String about,String favouriteb,String following) {
                             DatabaseAccess DBaccess = DatabaseAccess.getInstance(RegisterPage.this.getApplicationContext());
                             DBaccess.open();

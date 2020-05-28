@@ -19,14 +19,16 @@
             android:id="@+id/genrestext"
             android:padding='5dp'
             android:text="Genres"/>
+
         <androidx.recyclerview.widget.RecyclerView
-            android:layout_below="@id/genrestext"
             android:id="@+id/genrelistrecyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_below="@id/genrestext"
             android:layout_centerVertical="true"
+            android:layout_marginTop="-2dp"
             android:scrollbars="horizontal" />
+
         <TextView
             android:layout_marginTop="10dp"
             android:layout_below="@id/genrelistrecyclerview"

@@ -38,6 +38,7 @@ public class LoginPage extends AppCompatActivity {
     String uid;
     DatabaseReference databaseReference;
     ProgressBar progressBar;
+
     private static final String TAG = "LoginPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,23 +50,31 @@ public class LoginPage extends AppCompatActivity {
         Auth=FirebaseAuth.getInstance();
         RegisterButton=findViewById(R.id.Register);
         progressBar =  findViewById(R.id.progressBar);
+        user=Auth.getCurrentUser();
+        uid=Auth.getCurrentUser().getUid();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
 
-        //Auto_login.edit().putBoolean("logged", false).apply();
+        //Chris - Auto_login.edit().putBoolean("logged", false).apply();
         //^ if wan test again
 
+        //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){
+            Log.v(TAG, "the user id sent= "+ uid);
+            Bundle bundle=new Bundle();
+            bundle.putString("User_UID",uid);
             Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
+            MainActivity.putExtra("User_UID",bundle);
             startActivity(MainActivity);
         }
-
+        //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email, password;
                 email = EnterEmail.getText().toString().trim();
                 password = EnterPassword.getText().toString().trim();
+                //Chris - Validation
                 //Check for empty Inputs
                 if (email.isEmpty()) {
                     Log.v(TAG,"Email Required");
@@ -85,24 +94,25 @@ public class LoginPage extends AppCompatActivity {
                     Toast.makeText(LoginPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                user=Auth.getCurrentUser();
-                uid=Auth.getCurrentUser().getUid();
+                //Chris - Loading circle for improving user experience
                 progressBar.setVisibility(View.VISIBLE);
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            //Chris - if login is successful
                             progressBar.setVisibility(View.INVISIBLE);
-                            Auto_login.edit().putBoolean("logged",true).apply(); //User is Logged in until he log out
+                            //Chris - User is Logged in until he log out
+                            Auto_login.edit().putBoolean("logged",true).apply();
                             Log.v(TAG,"Successfully Logged In");
                             Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-
+                            //Chris - find user id for the login user
                             databaseReference.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                         String userid=snapshot.getKey();
-                                        //Toast.makeText(LoginPage.this,userid,Toast.LENGTH_LONG).show();
+                                        //Chris - show that it works
                                         Log.v(TAG, "the user id sent= "+ userid);
                                         Bundle bundle=new Bundle();
                                         bundle.putString("User_UID",userid);
@@ -119,7 +129,7 @@ public class LoginPage extends AppCompatActivity {
 
 
                         }
-                        else {
+                        else {//Chris - if login failed
                             progressBar.setVisibility(View.INVISIBLE);
                             Log.v(TAG,"Login Failed");
                             Toast.makeText(LoginPage.this, "Login Failed", Toast.LENGTH_LONG).show();
@@ -129,7 +139,7 @@ public class LoginPage extends AppCompatActivity {
                 });
             }
         });
-        //if press "Register"
+        //if User press "Register" text
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
