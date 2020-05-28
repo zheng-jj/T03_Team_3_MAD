@@ -83,6 +83,15 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                             .commit();
                 }
             });
+            //button to logout(i exited the app to make it easier)
+            final Button logout = view.findViewById(R.id.logout);
+            logout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
+                }
+            });
+
         }
 
         else{
@@ -92,16 +101,6 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             //jj - this variable is temporary
             usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
-
-        //button to logout(i exited the app to make it easier)
-        final Button logout = view.findViewById(R.id.logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
-            }
-        });
-
 
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
