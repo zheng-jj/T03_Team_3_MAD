@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,7 +52,9 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
     public void onBindViewHolder(AdapterReviewForUSer.ViewHolder viewHolder, int position) {
         viewHolder.uName.setText(mReviewlist.get(position).getBookName());
         viewHolder.uReview.setText(mReviewlist.get(position).getReviewtext());
-        viewHolder.uPic.setImageResource(R.drawable.demo_book_pic);
+        String filename = "book" + mReviewlist.get(position).getReviewisbn() +".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        viewHolder.uPic.setImageBitmap(bmImg);
         Log.v(TAG,"Review for :"+mReviewlist.get(position).getBookName());
     }
 
