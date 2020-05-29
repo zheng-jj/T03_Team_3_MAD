@@ -46,7 +46,7 @@ public class User implements Parcelable {
         return userisbn;
     }
     public void setUserisbn(String newUserisbn) {
-        this.username = newUserisbn;
+        this.userisbn = newUserisbn;
     }
 
     private String userabout;
