@@ -1,5 +1,7 @@
 package com.example.t03team3mad;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -80,10 +82,11 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             databaseAccess.close();
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "book" + currentbook.getIsbn();
-            int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
-            System.out.println(id);
-            viewHolder.searchpic.setImageResource(id);
+            String filename = "book" + currentbook.getIsbn()+".jpg";
+            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+            viewHolder.searchpic.setImageBitmap(bmImg);
+
+
         }
 
         //qh -- if object clicked is a author
@@ -94,10 +97,9 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             databaseAccess.close();
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "author" + currentauthor.getAuthorid();
-            int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
-            System.out.println(id);
-            viewHolder.searchpic.setImageResource(id);
+            String filename = "author" + currentauthor.getAuthorid()+".jpg";
+            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+            viewHolder.searchpic.setImageBitmap(bmImg);
         }
 
         //qh -- if object clicked is a user
@@ -108,10 +110,9 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             databaseAccess.close();
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "user" + currentuser.getUseridu();
-            int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
-            System.out.println(id);
-            viewHolder.searchpic.setImageResource(id);
+            String filename = "user" + currentuser.getUseridu()+".jpg";
+            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+            viewHolder.searchpic.setImageBitmap(bmImg);
         }
 
     }

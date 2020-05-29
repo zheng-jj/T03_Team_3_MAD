@@ -3,6 +3,8 @@ package com.example.t03team3mad;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -189,13 +191,12 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         TextView Desc = view.findViewById(R.id.userDescription);
         Name.setText(user.getUsername());
         Desc.setText(user.getUserabout());
-        Pic.setImageResource(R.drawable.demo_user_profile_pic);
+
 
         //QH = SETS IMAGE FROM STRING
-        String filename = "user" + user.getUseridu();
-        int id = getResources().getIdentifier(filename, "drawable", getActivity().getPackageName());
-        System.out.println(id);
-        Pic.setImageResource(id);
+        String filename = "user" + user.getUseridu()+".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        Pic.setImageBitmap(bmImg);
     }
     //qh -- the user object that is passed here
     @Override

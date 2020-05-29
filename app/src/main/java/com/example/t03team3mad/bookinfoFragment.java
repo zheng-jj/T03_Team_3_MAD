@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,10 +42,9 @@ public class bookinfoFragment extends Fragment {
             author.setText(receivedbook.getBookauthor());
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "book" + receivedbook.getIsbn();
-            int id = getResources().getIdentifier(filename, "drawable", getActivity().getPackageName());
-            System.out.println(id);
-            image.setImageResource(id);
+            String filename = "book" + receivedbook.getIsbn()+".jpg";
+            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+            image.setImageBitmap(bmImg);
         }
 
         return view;

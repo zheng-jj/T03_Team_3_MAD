@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.Adapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,10 +66,12 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
         //jj-this needs to change to the corrosponding user profile picture
 
         //QH = SETS IMAGE FROM STRING
-        String filename = "book" + mBooklist.get(position).getIsbn();
-        int id = context.getResources().getIdentifier(filename, "drawable", context.getPackageName());
-        System.out.println(id);
-        viewHolder.bookPic.setImageResource(id);
+        String filename = "book" + mBooklist.get(position).getIsbn() +".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        viewHolder.bookPic.setImageBitmap(bmImg);
+
+
+
     }
     @Override
     public int getItemCount() {

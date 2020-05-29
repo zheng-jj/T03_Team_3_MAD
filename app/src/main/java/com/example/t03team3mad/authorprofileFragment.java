@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,10 +43,9 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
             image.setImageResource(R.drawable.demo_user_profile_pic);
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "author" + receivedauthor.getAuthorid();
-            int id = getResources().getIdentifier(filename, "drawable", getActivity().getPackageName());
-            System.out.println(id);
-            image.setImageResource(id);
+            String filename = "author" + receivedauthor.getAuthorid()+".jpg";
+            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+            image.setImageBitmap(bmImg);
 
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
