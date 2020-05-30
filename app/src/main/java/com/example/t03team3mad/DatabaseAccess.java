@@ -389,4 +389,23 @@ public class DatabaseAccess {
         db.update("USER", cv, "IDU="+Integer.toString(user.getUseridu()), null);
     }
 
+
+    public boolean CheckExistingRecordByUserId(String idu) {
+        Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+idu, new String[]{});
+
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            c.close();
+            return true;
+
+        }
+        else
+        {
+            c.close();
+            return false;
+        }
+
+
+    }
 }
+
+
