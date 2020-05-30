@@ -1,3 +1,4 @@
+
 package com.example.t03team3mad;
 
 import android.annotation.SuppressLint;
@@ -33,7 +34,7 @@ public class RegisterPage extends AppCompatActivity {
     Member member;
     ProgressBar progressBar;
     long maxid=0;
-   private static final String TAG = "RegisterPage";
+    private static final String TAG = "RegisterPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +54,7 @@ public class RegisterPage extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists())
                 {
+                    //Chris - To get the current number of users in the database.
                     maxid=dataSnapshot.getChildrenCount();
                 }
             }
@@ -72,7 +74,7 @@ public class RegisterPage extends AppCompatActivity {
                 name = EnterName.getText().toString();
                 confirmPassword = ConfirmPassword.getText().toString();
                 //Chris - Verification for inputs
-                  //Chris - Check for empty Inputs
+                //Chris - Check for empty Inputs
                 if (name.equals(""))
                 {
                     Log.v(TAG,"Name Required");
@@ -92,7 +94,8 @@ public class RegisterPage extends AppCompatActivity {
                     Toast.makeText(RegisterPage.this, "Password Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if (password.length() < 6)//Chris - for exception to not appear
+
+                if (password.length() < 6)//Chris - to check password hit the minimal characters of the password requirement
                 {
                     Log.v(TAG,"Password is must be at least contain 6 characters");
                     Toast.makeText(RegisterPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
@@ -105,57 +108,50 @@ public class RegisterPage extends AppCompatActivity {
                     return;
                 }
 
-                if (!confirmPassword.equals(password))//Chris - Confirm password
+                if (!confirmPassword.equals(password))//Chris - To Confirm password
                 {
                     Log.v(TAG,"Password Do Not Match");
                     Toast.makeText(RegisterPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 else{
-                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.VISIBLE);//Chris - For user to know that the data is being processed
                     //Authentication
                     Auth.createUserWithEmailAndPassword(email, confirmPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
-                                //Chris - check whether register of user is successful or not
+                            //Chris - check whether register of user is successful or not
                             if (!task.isSuccessful()) {
                                 progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(RegisterPage.this, "Your email has already in use", Toast.LENGTH_SHORT).show();
+                                //Custom message if email existed in the database already
+                                Toast.makeText(RegisterPage.this, "The email is already in use", Toast.LENGTH_SHORT).show();
 
                             }
 
                             else {
-                                //Chris - Register is sucessful,saving user details
+                                progressBar.setVisibility(View.INVISIBLE);
+
+                                //Chris - Register is successful,saving user details to firebase database
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
                                 member.setPassword(EnterPassword.getText().toString());
 
-                                //Chris -  Customised user id
-                                String id= String.valueOf(maxid+4);
-                                progressBar.setVisibility(View.INVISIBLE);
+                                //Chris -  Customised user id,make sure no two users have the same user id
+                                String id= String.valueOf(maxid+1);
 
                                 //Chris - Add the user to firebase database
                                 databaseReference.child(id).setValue(member);
 
-                                //Chris - Insert to local database
-                               Boolean test=insertUser( id, EnterName.getText().toString(),"About",null ,null);
-                                Log.v(TAG,"Inserted Successfully");
                                 Log.v(TAG,"Registration Successfully");
                                 Toast.makeText(RegisterPage.this, "Registration Successfully", Toast.LENGTH_SHORT).show();
+
                                 //Go to login page after user successfully registered
                                 Intent login=new Intent(RegisterPage.this, LoginPage.class);
                                 startActivity(login);
                                 finish();
                             }
                         }
-                        //Chris - Method to insert to local database
-                        public boolean insertUser(String key,String idu,String about,String favouriteb,String following) {
-                            DatabaseAccess DBaccess = DatabaseAccess.getInstance(RegisterPage.this.getApplicationContext());
-                            DBaccess.open();
-                            boolean success = DBaccess.addData(key, idu, about, favouriteb, following);
-                            DBaccess.close();
-                            return success;
-                        }
+
 
                     });
 
