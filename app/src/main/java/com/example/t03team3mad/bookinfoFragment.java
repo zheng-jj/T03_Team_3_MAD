@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +20,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.User;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class bookinfoFragment extends Fragment {
     private static final String TAG = "bookinfoFragment";
@@ -72,65 +78,109 @@ public class bookinfoFragment extends Fragment {
 
             //jj- Allows users to favourite the book
             final Button favourite = view.findViewById(R.id.favourite);
-            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            final DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess.open();
-            final List<Book> userbooklist = DBaccess.loaduserbooklist(MainActivity.loggedinuser);
+            DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())));
+            final List<Book> userbooklist = new ArrayList<>();
+            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))){
+                userbooklist.add(DBaccess.searchbookbyisbn(book.getIsbn()));
+            }
+
+            final String Currentisbn = receivedbook.getIsbn();
             DBaccess.close();
-            for (Book book : userbooklist) {
-                if (book.getIsbn().equals(receivedbook.getIsbn())) {
-                    favourite.setText("Unfavourite this book");
+            final DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            DBaccess2.open();
+            final Book CurrentBook = DBaccess.searchbookbyisbn(Currentisbn);
+            //searches to see if userbooklist containst this book
+            Iterator<Book> itr = userbooklist.iterator();
+            while (itr.hasNext())
+            {
+                Book book = itr.next();
+                if (book.getIsbn().equals(CurrentBook.getIsbn()))
+                {
+                    favourite.setText("Added to list");
                 }
             }
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //jj-clears user isbn
-//                    MainActivity.loggedinuser.setUserisbn(null);
-//                    DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-//                    DBaccess.open();
-//                    DBaccess.editUserData(MainActivity.loggedinuser);
-//                    DBaccess.close();
-                    if(favourite.getText().equals("Unfavourite this book")){
-                        //jj edits the isbn of the userloggedin in main activity(global variable)
-                        userbooklist.remove(receivedbook);
-                        String isbn = "";
-                        for(Book remainbooks : userbooklist){
-                            Log.v(TAG,"Currently in list book :"+remainbooks.getBooktitle() + " "+remainbooks.getIsbn());
-                            isbn=isbn+remainbooks.getIsbn()+";";
+                    String isbn="";
+                    //does not work :(
+//                    if(userbooklist.contains(CurrentBook)){
+//                        Log.v(TAG,"Book list before change :");
+//                        for(Book x : userbooklist)
+//                        {
+//                            Log.v(TAG,x.getIsbn());
+//                        }
+//                        //iterator used to remove book from collection
+//                        Iterator<Book> itr = userbooklist.iterator();
+//                        while (itr.hasNext())
+//                        {
+//                            Book book = itr.next();
+//                            if (book.equals(CurrentBook))
+//                            {
+//                                userbooklist.remove(book);
+//                                Log.v(TAG,"Removed: "+book.getIsbn());
+//                            }
+//                        }
+//                        Log.v(TAG,"Book list after change :");
+//                        for(Book x : userbooklist)
+//                        {
+//                            Log.v(TAG,x.getIsbn());
+//                            isbn=isbn+x.getIsbn()+';';
+//                        }
+//                        if(isbn.equals("")){
+//                            isbn=null;
+//                        }
+//                        else {
+//                            //removes the ";" at the end of isbn string
+//                            isbn.substring(0, isbn.length() - 1);
+//                        }
+//
+//                        favourite.setText("Add to Favourites");
+//                    }
+                    if(!userbooklist.contains(CurrentBook)){
+                        Log.v(TAG,"Book list before change :");
+                        for(Book x : userbooklist)
+                        {
+                            Log.v(TAG,x.getIsbn());
                         }
-                        if (isbn.equals("")){
-                            isbn=null;
+                        userbooklist.add(CurrentBook);
+                        Log.v(TAG,"Book list after change :");
+                        for(Book x : userbooklist)
+                        {
+                            Log.v(TAG,x.getIsbn());
+                            isbn=isbn+x.getIsbn()+';';
                         }
-                        else {
-                            isbn.substring(0, isbn.length() - 1);
-                        }
-                        //jj-updates new user isbn
-                        MainActivity.loggedinuser.setUserisbn(isbn);
-                        DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-                        DBaccess2.open();
-                        DBaccess2.editUserData(MainActivity.loggedinuser);
-                        DBaccess2.close();
-                        favourite.setText("Favourite this book");
+                        //removes the ";" at the end of isbn string
+                        isbn.substring(0, isbn.length() - 1);
+                        favourite.setText("Added to list");
+                    }
+
+                    //removes duplicates
+                    List<String> isbns = new ArrayList<>(Arrays.asList(isbn.split(";")));
+                    Set<String> set = new LinkedHashSet<>(isbns);
+                    isbns.clear();
+                    isbns.addAll(set);
+                    isbn="";
+                    for(String x:isbns){
+                        isbn=isbn+x+";";
+                    }
+                    if(isbn.equals(""))
+                    {
+                        isbn=null;
                     }
                     else {
-                        //jj-if user didnt like this book previously
-                        userbooklist.add(receivedbook);
-                        String isbn = "";
-                        for(Book remainbooks : userbooklist){
-                            Log.v(TAG,"Currently in list book :"+remainbooks.getBooktitle() + " "+remainbooks.getIsbn());
-                            isbn=isbn+remainbooks.getIsbn()+";";
-                        }
-                        //removes the ";" at the end
                         isbn.substring(0, isbn.length() - 1);
-
-                        MainActivity.loggedinuser.setUserisbn(isbn);
-                        //updates new user isbn
-                        DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-                        DBaccess2.open();
-                        DBaccess2.editUserData(MainActivity.loggedinuser);
-                        DBaccess2.close();
-                        favourite.setText("Unfavourite this book");
                     }
+                    Log.v(TAG,"new isbn string added to db="+isbn);
+                    //updates user data in database
+                    MainActivity.loggedinuser.setUserisbn(isbn);
+                    DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+                    DBaccess.open();
+                    DBaccess.editUserData(MainActivity.loggedinuser);
+                    DBaccess.close();
+                    Log.v(TAG,"-==========-");
                 }
             });
         }
@@ -143,5 +193,6 @@ public class bookinfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
+
 }
 

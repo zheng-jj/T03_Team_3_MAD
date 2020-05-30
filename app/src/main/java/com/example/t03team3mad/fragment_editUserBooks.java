@@ -73,7 +73,7 @@ public class fragment_editUserBooks extends Fragment {
                 fragment_editUser fragment_editUser = new fragment_editUser();
                 fragment_editUser.setArguments(bundle);
                 getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
+                        .replace(R.id.mainactivitycontainer, fragment_editUser, "editUserBooks")
                         .addToBackStack(null)
                         .commit();
             }

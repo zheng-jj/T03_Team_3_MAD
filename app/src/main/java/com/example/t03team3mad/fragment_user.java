@@ -45,6 +45,11 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_user,container,false);
             usertoView = bundle.getParcelable("searchuser");
+            //gets user object from database
+            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            DBaccess.open();
+            usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
+            DBaccess.close();
             //jj-removes the arguements so that i will get the reason why this page is loaded
             this.getArguments().putParcelable("searchuser",null);
         }
@@ -54,6 +59,11 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
             usertoView = bundle.getParcelable("loggedin");
+            //gets user object from database
+            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            DBaccess.open();
+            usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
+            DBaccess.close();
             //onclick listener to edit profile
             Button editprofile = view.findViewById(R.id.edit);
             final User finalUsertoView = usertoView;

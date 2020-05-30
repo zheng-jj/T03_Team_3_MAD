@@ -39,7 +39,6 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         saveimagesmethods();
 
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-        Log.v(TAG,"first recycler");
         //load main popularbooks recyclerview
         RecyclerView popularbooks = (RecyclerView)view.findViewById(R.id.popularbookrecyclerview);
         //jj-layout manager linear layout manager manages the position of the recyclerview items
@@ -51,7 +50,6 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
 
-        Log.v(TAG,"second recycler");
         //load recommended books recyclerview
         //do the same for another recycler view recommendedbooks
         RecyclerView recommended = (RecyclerView)view.findViewById(R.id.recommendbookrecyclerview);

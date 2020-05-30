@@ -86,7 +86,6 @@ public class DatabaseAccess {
         Integer amountofusers =Integer.valueOf(getCount("IDU","USER"));
         cursor = db.rawQuery("Select * From Book",new  String[]{});
         cursor.moveToFirst();
-        Log.v(TAG,"im here " + Integer.toString(cursor.getCount()) );
         do {
             String title = cursor.getString(0);
             String author = cursor.getString(1);

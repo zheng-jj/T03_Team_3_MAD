@@ -92,11 +92,15 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
                 DBaccess.editUserData(finalUsertoEdit1);
                 DBaccess.close();
                 //reloads the fragment
-                Fragment edituserfragment= getFragmentManager().findFragmentByTag("editUser");
-                final FragmentTransaction refreshthisfragment = getFragmentManager().beginTransaction();
-                refreshthisfragment.detach(edituserfragment);
-                refreshthisfragment.attach(edituserfragment);
-                refreshthisfragment.commit();
+                fragment_user fragment = new fragment_user();
+                //jj- bundle to be moved to fragment
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("loggedin", finalUsertoEdit1);
+                fragment.setArguments(bundle);
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
+                transaction.replace(R.id.mainactivitycontainer,fragment,"editUser");
+                transaction.addToBackStack("UserFragment");
+                transaction.commit();
 
                 //updates global variable
                 MainActivity.loggedinuser=finalUsertoEdit1;

@@ -76,4 +76,12 @@ public class User implements Parcelable {
         dest.writeString(userisbn);
         dest.writeString(userabout);
     }
+    public boolean equal(Book book) {
+        boolean isEqual=false;
+        if(book!=null && book instanceof Book) {
+            isEqual=(this.userisbn==book.getIsbn());
+        }
+        return isEqual;
+    }
+
 }
