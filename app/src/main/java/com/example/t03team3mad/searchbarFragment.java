@@ -94,6 +94,8 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         SearchClass currentsearchobject = searchClassList.get(position);
 
         //qh -- if object clicked is a book
+
+
         if (currentsearchobject.getSearchClass() == "Book"){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
@@ -102,6 +104,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
             bookinfoFragment nextFrag= new bookinfoFragment();
             Bundle bundle = new Bundle();
+
             bundle.putParcelable("currentbook", currentbook);  // Key, value
             nextFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction()

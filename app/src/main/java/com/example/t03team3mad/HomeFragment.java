@@ -88,7 +88,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
                 .commit();
     }
 
-    //method to save the image to internal storage
+    //qh - method to save the image to internal storage
     public void saveimagestointernalstorage(String filename) {
 
         int id = getActivity().getApplicationContext().getResources().getIdentifier(filename, "drawable", getActivity().getApplicationContext().getPackageName());
