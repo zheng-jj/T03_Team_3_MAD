@@ -1,5 +1,7 @@
 package com.example.t03team3mad;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -123,7 +125,9 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
         Log.v(TAG,"current user dec= "+user.getUserabout());
         Name.setHint(user.getUsername());
         Desc.setHint(user.getUserabout());
-        Pic.setImageResource(R.drawable.demo_user_profile_pic);
+        String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        Pic.setImageBitmap(bmImg);
     }
     //qh -- the user object that is passed here
     @Override

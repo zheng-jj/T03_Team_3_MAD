@@ -29,6 +29,8 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 import java.util.ArrayList;
 import java.util.List;
 
+import dalvik.system.InMemoryDexClassLoader;
+
 public class fragment_user extends Fragment implements AdapterBookMain.OnBookMainListener {
     private static final String TAG = "userFragment";
     List<Book> userBooklist = null;
@@ -192,9 +194,9 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         Name.setText(user.getUsername());
         Desc.setText(user.getUserabout());
 
-
+        Log.v(TAG,"image id being used = user+"+ Integer.toString(user.getUseridu()));
         //QH = SETS IMAGE FROM STRING
-        String filename = "user" + user.getUseridu()+".jpg";
+        String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         Pic.setImageBitmap(bmImg);
     }
