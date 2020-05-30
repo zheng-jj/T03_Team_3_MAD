@@ -54,6 +54,7 @@ public class LoginPage extends AppCompatActivity {
         uid=Auth.getCurrentUser().getUid();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
+        Auto_login.edit().putBoolean("logged", false).apply();
 
         //Chris - Auto_login.edit().putBoolean("logged", false).apply();
         //^ if wan test again

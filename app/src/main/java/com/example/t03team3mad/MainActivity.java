@@ -79,14 +79,13 @@ public class MainActivity extends AppCompatActivity {
         //jj- bundle to be moved to fragment
         Bundle bundle = new Bundle();
         //places the currently logged in user into bundle
-        Log.v(TAG,"Creating user in main activity(in place of recieved user from login)");
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(this.getApplicationContext());
-        DBaccess.open();
-        loggedinuser =  DBaccess.searchuserbyid("1");
-        DBaccess.close();
+//        Log.v(TAG,"Creating user in main activity(in place of recieved user from login)");
+//        DatabaseAccess DBaccess = DatabaseAccess.getInstance(this.getApplicationContext());
+//        DBaccess.open();
+//        loggedinuser =  DBaccess.searchuserbyid("1");
+//        DBaccess.close();
         bundle.putParcelable("loggedin", loggedinuser);
         fragment.setArguments(bundle);
-
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,fragment,"HomeFragment");
         transaction.addToBackStack("UserFragment");
