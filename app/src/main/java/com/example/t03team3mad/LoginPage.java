@@ -140,6 +140,7 @@ public class LoginPage extends AppCompatActivity {
                                         //Chris - Intent to homepage and pass user id to it
                                         Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
                                         MainActivity.putExtra("User_UID", bundle);
+                                        Log.v(TAG,"sending this uid to main activity "+uid);
                                         startActivity(MainActivity);
                                         finish();
                                     }

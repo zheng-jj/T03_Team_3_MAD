@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
         starthomefragment();
         Intent intent = getIntent();
         //jj - receives which user is currently logged in from the login activity
-        Bundle receivedloggedin = intent.getBundleExtra("User_UID");
+        Bundle receivedloggedin = intent.getExtras().getBundle("User_UID");
 
         if(receivedloggedin!=null) {
             Log.v(TAG,"logged in user received");
