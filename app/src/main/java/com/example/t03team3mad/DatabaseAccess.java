@@ -404,7 +404,24 @@ public class DatabaseAccess {
             return false;
         }
 
-
+    }
+    public Book searchbookbyGenre(String Genre) {
+        Book book = null;
+        System.out.println("debug1");
+        Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE TITLE = '"+Genre+"'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                System.out.println("debug2");
+                String  title=c.getString(0);
+                String ida = c.getString(1);
+                String about = c.getString(2);
+                String pdate = c.getString(4);
+                String isbn = c.getString(5);
+                book = new Book(title, ida, about, Genre, pdate, isbn);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return book;
     }
 }
 
