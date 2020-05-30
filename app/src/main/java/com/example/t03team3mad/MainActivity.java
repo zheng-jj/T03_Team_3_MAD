@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +15,12 @@ import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 import com.roughike.bottombar.*;
 
+import java.security.PublicKey;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private User loggedinuser = null;
+    public static User loggedinuser = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

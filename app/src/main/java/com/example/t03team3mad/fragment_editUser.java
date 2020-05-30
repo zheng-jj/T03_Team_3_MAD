@@ -86,15 +86,20 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
                 finalUsertoEdit1.setUsername(Name.getText().toString());
                 finalUsertoEdit1.setUserabout(Desc.getText().toString());
                 Log.v(TAG,"new user name: "+finalUsertoEdit1.getUsername()+" New user desc: "+finalUsertoEdit1.getUserabout());
+                //jj-updates database on new user details
                 DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
                 DBaccess.open();
                 DBaccess.editUserData(finalUsertoEdit1);
                 DBaccess.close();
+                //reloads the fragment
                 Fragment edituserfragment= getFragmentManager().findFragmentByTag("editUser");
                 final FragmentTransaction refreshthisfragment = getFragmentManager().beginTransaction();
                 refreshthisfragment.detach(edituserfragment);
                 refreshthisfragment.attach(edituserfragment);
                 refreshthisfragment.commit();
+
+                //updates global variable
+                MainActivity.loggedinuser=finalUsertoEdit1;
             }
         });
         return view;
@@ -123,8 +128,8 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
         EditText Desc = view.findViewById(R.id.editDes);
         Log.v(TAG,"current user name= "+user.getUsername());
         Log.v(TAG,"current user dec= "+user.getUserabout());
-        Name.setHint(user.getUsername());
-        Desc.setHint(user.getUserabout());
+        Name.setText(user.getUsername());
+        Desc.setText(user.getUserabout());
         String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         Pic.setImageBitmap(bmImg);

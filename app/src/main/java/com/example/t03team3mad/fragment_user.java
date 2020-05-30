@@ -87,7 +87,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                             .commit();
                 }
             });
-            //button to logout(i exited the app to make it easier)
+            //button to logout
             final Button logout = view.findViewById(R.id.logout);
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override

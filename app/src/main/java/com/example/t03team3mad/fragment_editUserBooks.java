@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,17 +27,57 @@ public class fragment_editUserBooks extends Fragment {
             usertoEdit = bundle.getParcelable("UserToEdit");
             Log.v(TAG, "user edit: username: "+ usertoEdit.getUsername());
         }
-        List<Book> userfav = loaduserbooks(usertoEdit);
+        final List<Book> userfav = loaduserbooks(usertoEdit);
         //jj - load favourite user books recyclerview
-        RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.edituserbookrecycler);
+        final RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.edituserbookrecycler);
         //jj-layout manager linear layout manager manages the position of the recyclerview items
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         //jj-set the recyclerview's manager to the previously created manager
         favouritebooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterFavBooksList bookadapter = new AdapterFavBooksList(userfav);
+        final AdapterFavBooksList bookadapter = new AdapterFavBooksList(userfav);
         //jj- set the recyclerview object to its adapter
         favouritebooks.setAdapter(bookadapter);
+
+
+        Button savebookchanges = view.findViewById(R.id.savebooks);
+        final User finalUsertoEdit = usertoEdit;
+        savebookchanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(Book x: userfav){
+                    Log.v(TAG,"Previously in list book :"+x.getBooktitle() + " "+x.getIsbn());
+                }
+                String isbn = "";
+                for(Book favoritebook : bookadapter.mBooklistToBeRemoved){
+                    Log.v(TAG,"Removing book :"+favoritebook.getBooktitle() + " "+favoritebook.getIsbn());
+                    userfav.remove(favoritebook);
+                }
+
+                for(Book remainbooks : userfav){
+                    Log.v(TAG,"Currently in list book :"+remainbooks.getBooktitle() + " "+remainbooks.getIsbn());
+                    isbn=isbn+remainbooks.getIsbn()+";";
+                }
+                if (isbn.equals("")){
+                    isbn=null;
+                }
+                else {
+                    isbn.substring(0, isbn.length() - 1);
+                }
+                Log.v(TAG,"New isbn user =  "+isbn);
+                finalUsertoEdit.setUserisbn(isbn);
+
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("UserToEdit", finalUsertoEdit);
+                Log.v(TAG,"user sending to edit = "+finalUsertoEdit.getUsername());
+                fragment_editUser fragment_editUser = new fragment_editUser();
+                fragment_editUser.setArguments(bundle);
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         return view;
     }
     //jj-loads the books user liked

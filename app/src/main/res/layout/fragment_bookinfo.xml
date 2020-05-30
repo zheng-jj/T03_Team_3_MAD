@@ -91,18 +91,18 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/buttontobeused"
-            android:layout_width="86dp"
-            android:layout_height="48dp"
+            android:id="@+id/favourite"
+            android:layout_width="175dp"
+            android:layout_height="38dp"
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="8dp"
-            android:text="Button"
+            android:text="Add to Favourites"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.811"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/authorview"
             app:layout_constraintTop_toBottomOf="@+id/genreview"
-            app:layout_constraintVertical_bias="0.619" />
+            app:layout_constraintVertical_bias="0.87" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/genreview"
