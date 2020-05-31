@@ -101,7 +101,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                             .commit();
                 }
             });
-            //button to logout
+            //jj-button to logout
             LoginPage temp =  new LoginPage(getActivity());
             Auto_login = temp.getLogincontext().getSharedPreferences("LoginButton",Context.MODE_PRIVATE);
             final SharedPreferences.Editor editor = Auto_login.edit();
@@ -109,11 +109,9 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //stops auto login
+                    //jj-stops auto login
                     editor.putBoolean("logged", false);
                     editor.commit();
-                    boolean indexStatus = Auto_login.getBoolean("logged", true);  // false is the default value if nothing is returned.
-                    Log.v(TAG,"Current login auto bool ="+indexStatus);
                     ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
                 }
             });

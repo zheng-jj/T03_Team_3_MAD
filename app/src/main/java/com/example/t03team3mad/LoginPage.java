@@ -37,7 +37,7 @@ public class LoginPage extends AppCompatActivity {
     String uid;
     DatabaseReference databaseReference;
     ProgressBar progressBar;
-
+    //jj-constructors to get the context of the login page from other fragments
     public LoginPage(Context context)
     {
         logincontext=context;
