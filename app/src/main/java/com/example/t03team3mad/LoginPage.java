@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import com.google.firebase.database.ValueEventListener;
 
 
 public class LoginPage extends AppCompatActivity {
+    public Context logincontext;
     EditText EnterEmail,EnterPassword;
     Button LoginButton;
     TextView RegisterButton;
@@ -36,6 +38,18 @@ public class LoginPage extends AppCompatActivity {
     DatabaseReference databaseReference;
     ProgressBar progressBar;
 
+    public LoginPage(Context context)
+    {
+        logincontext=context;
+    }
+    public Context getLogincontext(){
+        return logincontext;
+    }
+    public  Context getContext(){
+        Context mContext = LoginPage.this;
+        return mContext;
+    }
+    public LoginPage(){}
     private static final String TAG = "LoginPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +68,7 @@ public class LoginPage extends AppCompatActivity {
 
         //Auto_login.edit().putBoolean("logged", false).apply();
         //^ if wan test again
+
 
         //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){

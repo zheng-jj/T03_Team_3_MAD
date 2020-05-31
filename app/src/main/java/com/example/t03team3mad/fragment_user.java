@@ -2,7 +2,9 @@ package com.example.t03team3mad;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -34,6 +36,8 @@ import dalvik.system.InMemoryDexClassLoader;
 public class fragment_user extends Fragment implements AdapterBookMain.OnBookMainListener {
     private static final String TAG = "userFragment";
     List<Book> userBooklist = null;
+    SharedPreferences Auto_login;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view;
@@ -98,10 +102,18 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                 }
             });
             //button to logout
+            LoginPage temp =  new LoginPage(getActivity());
+            Auto_login = temp.getLogincontext().getSharedPreferences("LoginButton",Context.MODE_PRIVATE);
+            final SharedPreferences.Editor editor = Auto_login.edit();
             final Button logout = view.findViewById(R.id.logout);
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //stops auto login
+                    editor.putBoolean("logged", false);
+                    editor.commit();
+                    boolean indexStatus = Auto_login.getBoolean("logged", true);  // false is the default value if nothing is returned.
+                    Log.v(TAG,"Current login auto bool ="+indexStatus);
                     ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
                 }
             });
