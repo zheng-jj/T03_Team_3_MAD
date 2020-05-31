@@ -25,6 +25,7 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
         TextView userName;
         TextView userDes;
         ImageView userPic;
+
         ViewHolder(View itemView) {
             //takes the cardview from parameters
             super(itemView);

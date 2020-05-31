@@ -33,7 +33,7 @@ import java.util.Set;
 public class bookinfoFragment extends Fragment {
     private static final String TAG = "bookinfoFragment";
     ArrayList<String>data = new ArrayList<>();
-    RecyclerView recyclerView;
+    RecyclerView Genre;
     //AdapterGenre adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,7 +41,7 @@ public class bookinfoFragment extends Fragment {
         TextView title = view.findViewById(R.id.titleview);
         TextView synopsis = view.findViewById(R.id.synopsis);
         TextView releasedate = view.findViewById(R.id.releasedateview);
-        RecyclerView Genre = view.findViewById(R.id.genreview);
+        Genre = view.findViewById(R.id.genreview_layout);
         TextView author = view.findViewById(R.id.authorview);
         ImageView image = view.findViewById(R.id.imageView2);
 
@@ -55,20 +55,21 @@ public class bookinfoFragment extends Fragment {
             title.setText(receivedbook.getBooktitle());
             synopsis.setText(receivedbook.getBookabout());
             releasedate.setText(receivedbook.getPdate());
-            String[] splitgenre = receivedbook.getBookgenre().split(";");
+            String[] splitgenre = receivedbook.getBookgenre().split(",");
             int i = 0;
             for (i = 0; i < splitgenre.length; i++) {
                 data.add(splitgenre[i]);
             }
+            AdapterGenre mAdapter =
+                    new AdapterGenre(data);
 
-            //adapter = new AdapterGenre(data);
+            LinearLayoutManager mLayoutManager =
+                    new LinearLayoutManager(this.getContext());
 
-//            LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-//            //Chris - set the recyclerview's manager to the previously created manager
-//            recyclerView.setLayoutManager(llm);
-//            recyclerView.setItemAnimator(new DefaultItemAnimator());
-//            //recyclerView.setAdapter(adapter);
-//            author.setText(receivedbook.getBookauthor());
+            Genre.setLayoutManager(mLayoutManager);
+            Genre.setItemAnimator(new DefaultItemAnimator());
+            Genre.setAdapter(mAdapter);
+
 
             //QH = SETS IMAGE FROM STRING
             String filename = "book" + receivedbook.getIsbn() + ".jpg";

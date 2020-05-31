@@ -50,9 +50,9 @@ public class LoginPage extends AppCompatActivity {
         user=Auth.getCurrentUser();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
-        Auto_login.edit().putBoolean("logged", false).apply();
 
-        Auto_login.edit().putBoolean("logged", false).apply();
+
+        //Auto_login.edit().putBoolean("logged", false).apply();
         //^ if wan test again
 
         //Chris - User is already logged in
@@ -60,7 +60,11 @@ public class LoginPage extends AppCompatActivity {
             //Chris - get uid from shared preferences
             uid=Auto_login.getString("UserID",null);
             Log.v(TAG, "the user id sent= "+ uid);
+            Bundle bundle = new Bundle();
+            bundle.putString("User_UID", uid);
             Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
+            MainActivity.putExtra("User_UID", bundle);
+            Log.v(TAG,"sending this uid to main activity "+uid);
             startActivity(MainActivity);
         }
         //Chris -Login button listener
