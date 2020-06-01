@@ -20,7 +20,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private User loggedinuser = null;
     private Integer uid = null;
     public static User loggedinuser = null;
     @Override

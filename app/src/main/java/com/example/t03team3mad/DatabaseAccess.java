@@ -331,19 +331,12 @@ public class DatabaseAccess {
             String idus = temp2.getString(0);
             String idrs = temp2.getString(1);
             String review = temp2.getString(2);
-        temp = db.rawQuery("Select * From Reviews ", new String[]{});
-        temp.moveToFirst();
-        do {
-            String idus = temp.getString(0);
-            String idrs = temp.getString(1);
-            String review = temp.getString(2);
             String uname = getElement("Name", "USER", "IDU", idus);
             String title = getElement("Title", "Book", "ISBN", ISBN);
             Review review1 = new Review(Integer.parseInt(idus),Integer.parseInt(idrs) , uname, title, review, ISBN);
             mReviewlist.add(review1);
-            Log.d("list",mReviewlist.toString());
+            Log.d("list",mReviewlist.toString());}
 
-        }
         temp2.close();
 
         return mReviewlist;
