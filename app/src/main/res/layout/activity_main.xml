@@ -5,11 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
+    <FrameLayout
+        android:id="@+id/topbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@color/colorPrimary">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="hey" />
+    </FrameLayout>
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/topbar"
+        android:layout_marginBottom="-1dp"
+        android:background="#4b86bf"/>
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@id/bottomBar"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/line"
         android:id="@+id/include"
         layout="@layout/container_for_mainactivity">
     </include>
@@ -30,4 +50,6 @@
         app:bb_activeTabColor="#4b86b4"
         app:bb_inActiveTabColor="#63ace5"
         app:bb_tabXmlResource="@xml/bottombar_tabs"></com.roughike.bottombar.BottomBar>
+
+
 </RelativeLayout>
