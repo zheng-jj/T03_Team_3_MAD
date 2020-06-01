@@ -20,6 +20,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+    private User loggedinuser = null;
+    private Integer uid = null;
     public static User loggedinuser = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,8 @@ public class MainActivity extends AppCompatActivity {
         }
         if(loggedinuser == null)
         {
+            loggedinuser = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
+            uid = loggedinuser.getUseridu();
             Log.v(TAG,"no logged in user received");
             //startsLoginPage();
         }
@@ -57,10 +61,10 @@ public class MainActivity extends AppCompatActivity {
                 startsearchbarfragment();
             }
             if (tabId == R.id.tab_feed) {
-                startsLoginPage();
+                startreviewpagefragment();
             }
             if (tabId == R.id.tab_profile) {
-                startuserfragment();
+                fragment_addreview();
             }
             }
         });
@@ -109,14 +113,14 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("bookdisplayFragment");
         transaction.commit();
     }
-//    private void startreviewpagefragment(){
-//        Log.v(TAG, "reviewpage fragment launched");
-//        reviewpageFragment reviewpage = new reviewpageFragment();
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
-//        transaction.addToBackStack("reviewpageFragment");
-//        transaction.commit();
-//    }
+    private void startreviewpagefragment(){
+        Log.v(TAG, "reviewpage fragment launched");
+        reviewpageFragment reviewpage = new reviewpageFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
+        transaction.addToBackStack("reviewpageFragment");
+        transaction.commit();
+    }
 
     private void startsearchbaractivity(){
         Log.v(TAG, "Search Bar launched");
@@ -150,6 +154,26 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,bookinfo,"bookinfoFragment");
         transaction.addToBackStack("bookinfoFragment");
+        transaction.commit();
+    }
+    private void starteditprofilefragment(){
+        Log.v(TAG, "edit profile fragment launched");
+        editprofileFragment editFragment= new editprofileFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,editFragment,"editprofileFragment");
+        transaction.addToBackStack("editprofileFragment");
+        transaction.commit();
+    }
+    private void fragment_addreview(){
+        Log.v(TAG, "add review fragment launched");
+        fragment_addreview addreviewfragment = new fragment_addreview();
+        fragment_user fragment = new fragment_user();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("user",loggedinuser);
+        fragment.setArguments(bundle);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.mainactivitycontainer,addreviewfragment,"addreviewFragment");
+        transaction.addToBackStack("addreviewFragment");
         transaction.commit();
     }
 }

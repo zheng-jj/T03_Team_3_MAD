@@ -22,6 +22,7 @@ public class DatabaseAccess {
     private SQLiteDatabase db;
     private static DatabaseAccess instance;
     private Cursor temp = null;
+    private Cursor temp2 = null;
     private Cursor count = null;
     private Cursor cursor = null;
     private Cursor insert = null;
@@ -60,8 +61,21 @@ public class DatabaseAccess {
         }
         return output2;
     }
+    public boolean addData(String idr,String idu,String review, String ISBN){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("IDU",idu);
+        contentValues.put("IDR",idr);
+        contentValues.put("Review",review);
+        contentValues.put("ISBN",ISBN);
 
-
+        long result = db.insert("Reviews",null,contentValues);
+        if (result== -1){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
 
     //jj- this method is used to load the users into a list and returns the list(create one for each table so can load into recyclerview)
     public List<User> loadalluserlist() {
@@ -309,6 +323,14 @@ public class DatabaseAccess {
     public List<Review> extractreviewbybook(String ISBN) {
         List<Review> mReviewlist = new ArrayList<Review>() {
         };
+        temp2 = db.rawQuery("Select * From Reviews WHERE ISBN = '" + ISBN +"'", new String[]{});
+        temp2.moveToFirst();
+        Log.d("list",getCount("IDR","Reviews"));
+        while (temp2.moveToNext()) {
+
+            String idus = temp2.getString(0);
+            String idrs = temp2.getString(1);
+            String review = temp2.getString(2);
         temp = db.rawQuery("Select * From Reviews ", new String[]{});
         temp.moveToFirst();
         do {
@@ -319,9 +341,10 @@ public class DatabaseAccess {
             String title = getElement("Title", "Book", "ISBN", ISBN);
             Review review1 = new Review(Integer.parseInt(idus),Integer.parseInt(idrs) , uname, title, review, ISBN);
             mReviewlist.add(review1);
+            Log.d("list",mReviewlist.toString());
 
-        }while (temp.moveToNext());
-
+        }
+        temp2.close();
 
         return mReviewlist;
     }
