@@ -20,7 +20,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
-    private User loggedinuser = null;
     private Integer uid = null;
     public static User loggedinuser = null;
     @Override
@@ -154,14 +153,6 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.mainactivitycontainer,bookinfo,"bookinfoFragment");
         transaction.addToBackStack("bookinfoFragment");
-        transaction.commit();
-    }
-    private void starteditprofilefragment(){
-        Log.v(TAG, "edit profile fragment launched");
-        editprofileFragment editFragment= new editprofileFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,editFragment,"editprofileFragment");
-        transaction.addToBackStack("editprofileFragment");
         transaction.commit();
     }
     private void fragment_addreview(){
