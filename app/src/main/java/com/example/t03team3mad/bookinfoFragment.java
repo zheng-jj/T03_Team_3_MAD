@@ -37,6 +37,7 @@ public class bookinfoFragment extends Fragment {
     //AdapterGenre adapter;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        final User user;
         View view = inflater.inflate(R.layout.fragment_bookinfo, container, false);
         TextView title = view.findViewById(R.id.titleview);
         TextView synopsis = view.findViewById(R.id.synopsis);
@@ -102,6 +103,39 @@ public class bookinfoFragment extends Fragment {
                     favourite.setText("Added to list");
                 }
             }
+            user = DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu()));
+            Button review = view.findViewById(R.id.reviewpage);
+            review.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("book", CurrentBook);
+                    Log.v(TAG,"book info sending data =  "+ CurrentBook);
+                    reviewpageFragment rpage = new reviewpageFragment();
+                    rpage.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.mainactivitycontainer, rpage, "reviewPage")
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+            Button addreview = view.findViewById(R.id.addreview);
+            addreview.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("user", user);
+                    bundle.putParcelable("book", CurrentBook);
+                    Log.v(TAG,"book info sending data =  "+ user);
+                    fragment_addreview addrpage = new fragment_addreview();
+                    addrpage.setArguments(bundle);
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.mainactivitycontainer, addrpage, "addreviewPage")
+                            .addToBackStack(null)
+                            .commit();
+                }
+            });
+
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

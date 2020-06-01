@@ -31,16 +31,16 @@ public class reviewpageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle bundle = this.getArguments();
-        bundle.getParcelable("");
+        final Book book = bundle.getParcelable("book");
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
         TextView booktitle = view.findViewById(R.id.rtitle);
         ImageView bookimage = view.findViewById(R.id.bookimg);
         bookimage.setImageResource(R.drawable.demo_book_pic);
-        booktitle.setText(Title("9781338132083"));
+        booktitle.setText(book.getBooktitle());
         RecyclerView reviews = (RecyclerView)view.findViewById(R.id.rRecyclerView);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviews.setLayoutManager(llm);
-        AdapterReview adapterReview  = new AdapterReview(loadAllReviews("9781338132083"));
+        AdapterReview adapterReview  = new AdapterReview(loadAllReviews(book.getIsbn()));
         reviews.setAdapter(adapterReview);
         return view;
     }

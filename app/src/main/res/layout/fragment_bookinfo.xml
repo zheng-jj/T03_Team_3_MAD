@@ -91,18 +91,39 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/favourite"
-            android:layout_width="175dp"
+            android:id="@+id/addreview"
+            android:layout_width="80dp"
             android:layout_height="38dp"
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="8dp"
-            android:text="Add to Favourites"
+            android:text="Add review"
+            android:textSize="10dp"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/authorview"
             app:layout_constraintTop_toBottomOf="@+id/genreview_layout"
             app:layout_constraintVertical_bias="0.87" />
+
+        <Button
+            android:id="@+id/reviewpage"
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="284dp"
+            android:layout_marginTop="360dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="Reviews"></Button>
+
+        <Button
+            android:id="@+id/favourite"
+            android:layout_width="80dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="28dp"
+            android:layout_marginTop="320dp"
+            android:text="Add To"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></Button>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/genreview_layout"

@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 startreviewpagefragment();
             }
             if (tabId == R.id.tab_profile) {
-                fragment_addreview();
+//                fragment_addreview();
             }
             }
         });
@@ -155,16 +155,16 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("bookinfoFragment");
         transaction.commit();
     }
-    private void fragment_addreview(){
-        Log.v(TAG, "add review fragment launched");
-        fragment_addreview addreviewfragment = new fragment_addreview();
-        fragment_user fragment = new fragment_user();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("user",loggedinuser);
-        fragment.setArguments(bundle);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,addreviewfragment,"addreviewFragment");
-        transaction.addToBackStack("addreviewFragment");
-        transaction.commit();
-    }
+//    private void fragment_addreview(){
+//        Log.v(TAG, "add review fragment launched");
+//        fragment_addreview addreviewfragment = new fragment_addreview();
+//        fragment_user fragment = new fragment_user();
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelable("user",loggedinuser);
+//        fragment.setArguments(bundle);
+//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//        transaction.replace(R.id.mainactivitycontainer,addreviewfragment,"addreviewFragment");
+//        transaction.addToBackStack("addreviewFragment");
+//        transaction.commit();
+//    }
 }

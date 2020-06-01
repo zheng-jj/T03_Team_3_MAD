@@ -1,3 +1,4 @@
+
 package com.example.t03team3mad;
 
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.widget.SearchView;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
 
 public class fragment_addreview extends Fragment {
@@ -21,9 +24,11 @@ public class fragment_addreview extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.subfragment_writereview, container, false);
         Bundle bundle = this.getArguments();
         final User user = bundle.getParcelable("user");
+        final Book book = bundle.getParcelable("book");
         enter =  view.findViewById(R.id.enter);
         editreview = view.findViewById(R.id.reviewinput);
         enter.setOnClickListener(new View.OnClickListener(){
@@ -31,7 +36,7 @@ public class fragment_addreview extends Fragment {
                 Log.v("Click","Button clicked");
                 Integer idrcount = Integer.parseInt(getidr());
                 String idr = String.valueOf(idrcount + 1);
-                String ISBN = "9781338132083";
+                String ISBN = book.getIsbn();
                 idu = Integer.toString(user.getUseridu());
                 String review = editreview.getText().toString();
                 boolean test = insertreview(idr,idu,review,ISBN);
@@ -60,4 +65,5 @@ public class fragment_addreview extends Fragment {
 
     }
 }
+
 
