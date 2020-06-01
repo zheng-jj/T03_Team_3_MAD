@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 startreviewpagefragment();
             }
             if (tabId == R.id.tab_profile) {
-//                fragment_addreview();
+                startuserfragment();
             }
             }
         });
