@@ -155,14 +155,6 @@ public class MainActivity extends AppCompatActivity {
         transaction.addToBackStack("bookinfoFragment");
         transaction.commit();
     }
-    private void starteditprofilefragment(){
-        Log.v(TAG, "edit profile fragment launched");
-        editprofileFragment editFragment= new editprofileFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,editFragment,"editprofileFragment");
-        transaction.addToBackStack("editprofileFragment");
-        transaction.commit();
-    }
     private void fragment_addreview(){
         Log.v(TAG, "add review fragment launched");
         fragment_addreview addreviewfragment = new fragment_addreview();
