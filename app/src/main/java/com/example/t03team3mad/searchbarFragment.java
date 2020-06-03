@@ -34,7 +34,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_searchbar,container,false);
         SearchView searchbar = view.findViewById(R.id.searchView);
-
         //qh - simple search
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -147,8 +146,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
         }
     }
-
-
 }
 
 

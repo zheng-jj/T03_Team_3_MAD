@@ -2,6 +2,8 @@ package com.example.t03team3mad;
 
 import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
@@ -16,12 +18,14 @@ import com.example.t03team3mad.model.User;
 import com.roughike.bottombar.*;
 
 import java.security.PublicKey;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private Integer uid = null;
     public static User loggedinuser = null;
+    public List<String> backstacktags = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
             }
             }
         });
+        //getSupportFragmentManager().addOnBackStackChangedListener(getListener());
     }
+
+
+
     private void starthomefragment(){
         Log.v(TAG, "home fragment launched");
         HomeFragment homeFragment = new HomeFragment();
@@ -92,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
         bundle.putParcelable("loggedin", loggedinuser);
         fragment.setArguments(bundle);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,fragment,"HomeFragment");
+        transaction.replace(R.id.mainactivitycontainer,fragment,"UserFragment");
         transaction.addToBackStack("UserFragment");
         transaction.commit();
     }
@@ -166,5 +174,49 @@ public class MainActivity extends AppCompatActivity {
 //        transaction.replace(R.id.mainactivitycontainer,addreviewfragment,"addreviewFragment");
 //        transaction.addToBackStack("addreviewFragment");
 //        transaction.commit();
+//    }
+    //jj- this overrides the back press button so that we can see which fragments are in the backstack at any given time when backstack is pressed
+    @Override
+    public void onBackPressed(){
+        Integer amount = getSupportFragmentManager().getBackStackEntryCount();
+        Log.v(TAG,"Total count in backstack is "+ Integer.toString(amount));
+        for(Integer x = 0;x<amount;x++){
+            Log.v(TAG,"tags from in backstack "+ getSupportFragmentManager().getBackStackEntryAt(x).getName());
+        }
+        //backstack consists of empty main activity, hence when i set the amount to 2, it will just skip past the empty container and go back
+        if(amount==2){
+            finish();
+            System.exit(0);
+        }
+        else{
+            super.onBackPressed();
+        }
+    }
+//    //jj- listener which will check if backstack changes
+//    private FragmentManager.OnBackStackChangedListener getListener() {
+//        FragmentManager.OnBackStackChangedListener result = new FragmentManager.OnBackStackChangedListener() {
+//            public void onBackStackChanged() {
+//                FragmentManager manager = getSupportFragmentManager();
+//                if (manager != null) {
+//                    int backStackEntryCount = manager.getBackStackEntryCount();
+//                    if (backStackEntryCount == 2) {
+//                        finish();
+//                    }
+//                    //updates local list for backstacks
+//                    backstacktags.clear();
+//                    for(Integer count=0 ; count<manager.getBackStackEntryCount();count++){
+//                        //if the tag does not already exist in the backstack
+//
+//                        backstacktags.add(manager.getBackStackEntryAt(count).getName());
+//                    }
+//                    for(String x:backstacktags){
+//                        Log.v(TAG,"Backstacktag: "+x);
+//                    }
+//                    Fragment fragment = manager.findFragmentByTag(backstacktags.get(backstacktags.size()-1));
+//                    fragment.onResume();
+//                }
+//            }
+//        };
+//        return result;
 //    }
 }

@@ -53,6 +53,7 @@ public class LoginPage extends AppCompatActivity {
     private static final String TAG = "LoginPage";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_page);
         EnterEmail=findViewById(R.id.EnterEmail);
@@ -81,6 +82,7 @@ public class LoginPage extends AppCompatActivity {
             MainActivity.putExtra("User_UID", bundle);
             Log.v(TAG,"sending this uid to main activity "+uid);
             startActivity(MainActivity);
+            finish();
         }
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
