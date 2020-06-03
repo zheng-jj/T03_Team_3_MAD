@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -19,9 +20,10 @@ import com.roughike.bottombar.*;
 
 import java.security.PublicKey;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
     private static final String TAG = "MainActivity";
     private Integer uid = null;
     public static User loggedinuser = null;
@@ -64,14 +66,15 @@ public class MainActivity extends AppCompatActivity {
                 startsearchbarfragment();
             }
             if (tabId == R.id.tab_feed) {
-                startreviewpagefragment();
             }
             if (tabId == R.id.tab_profile) {
                 startuserfragment();
             }
             }
         });
-        //getSupportFragmentManager().addOnBackStackChangedListener(getListener());
+        //attaches listener for whenever backstack changes
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(this);
     }
 
 
@@ -79,10 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private void starthomefragment(){
         Log.v(TAG, "home fragment launched");
         HomeFragment homeFragment = new HomeFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,homeFragment,"HomeFragment");
-        transaction.addToBackStack("HomeFragment");
-        transaction.commit();
+        addFragment(homeFragment,this,"HomeFragment");
     }
     //jj - starts user fragment based on what is to be displayed
     private void startuserfragment(){
@@ -99,89 +99,25 @@ public class MainActivity extends AppCompatActivity {
 //        DBaccess.close();
         bundle.putParcelable("loggedin", loggedinuser);
         fragment.setArguments(bundle);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,fragment,"UserFragment");
-        transaction.addToBackStack("UserFragment");
-        transaction.commit();
-    }
-    private void startauthorprofilefragment(){
-        Log.v(TAG, "authorprofile fragment launched");
-        authorprofileFragment authorprofile = new authorprofileFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,authorprofile,"authorprofileFragment");
-        transaction.addToBackStack("authorprofileFragment");
-        transaction.commit();
-    }
-    private void startbookdisplayfragment(){
-        Log.v(TAG, "bookdisplay fragment launched");
-        bookdisplayFragment bookdisplay = new bookdisplayFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,bookdisplay,"bookdisplayFragment");
-        transaction.addToBackStack("bookdisplayFragment");
-        transaction.commit();
-    }
-    private void startreviewpagefragment(){
-        Log.v(TAG, "reviewpage fragment launched");
-        reviewpageFragment reviewpage = new reviewpageFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,reviewpage,"reviewpageFragment");
-        transaction.addToBackStack("reviewpageFragment");
-        transaction.commit();
-    }
-
-    private void startsearchbaractivity(){
-        Log.v(TAG, "Search Bar launched");
-        Intent searchbar= new Intent(getApplicationContext(),SearchPage.class);
-        startActivity(searchbar);
+        addFragment(fragment,this,"UserFragment");
     }
 
     private void startsearchbarfragment(){
         Log.v(TAG, "searchbar fragment launched");
         searchbarFragment searchbar = new searchbarFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,searchbar,"searchbarFragment");
-        transaction.addToBackStack("searchbarFragment");
-        transaction.commit();
-    }
-    private void startsLoginPage(){
-        Log.v(TAG, "Login Page launched");
-        Intent Login= new Intent(getApplicationContext(),LoginPage.class);
-        startActivity(Login);
-    }
-    private void startRegisterPage(){
-
-        Log.v(TAG, "Register Page launched");
-        Intent register= new Intent(getApplicationContext(),RegisterPage.class);
-        startActivity(register);
+        addFragment(searchbar,this,"SearchFragment");
     }
 
-    private void startbookinfofragment(){
-        Log.v(TAG, "bookinfo fragment launched");
-        bookinfoFragment bookinfo= new bookinfoFragment();
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.mainactivitycontainer,bookinfo,"bookinfoFragment");
-        transaction.addToBackStack("bookinfoFragment");
-        transaction.commit();
-    }
-//    private void fragment_addreview(){
-//        Log.v(TAG, "add review fragment launched");
-//        fragment_addreview addreviewfragment = new fragment_addreview();
-//        fragment_user fragment = new fragment_user();
-//        Bundle bundle = new Bundle();
-//        bundle.putParcelable("user",loggedinuser);
-//        fragment.setArguments(bundle);
-//        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//        transaction.replace(R.id.mainactivitycontainer,addreviewfragment,"addreviewFragment");
-//        transaction.addToBackStack("addreviewFragment");
-//        transaction.commit();
-//    }
+
+    //jj-manage backstack plz dont touchy touchy
+
     //jj- this overrides the back press button so that we can see which fragments are in the backstack at any given time when backstack is pressed
     @Override
     public void onBackPressed(){
         Integer amount = getSupportFragmentManager().getBackStackEntryCount();
-        Log.v(TAG,"Total count in backstack is "+ Integer.toString(amount));
+        Log.v(TAG,"Total count in backstack before backbuttonpressed "+ Integer.toString(amount));
         for(Integer x = 0;x<amount;x++){
-            Log.v(TAG,"tags from in backstack "+ getSupportFragmentManager().getBackStackEntryAt(x).getName());
+            Log.v(TAG,"tags from in backstack before backbuttonpressed "+ getSupportFragmentManager().getBackStackEntryAt(x).getName());
         }
         //backstack consists of empty main activity, hence when i set the amount to 2, it will just skip past the empty container and go back
         if(amount==2){
@@ -219,4 +155,51 @@ public class MainActivity extends AppCompatActivity {
 //        };
 //        return result;
 //    }
+
+    //jj-method which is called whenever the backstack changes in the fragment manager
+    @Override
+    public void onBackStackChanged() {
+        //jj-list to store duplicated fragments in backstack to be removed from manager
+        HashMap<String,Integer> fragmentsAndTheirCountsinBackStack = new HashMap<String, Integer>();
+        Integer amount = getSupportFragmentManager().getBackStackEntryCount();
+        Log.v(TAG,"Total count in backstack is "+ Integer.toString(amount));
+        //clears local list for backstacktags
+        backstacktags.clear();
+
+        for(Integer x = 0;x<amount;x++){
+            //prints out all the fragments in the backstackmanager at this given point
+            Log.v(TAG,"tags from in backstack "+ getSupportFragmentManager().getBackStackEntryAt(x).getName());
+            backstacktags.add(getSupportFragmentManager().getBackStackEntryAt(x).getName());
+        }
+
+        FragmentManager manager = ((AppCompatActivity)this).getSupportFragmentManager ();
+        FragmentTransaction ft = manager.beginTransaction ();
+        //jj-hides all other fragments
+        for(Fragment allhide : manager.getFragments()){
+            ft.hide(allhide);
+        }
+        ft.show(manager.getFragments().get(manager.getFragments().size()-1));
+        ft.commit();
+    }
+    //jj- method that can be used for all other fragments to show fragment
+    public static void addFragment (Fragment fragment, Context context, String tag ) {
+        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager ();
+        FragmentTransaction ft = manager.beginTransaction ();
+        //jj-hides all other fragments
+        // if there are no fragments in the backstack with the same tag
+        if (manager.findFragmentByTag (tag) == null) {
+            //jj- only adds to backstack if it doesnt even exist
+            ft.add ( R.id.mainactivitycontainer, fragment, tag);
+            ft.addToBackStack ( tag );
+            ft.commit ();
+        }
+        else {
+            for(Fragment allhide : manager.getFragments()){
+                ft.hide(allhide);
+            }
+            //only shows the fragment chosen
+            ft.show (manager.findFragmentByTag(tag));
+            ft.commit();
+        }
+    }
 }

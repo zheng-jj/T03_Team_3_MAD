@@ -72,10 +72,8 @@ public class fragment_editUserBooks extends Fragment {
                 Log.v(TAG,"user sending to edit = "+finalUsertoEdit.getUsername());
                 fragment_editUser fragment_editUser = new fragment_editUser();
                 fragment_editUser.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainactivitycontainer, fragment_editUser, "editUserBooks")
-                        .addToBackStack(null)
-                        .commit();
+                //jj-updated the way we add fragments into the view
+                MainActivity.addFragment(fragment_editUser,getActivity(),"EditUserBooks");
             }
         });
         return view;

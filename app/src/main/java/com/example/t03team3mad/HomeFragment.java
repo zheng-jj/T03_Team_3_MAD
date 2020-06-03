@@ -80,10 +80,8 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         Bundle bundle = new Bundle();
         bundle.putParcelable("currentbook", currentbook);  // Key, value
         nextFrag.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
-                .addToBackStack(null)
-                .commit();
+        //jj-updated the way we add fragments into the view
+        MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment");
     }
 
     //qh - method to save the image to internal storage
@@ -121,4 +119,5 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         saveimagestointernalstorage("user3");
         saveimagestointernalstorage("author1");
     }
+
 }

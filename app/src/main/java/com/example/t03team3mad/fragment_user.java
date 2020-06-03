@@ -80,10 +80,8 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
                     fragment_editUser fragment_editUser = new fragment_editUser();
                     fragment_editUser.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainactivitycontainer, fragment_editUser, "editUser")
-                            .addToBackStack(null)
-                            .commit();
+                    //jj-updated the way we add fragments into the view
+                    MainActivity.addFragment(fragment_editUser,getActivity(),"EditUser");
                     }
             });
             Button following = view.findViewById(R.id.viewfollowing);
@@ -95,10 +93,8 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     Log.v(TAG,"user sending to edit = "+finalUsertoView.getUsername());
                     fragment_userfollowing fragment_userFollowing = new fragment_userfollowing();
                     fragment_userFollowing.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainactivitycontainer, fragment_userFollowing, "viewFollowing")
-                            .addToBackStack(null)
-                            .commit();
+                    //jj-updated the way we add fragments into the view
+                    MainActivity.addFragment(fragment_userFollowing,getActivity(),"UserFollowing");
                 }
             });
             //jj-button to logout

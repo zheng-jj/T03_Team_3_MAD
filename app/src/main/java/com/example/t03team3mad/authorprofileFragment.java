@@ -76,12 +76,7 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
         Bundle bundle = new Bundle();
         bundle.putParcelable("currentbook", currentbook);  // Key, value
         nextFrag.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
-                .addToBackStack(null)
-                .commit();
-
-
-
+        //jj-updated the way we add fragments into the view
+        MainActivity.addFragment(nextFrag,getActivity(),"AuthorProfile");
     }
 }

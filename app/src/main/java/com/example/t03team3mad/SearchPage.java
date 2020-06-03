@@ -22,15 +22,12 @@ public class SearchPage extends AppCompatActivity {
                 doMySearch(query);
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
         });
-
     }
-
     public void doMySearch(String query){
         System.out.println(query);
     }

@@ -67,10 +67,8 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
                 bundle.putParcelable("UserToEdit", finalUsertoEdit);
                 Log.v(TAG,"user sending to editBooks = "+ finalUsertoEdit.getUsername());
                 fragment_editUserBooks.setArguments(bundle);
-                getActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.mainactivitycontainer, fragment_editUserBooks, "editUserBooks")
-                        .addToBackStack(null)
-                        .commit();
+                //jj-updated the way we add fragments into the view
+                MainActivity.addFragment(fragment_editUserBooks,getActivity(),"editUserBooks");
             }
         });
 
@@ -97,11 +95,8 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("loggedin", finalUsertoEdit1);
                 fragment.setArguments(bundle);
-                FragmentTransaction transaction = getFragmentManager().beginTransaction();
-                transaction.replace(R.id.mainactivitycontainer,fragment,"editUser");
-                transaction.addToBackStack("UserFragment");
-                transaction.commit();
-
+                //jj-updated the way we add fragments into the view
+                MainActivity.addFragment(fragment,getActivity(),"UserFragment");
                 //updates global variable
                 MainActivity.loggedinuser=finalUsertoEdit1;
             }

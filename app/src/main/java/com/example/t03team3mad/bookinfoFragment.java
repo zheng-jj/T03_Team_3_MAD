@@ -113,10 +113,8 @@ public class bookinfoFragment extends Fragment {
                     Log.v(TAG,"book info sending data =  "+ CurrentBook);
                     reviewpageFragment rpage = new reviewpageFragment();
                     rpage.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainactivitycontainer, rpage, "reviewPage")
-                            .addToBackStack(null)
-                            .commit();
+                    //jj-updated the way we add fragments into the view
+                    MainActivity.addFragment(rpage,getActivity(),"reviewpage");
                 }
             });
             Button addreview = view.findViewById(R.id.addreview);
@@ -129,10 +127,8 @@ public class bookinfoFragment extends Fragment {
                     Log.v(TAG,"book info sending data =  "+ user);
                     fragment_addreview addrpage = new fragment_addreview();
                     addrpage.setArguments(bundle);
-                    getActivity().getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.mainactivitycontainer, addrpage, "addreviewPage")
-                            .addToBackStack(null)
-                            .commit();
+                    //jj-updated the way we add fragments into the view
+                    MainActivity.addFragment(addrpage,getActivity(),"addreviewPage");
                 }
             });
 
