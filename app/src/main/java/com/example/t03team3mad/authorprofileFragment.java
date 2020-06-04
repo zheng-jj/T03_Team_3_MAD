@@ -36,6 +36,7 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
+            //qh - getting the author object passed
             Author receivedauthor = bundle.getParcelable("currentauthor"); // Key
             System.out.println(receivedauthor.getAuthorname());
             name.setText(receivedauthor.getAuthorname());
@@ -52,7 +53,7 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
             booklist = databaseAccess.searchauthorbook(String.valueOf(receivedauthor.getAuthorid()));
             databaseAccess.close();
 
-            //shows author's published books
+            //qh - shows author's published books
             RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.published);
             LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
             searchresults.setLayoutManager(searchlayout);
@@ -67,7 +68,7 @@ public class authorprofileFragment extends Fragment implements AdapterAuthor.OnS
         return view;
     }
 
-
+    //qh - clicking for book
     @Override
     public void onSearchClick(int position) {
         Book currentbook = booklist.get(position);

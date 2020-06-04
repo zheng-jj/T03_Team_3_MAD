@@ -84,7 +84,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment");
     }
 
-    //qh - method to save the image to internal storage
+    //qh - method to save the image to internal storage (needs the image to be in drawable first) (name the image like this please, ObjectnameID)
     public void saveimagestointernalstorage(String filename) {
 
         int id = getActivity().getApplicationContext().getResources().getIdentifier(filename, "drawable", getActivity().getApplicationContext().getPackageName());
@@ -108,7 +108,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
 
     }
 
-    //calls the methods to save images into internal storage
+    //qh - calls the methods to save images into internal storage
     public void saveimagesmethods(){
         saveimagestointernalstorage("book9780439362139");
         saveimagestointernalstorage("book9780545128285");

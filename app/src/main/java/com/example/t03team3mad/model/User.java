@@ -2,7 +2,7 @@ package com.example.t03team3mad.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-
+//qh - added parcelable
 public class User implements Parcelable {
 
     private int useridu;

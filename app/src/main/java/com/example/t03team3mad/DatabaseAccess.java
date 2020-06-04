@@ -238,7 +238,7 @@ public class DatabaseAccess {
         }
         return book1;
     }
-
+    //qh - search author by ida
     public Author searchauthorbyida(String ida) {
         Author author1 = null;
         Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE IDA =="+ida, new String[]{});
@@ -251,7 +251,7 @@ public class DatabaseAccess {
         }
         return author1;
     }
-
+    //qh - search author by name
     public Author searchauthorbyname(String name) {
         Author author1 = null;
         Cursor c = db.rawQuery("SELECT * FROM AUTHOR WHERE NAME ='"+name+"'", new String[]{});
@@ -264,7 +264,7 @@ public class DatabaseAccess {
         }
         return author1;
     }
-
+    //qh - search user by name
     public User searchuserbyname(String name) {
         User user1 = null;
         Cursor c = db.rawQuery("SELECT * FROM USER WHERE NAME ='"+name+"'", new String[]{});
@@ -278,7 +278,7 @@ public class DatabaseAccess {
         }
         return user1;
     }
-
+    //qh - search user by id
     public User searchuserbyid(String idu) {
         User user1 = null;
         try {

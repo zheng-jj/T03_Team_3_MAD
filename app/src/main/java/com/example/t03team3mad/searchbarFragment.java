@@ -61,6 +61,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         List<User> searchUser = databaseAccess.searchUser(query);
         databaseAccess.close();
         //qh - adds name and description of book, author and user to arraylist
+        //qh - i converted them into searchclass because i wanted to show 3 types of objects. search class has the object type, id, name and description.
         for (Book var : searchbooks)
         {
             System.out.println(var.getBooktitle());
@@ -97,13 +98,14 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
         if (currentsearchobject.getSearchClass() == "Book"){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            //qh searching book by isbn
             databaseAccess.open();
             Book currentbook = databaseAccess.searchbookbyisbn(currentsearchobject.getId());
             databaseAccess.close();
 
             bookinfoFragment nextFrag= new bookinfoFragment();
             Bundle bundle = new Bundle();
-
+            //qh - bring the object into book
             bundle.putParcelable("currentbook", currentbook);  // Key, value
             nextFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction()
