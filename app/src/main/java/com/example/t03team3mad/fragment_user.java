@@ -36,7 +36,7 @@ import dalvik.system.InMemoryDexClassLoader;
 
 public class fragment_user extends Fragment implements AdapterBookMain.OnBookMainListener {
     private static final String TAG = "userFragment";
-    List<Book> userBooklist = null;
+    List<Book> newbooklist;
     SharedPreferences Auto_login;
     User usertoView = null;
     View v;
@@ -192,6 +192,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         List<Book> userbooklist = DBaccess.loaduserbooklist(user);
         DBaccess.close();
         Log.v(TAG,"fav book list is loaded");
+        this.newbooklist=userbooklist;
         return userbooklist;
     }
     //jj- get user reviews made
@@ -223,10 +224,6 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         super.onCreate(savedInstanceState);
     }
 
-    @Override
-    public void onBookMainClick(int position) {
-
-    }
 
     @Override
     public void onStart() {
@@ -237,5 +234,19 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     public void onAttach(@NonNull Context context) {
         Log.v(TAG,"USER FRAGMENT RECREATED");
         super.onAttach(context);
+    }
+
+    @Override
+    public void onBookMainClick(int position) {
+        Book currentbook = newbooklist.get(position);
+
+        bookinfoFragment nextFrag= new bookinfoFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("currentbook", currentbook);  // Key, value
+        nextFrag.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
     }
 }
