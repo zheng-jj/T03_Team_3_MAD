@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -37,13 +38,13 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     private static final String TAG = "userFragment";
     List<Book> userBooklist = null;
     SharedPreferences Auto_login;
-
+    User usertoView = null;
+    View v;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view;
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
-        User usertoView = null;
         if (bundle.getParcelable("searchuser") != null) {
             Log.v(TAG,"showing search user profile");
             //jj- inflates the fragment into the container for the fragment
@@ -121,7 +122,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             //jj - this variable is temporary
             usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
         }
-
+        v=view;
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
         //jj - loads user into layout
@@ -225,5 +226,16 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     @Override
     public void onBookMainClick(int position) {
 
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        Log.v(TAG,"USER FRAGMENT RECREATED");
+        super.onAttach(context);
     }
 }

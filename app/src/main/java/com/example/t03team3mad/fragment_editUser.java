@@ -1,9 +1,16 @@
 package com.example.t03team3mad;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Parcelable;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,12 +31,22 @@ import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 public class fragment_editUser extends Fragment implements AdapterBookMain.OnBookMainListener {
     private static final String TAG = "userEditFragment";
     List<Book> userBooklist = null;
+
+    private static final int RESULTLOADIMAGE=1;
+
+
+    ImageButton Pic;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view;
@@ -45,6 +62,7 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
         if(usertoEdit!=null) {
             loaduserintoview(view, usertoEdit);
         }
+        Pic=view.findViewById(R.id.newprofileimg);
 
         //jj - load favourite user books recyclerview
         RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favBooksRecycler);
@@ -72,7 +90,7 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
             }
         });
 
-        //edits user and refreshes the fragment
+        //jj-edits user and refreshes the fragment
         Button saveEdits = view.findViewById(R.id.savechanges);
         final User finalUsertoEdit1 = usertoEdit;
         saveEdits.setOnClickListener(new View.OnClickListener() {
@@ -91,26 +109,75 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
                 DBaccess.close();
                 //reloads the fragment
                 fragment_user fragment = new fragment_user();
+
+                //updates global variable
+                MainActivity.loggedinuser=finalUsertoEdit1;
+
+                //updates database on new image
+                Bitmap userprofileimg = ((BitmapDrawable) Pic.getDrawable()).getBitmap();
+                //saves image from gallery to internal storage
+                SaveBitmap(userprofileimg,Integer.toString(finalUsertoEdit1.getUseridu()));
+
                 //jj- bundle to be moved to fragment
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("loggedin", finalUsertoEdit1);
                 fragment.setArguments(bundle);
                 //jj-updated the way we add fragments into the view
                 MainActivity.addFragment(fragment,getActivity(),"UserFragment");
-                //updates global variable
-                MainActivity.loggedinuser=finalUsertoEdit1;
+            }
+        });
+
+        //jj-upload image from gallery
+        Pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //jj-creates a new intent to PICK image from the media folder
+                Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                //jj-when gallery intent is started, we need to get back a result, hence use startActivityforresult instead of start activity
+                startActivityForResult(gallery, RESULTLOADIMAGE);
             }
         });
         return view;
     }
-//    public List<User> loadAllusers()
-//    {
-//        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-//        DBaccess.open();
-//        List<User> mUserlist = DBaccess.loadalluserlist();
-//        DBaccess.close();
-//        return mUserlist;
-//    }
+    //jj-method which is called when the user selects image from gallery(startActivityForResult
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //checks if the gallery intent is the one who called this method, and if data returned is not null, and also checks if result code is correct(user successfully select image)
+        if(requestCode == RESULTLOADIMAGE && data!=null && resultCode==Activity.RESULT_OK ){
+            Uri selected = data.getData();
+            //sets picture to imagebutton widget
+            Pic.setImageURI(selected);
+        }
+    }
+    //jj- used to save a bitmap to internal storage
+    private void SaveBitmap(Bitmap bitmap, String uid){
+        FileOutputStream outStream = null;
+        try {
+            File directory = new File("/data/data/com.example.t03team3mad/app_imageDir");
+            directory.mkdirs();
+            //image saved name
+            String fileName = "user"+uid+".jpg";
+            //creates the file
+            File filetosave = new File(directory, fileName);
+            //saves the file
+            outStream = new FileOutputStream(filetosave);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
+            outStream.flush();
+            outStream.close();
+            //media scanner is used to scan all media files without having to restart application
+            MediaScannerConnection.scanFile(getActivity(), new String[] { "/data/data/com.example.t03team3mad/app_imageDir" }, null, new MediaScannerConnection.OnScanCompletedListener() {
+                public void onScanCompleted(String path, Uri uri)
+                {
+                    Log.i("ExternalStorage", "Scanned " + path + ":");
+                    Log.i("ExternalStorage", "-> uri=" + uri);
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     //jj - gets the user's favourite books
     public List<Book> loaduserbooks(User user){
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
@@ -133,7 +200,7 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         Pic.setImageBitmap(bmImg);
     }
-    //qh -- the user object that is passed here
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

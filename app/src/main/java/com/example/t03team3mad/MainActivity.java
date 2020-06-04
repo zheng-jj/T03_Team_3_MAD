@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private Integer uid = null;
     public static User loggedinuser = null;
     public List<String> backstacktags = new ArrayList<>();
+    BottomBar bottomBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         }
 
         //jj - this is the code to navigate using the bottom navigation bar
-        BottomBar bottomBar = (BottomBar) findViewById(R.id.bottomBar);
+        bottomBar = (BottomBar) findViewById(R.id.bottomBar);
         bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             //enter the fragment function based on what is clicked(after yall done)
@@ -118,7 +119,25 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         Log.v(TAG,"Total count in backstack before backbuttonpressed "+ Integer.toString(amount));
         for(Integer x = 0;x<amount;x++){
             Log.v(TAG,"tags from in backstack before backbuttonpressed "+ getSupportFragmentManager().getBackStackEntryAt(x).getName());
+
         }
+
+
+        //jj-updates the bottom bar display on which fragment the page is on
+        if(getSupportFragmentManager().getBackStackEntryAt(amount-2).getName().equals("HomeFragment")){
+            Log.v(TAG,"Im here");
+            bottomBar.selectTabAtPosition(0);
+        }
+        if(getSupportFragmentManager().getBackStackEntryAt(amount-2).getName().equals("SearchFragment")){
+            Log.v(TAG,"Im here");
+            bottomBar.selectTabAtPosition(1);
+        }
+        if(getSupportFragmentManager().getBackStackEntryAt(amount-2).getName().equals("UserFragment")){
+            Log.v(TAG,"Im here");
+            bottomBar.selectTabAtPosition(3);
+        }
+
+
         //backstack consists of empty main activity, hence when i set the amount to 2, it will just skip past the empty container and go back
         if(amount==2){
             finish();
@@ -183,23 +202,33 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
     //jj- method that can be used for all other fragments to show fragment
     public static void addFragment (Fragment fragment, Context context, String tag ) {
-        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager ();
+        FragmentManager manager = ((AppCompatActivity)context).getSupportFragmentManager();
         FragmentTransaction ft = manager.beginTransaction ();
         //jj-hides all other fragments
         // if there are no fragments in the backstack with the same tag
-        if (manager.findFragmentByTag (tag) == null) {
+        if (manager.findFragmentByTag(tag) == null) {
             //jj- only adds to backstack if it doesnt even exist
-            ft.add ( R.id.mainactivitycontainer, fragment, tag);
-            ft.addToBackStack ( tag );
-            ft.commit ();
+            ft.add(R.id.mainactivitycontainer, fragment, tag);
+            ft.addToBackStack(tag);
+            ft.commit();
         }
         else {
             for(Fragment allhide : manager.getFragments()){
+                Log.v(TAG,"backstack consists of "+allhide.getTag());
                 ft.hide(allhide);
             }
-            //only shows the fragment chosen
-            ft.show (manager.findFragmentByTag(tag));
+            //jj- i need to user fragment to always refresh since it gets updated rather than showing
+            if(fragment instanceof fragment_user){
+                ft.detach(manager.findFragmentByTag(tag));
+                ft.attach(manager.findFragmentByTag(tag));
+                ft.show(manager.findFragmentByTag(tag));
+            }
+            else {
+                //only shows the fragment chosen
+                ft.show(manager.findFragmentByTag(tag));
+            }
             ft.commit();
+
         }
     }
 }
