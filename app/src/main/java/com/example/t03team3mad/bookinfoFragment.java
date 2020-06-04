@@ -30,7 +30,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class bookinfoFragment extends Fragment {
+public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickListener {
     private static final String TAG = "bookinfoFragment";
     ArrayList<String>data = new ArrayList<>();
     RecyclerView Genre;
@@ -62,7 +62,7 @@ public class bookinfoFragment extends Fragment {
                 data.add(splitgenre[i]);
             }
             AdapterGenre mAdapter =
-                    new AdapterGenre(data);
+                    new AdapterGenre(data,this);
 
             LinearLayoutManager mLayoutManager =
                     new LinearLayoutManager(this.getContext());
@@ -224,6 +224,19 @@ public class bookinfoFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
+//For Genre to send genre name to search book by genre
+    @Override
+    public void OnClick(int postion) {
+        String Genre=data.get(postion);
+        Log.v(TAG,Genre);
+        Bundle bundle = new Bundle();
+        bundle.putString("Genre", Genre);  // Key, value
+        Book_ByGenre nextFragment = new Book_ByGenre();
+        nextFragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainactivitycontainer, nextFragment, "findThisgenre")
+                .addToBackStack(null)
+                .commit();
+    }
 }
 
