@@ -70,8 +70,6 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.bookPic.setImageBitmap(bmImg);
 
-
-
     }
     @Override
     public int getItemCount() {
