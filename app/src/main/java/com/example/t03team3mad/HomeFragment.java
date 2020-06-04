@@ -21,17 +21,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.t03team3mad.model.Book;
-import com.example.t03team3mad.model.User;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 
-public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMainListener {
+public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMainListener,AdapterGenreInHomeFragment.OnClickListener {
     Bitmap bitmap;
     private static final String TAG = "HomeFragment";
     List<Book> newbooklist;
+    ArrayList<String> GenreList=new ArrayList<>();
+    ArrayList<String> Ran5ToDisplay=new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -39,6 +42,18 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         saveimagesmethods();
 
         View view = inflater.inflate(R.layout.fragment_home,container,false);
+
+        RecyclerView Genre=(RecyclerView)view.findViewById(R.id.genrelistrecyclerview);
+        LinearLayoutManager genrelayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        Genre.setLayoutManager(genrelayout);
+        LoadAllGenre();
+        AdapterGenreInHomeFragment adapterGenreInHomeFragment =
+                new AdapterGenreInHomeFragment(this.getContext(),Ran5ToDisplay,this);
+        Genre.setAdapter(adapterGenreInHomeFragment);
+
+
+
+
         //load main popularbooks recyclerview
         RecyclerView popularbooks = (RecyclerView)view.findViewById(R.id.popularbookrecyclerview);
         //jj-layout manager linear layout manager manages the position of the recyclerview items
@@ -71,6 +86,38 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         DBaccess.close();
         return newbooklist;
     }
+    //Chris - get all the genre in the database
+    public void LoadAllGenre()
+    {
+        //Chris - the 5 genres to display are different everytime
+        Ran5ToDisplay.clear();
+        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+        DBaccess.open();
+        newbooklist = DBaccess.loadallbooklist();
+        DBaccess.close();
+        //Chris - To seperate the long genre string into individual genre
+        for(int i = 0; i<newbooklist.size(); i++)
+        {
+            String GenreListForATable= newbooklist.get(i).getBookgenre();
+            String[] ToGetIndividualGenre =GenreListForATable.split(",");
+            for (int a=0;a<ToGetIndividualGenre.length;a++)
+            {
+                if (!GenreList.contains(ToGetIndividualGenre[a])) {
+                    GenreList.add(ToGetIndividualGenre[a]);
+                }
+            }
+
+        }
+        //Chris - Randomised the genre to be display
+        for(int x=1;Ran5ToDisplay.size()<6;x++)
+        {
+            String Genre=GenreList.get(new Random().nextInt(GenreList.size()));
+            if (!Ran5ToDisplay.contains(Genre))
+            Ran5ToDisplay.add(Genre);
+        }
+
+    }
+
 
     @Override
     public void onBookMainClick(int position) {
@@ -80,11 +127,14 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         Bundle bundle = new Bundle();
         bundle.putParcelable("currentbook", currentbook);  // Key, value
         nextFrag.setArguments(bundle);
-        //jj-updated the way we add fragments into the view
-        MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment");
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                .addToBackStack(null)
+                .commit();
     }
 
-    //qh - method to save the image to internal storage (needs the image to be in drawable first) (name the image like this please, ObjectnameID)
+
+    //qh - method to save the image to internal storage
     public void saveimagestointernalstorage(String filename) {
 
         int id = getActivity().getApplicationContext().getResources().getIdentifier(filename, "drawable", getActivity().getApplicationContext().getPackageName());
@@ -108,7 +158,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
 
     }
 
-    //qh - calls the methods to save images into internal storage
+    //calls the methods to save images into internal storage
     public void saveimagesmethods(){
         saveimagestointernalstorage("book9780439362139");
         saveimagestointernalstorage("book9780545128285");
@@ -120,4 +170,19 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         saveimagestointernalstorage("author1");
     }
 
+
+    //Chris - if user click on the genre on the recycler view
+    @Override
+    public void OnClick(int postion) {
+        String Genre=Ran5ToDisplay.get(postion);
+        Log.v(TAG,Genre);
+        Bundle bundle = new Bundle();
+        bundle.putString("Genre", Genre);  // Key, value
+        Book_ByGenre nextFragment = new Book_ByGenre();  //will go the fragment where it will display all the books of that genre
+        nextFragment.setArguments(bundle);
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.mainactivitycontainer, nextFragment, "findThisgenre")
+                .addToBackStack(null)
+                .commit();
+    }
 }

@@ -238,6 +238,25 @@ public class DatabaseAccess {
         }
         return book1;
     }
+    //Chris - Search Book by genre
+    public List<Book> searchgenre(String query) {
+        List<Book> booklist = new ArrayList<Book>();
+        Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE TRIM(GENRE) LIKE '%" + query + "%'", new String[]{});
+        if (c.moveToFirst() && c.getCount() >= 1) {
+            do {
+                String title = c.getString(0);
+                String ida = c.getString(1);
+                String about = c.getString(2);
+                String genre = c.getString(3);
+                String pdate = c.getString(4);
+                String isbn = c.getString(5);
+                Book book1 = new Book(title, ida, about, genre, pdate, isbn);
+                booklist.add(book1);
+                System.out.println(book1.getBooktitle());
+            } while (c.moveToNext());
+        }
+        return booklist;
+    }
     //qh - search author by ida
     public Author searchauthorbyida(String ida) {
         Author author1 = null;
@@ -278,6 +297,7 @@ public class DatabaseAccess {
         }
         return user1;
     }
+
     //qh - search user by id
     public User searchuserbyid(String idu) {
         User user1 = null;
@@ -406,7 +426,7 @@ public class DatabaseAccess {
         db.update("USER", cv, "IDU="+Integer.toString(user.getUseridu()), null);
     }
 
-
+    //Chris -  check user record if exist in local database
     public boolean CheckExistingRecordByUserId(String idu) {
         Cursor c = db.rawQuery("SELECT * FROM USER WHERE IDU =="+idu, new String[]{});
 
@@ -421,24 +441,6 @@ public class DatabaseAccess {
             return false;
         }
 
-    }
-    public Book searchbookbyGenre(String Genre) {
-        Book book = null;
-        System.out.println("debug1");
-        Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE TITLE = '"+Genre+"'", new String[]{});
-        if (c.moveToFirst() && c.getCount() >= 1) {
-            do {
-                System.out.println("debug2");
-                String  title=c.getString(0);
-                String ida = c.getString(1);
-                String about = c.getString(2);
-                String pdate = c.getString(4);
-                String isbn = c.getString(5);
-                book = new Book(title, ida, about, Genre, pdate, isbn);
-            } while (c.moveToNext());
-        }
-        c.close();
-        return book;
     }
 }
 

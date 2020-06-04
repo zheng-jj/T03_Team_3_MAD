@@ -66,11 +66,6 @@ public class LoginPage extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
 
-
-        //Auto_login.edit().putBoolean("logged", false).apply();
-        //^ if wan test again
-
-
         //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){
             //Chris - get uid from shared preferences
@@ -117,17 +112,7 @@ public class LoginPage extends AppCompatActivity {
                 Auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-
                         if (task.isSuccessful()) {
-
-                            //Chris - if login is successful
-                            progressBar.setVisibility(View.INVISIBLE);
-
-                            //Chris - User is Logged in until he log out
-                            Auto_login.edit().putBoolean("logged",true).apply();
-                            Log.v(TAG,"Successfully Logged In");
-                            Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-
                             //Chris - find user id for the login user
                             databaseReference.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -146,7 +131,6 @@ public class LoginPage extends AppCompatActivity {
                                         //Chris -  save user id in shared preference
                                         SharedPreferences.Editor editor = Auto_login.edit();
                                         editor.putString("UserID", uid).apply();
-
                                         //Chris - Check if user record is already recorded in the local database or not
                                         Boolean CheckIfRecordExisted = CheckRecord(uid);
                                         if (!CheckIfRecordExisted) {
@@ -157,6 +141,13 @@ public class LoginPage extends AppCompatActivity {
                                         {
                                             Log.v(TAG, "User Record Is Already Inserted");
                                         }
+
+                                        //Chris - if login is successful
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        //Chris - User is Logged in until he log out
+                                        Auto_login.edit().putBoolean("logged",true).apply();
+                                        Log.v(TAG,"Successfully Logged In");
+                                        Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
 
                                         //Chris - Intent to homepage and pass user id to it
                                         Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
@@ -184,7 +175,7 @@ public class LoginPage extends AppCompatActivity {
                 });
             }
         });
-        //if User press "Register" text
+        //Chris -if User press "Register" text
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

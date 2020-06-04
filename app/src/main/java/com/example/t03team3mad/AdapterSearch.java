@@ -38,7 +38,6 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         ViewHolder(View itemView, OnSearchListener onSearchListener) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.searchCardView);
-
             searchname = (TextView)itemView.findViewById(R.id.titleview);
             searchdes = (TextView)itemView.findViewById(R.id.descriptionview);
             searchpic = (ImageView)itemView.findViewById(R.id.searchImage);

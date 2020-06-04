@@ -3,8 +3,6 @@ package com.example.t03team3mad;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,16 +12,17 @@ import java.util.ArrayList;
 
 public class AdapterGenre extends RecyclerView.Adapter<AdapterGenre.ViewHolder> {
     ArrayList<String> data;
-
-    public AdapterGenre(ArrayList<String> input) {
+    private OnClickListener clickListener;
+    public AdapterGenre(ArrayList<String> input,OnClickListener onClickListener) {
         data = input;
+        clickListener=onClickListener;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View item = LayoutInflater.from(parent.getContext()).inflate(R.layout.genre_view, parent, false);
-            return new ViewHolder(item);
+            return new ViewHolder(item,clickListener);
         }
 
 
@@ -38,12 +37,20 @@ public class AdapterGenre extends RecyclerView.Adapter<AdapterGenre.ViewHolder> 
     public int getItemCount() {
         return data.size();
     }
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public interface OnClickListener {
+        void OnClick(int postion);
+    }
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txt;
-
-        public ViewHolder(View itemView){
+        OnClickListener onClickListener;
+        public ViewHolder(View itemView,OnClickListener onClickListener){
             super(itemView);
             txt = itemView.findViewById(R.id.genrestext);
+            this.onClickListener=onClickListener;
+            itemView.setOnClickListener(this);
+        }
+        public void onClick(View v) {
+            onClickListener.OnClick (getAdapterPosition());
         }
 
     }

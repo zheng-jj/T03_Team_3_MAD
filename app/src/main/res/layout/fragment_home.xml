@@ -22,17 +22,17 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/genrelistrecyclerview"
+            android:layout_below="@id/genrestext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/genrestext"
+            android:layout_centerHorizontal="true"
+            android:padding='5dp'
             android:layout_centerVertical="true"
-            android:layout_marginTop="-2dp"
-            android:scrollbars="horizontal" />
-
+            android:scrollbars="none"/>
         <TextView
             android:layout_marginTop="10dp"
             android:layout_below="@id/genrelistrecyclerview"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/recommendedtext"
             android:textStyle="bold"

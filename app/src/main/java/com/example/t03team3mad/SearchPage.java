@@ -35,4 +35,3 @@ public class SearchPage extends AppCompatActivity {
 
 
 }
-
