@@ -62,13 +62,14 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
     }
     @Override
     public void onBindViewHolder(AdapterBookMain.ViewHolder viewHolder, int position) {
+        try{
         viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
         //jj-this needs to change to the corrosponding user profile picture
 
         //QH = SETS IMAGE FROM STRING
         String filename = "book" + mBooklist.get(position).getIsbn() +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        viewHolder.bookPic.setImageBitmap(bmImg);
+        viewHolder.bookPic.setImageBitmap(bmImg);}catch (Exception e){}
 
     }
     @Override

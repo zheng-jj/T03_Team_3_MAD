@@ -109,7 +109,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             bundle.putParcelable("currentbook", currentbook);  // Key, value
             nextFrag.setArguments(bundle);
             getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
+                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment"+currentsearchobject.getSearchName())
                     .addToBackStack("bookSearch")
                     .commit();
 
@@ -126,7 +126,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             bundle.putParcelable("currentauthor", currentauthor);  // Key, value
             nextFrag.setArguments(bundle);
             //jj-updated the way we add fragments into the view
-            MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment");
+            MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
         }
         //qh -- if object clicked is user
         if (currentsearchobject.getSearchClass() == "User"){
@@ -140,7 +140,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             bundle.putParcelable("searchuser", currentuser);  // Key, value
 
             nextFrag.setArguments(bundle);//jj-updated the way we add fragments into the view
-            MainActivity.addFragment(nextFrag,getActivity(),"findUser");
+            MainActivity.addFragment(nextFrag,getActivity(),"findUser"+currentsearchobject.getSearchName());
         }
     }
 }

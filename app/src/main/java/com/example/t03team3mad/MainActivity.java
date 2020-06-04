@@ -61,15 +61,43 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             //enter the fragment function based on what is clicked(after yall done)
             public void onTabSelected(@IdRes int tabId) {
             if (tabId == R.id.tab_home) {
+                //jj- if the fragment is reselected, hide the rest and show the selected fragment
+                bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+                    @Override
+                    public void onTabReSelected(int tabId) {
+                        getSupportFragmentManager().popBackStack("HomeFragment",0);
+                        starthomefragment();
+                        getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("HomeFragment")).commit();
+                    }
+                });
                 starthomefragment();
+                getSupportFragmentManager().popBackStack("HomeFragment",0);
             }
             if (tabId == R.id.tab_search) {
+                bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+                    @Override
+                    public void onTabReSelected(int tabId) {
+                        getSupportFragmentManager().popBackStack("SearchFragment",0);
+                        startsearchbarfragment();
+                        getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("SearchFragment")).commit();
+                    }
+                });
                 startsearchbarfragment();
+                getSupportFragmentManager().popBackStack("SearchFragment",0);
             }
             if (tabId == R.id.tab_feed) {
             }
             if (tabId == R.id.tab_profile) {
+                bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+                    @Override
+                    public void onTabReSelected(int tabId) {
+                        getSupportFragmentManager().popBackStack("UserFragment",0);
+                        startuserfragment();
+                        getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("UserFragment")).commit();
+                    }
+                });
                 startuserfragment();
+                getSupportFragmentManager().popBackStack("UserFragment",0);
             }
             }
         });
@@ -122,24 +150,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
         }
 
-
-        //jj-updates the bottom bar display on which fragment the page is on
-        if(getSupportFragmentManager().getBackStackEntryAt(amount-2).getName().equals("HomeFragment")){
-            Log.v(TAG,"Im here");
-            bottomBar.selectTabAtPosition(0);
-        }
-        if(getSupportFragmentManager().getBackStackEntryAt(amount-2).getName().equals("SearchFragment")){
-            Log.v(TAG,"Im here");
-            bottomBar.selectTabAtPosition(1);
-        }
-        if(getSupportFragmentManager().getBackStackEntryAt(amount-2).getName().equals("UserFragment")){
-            Log.v(TAG,"Im here");
-            bottomBar.selectTabAtPosition(3);
-        }
-
-
         //backstack consists of empty main activity, hence when i set the amount to 2, it will just skip past the empty container and go back
-        if(amount==2){
+        if(amount<=2){
             finish();
             System.exit(0);
         }
@@ -197,7 +209,10 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         for(Fragment allhide : manager.getFragments()){
             ft.hide(allhide);
         }
-        ft.show(manager.getFragments().get(manager.getFragments().size()-1));
+        try {
+            ft.show(manager.getFragments().get(manager.getFragments().size()-1));
+        }catch (Exception e){}
+
         ft.commit();
     }
     //jj- method that can be used for all other fragments to show fragment
