@@ -160,10 +160,14 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
 
     //calls the methods to save images into internal storage
     public void saveimagesmethods(){
-        saveimagestointernalstorage("book9780439362139");
-        saveimagestointernalstorage("book9780545128285");
-        saveimagestointernalstorage("book9780747591061");
-        saveimagestointernalstorage("book9781338132083");
+        saveimagestointernalstorage("book9780060562533");
+        saveimagestointernalstorage("book9780312351649");
+        saveimagestointernalstorage("book0380802325");
+        saveimagestointernalstorage("book9780060091293");
+        saveimagestointernalstorage("book0380802317");
+        saveimagestointernalstorage("book9780312351663");
+        saveimagestointernalstorage("book0380811065");
+        saveimagestointernalstorage("book9780380781225");
         saveimagestointernalstorage("user1");
         saveimagestointernalstorage("user2");
         saveimagestointernalstorage("user3");
