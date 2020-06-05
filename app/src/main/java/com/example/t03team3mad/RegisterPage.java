@@ -123,8 +123,8 @@ public class RegisterPage extends AppCompatActivity {
                             //Chris - check whether register of user is successful or not
                             if (!task.isSuccessful()) {
                                 progressBar.setVisibility(View.INVISIBLE);
-                                //Custom message if email existed in the database already
-                                Toast.makeText(RegisterPage.this, "The email is already in use", Toast.LENGTH_SHORT).show();
+                                //Custom message if email is invaild
+                                Toast.makeText(RegisterPage.this, "The email is invaild", Toast.LENGTH_SHORT).show();
 
                             }
 
