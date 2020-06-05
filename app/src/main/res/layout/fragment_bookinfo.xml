@@ -41,7 +41,9 @@
             android:layout_marginStart="20dp"
             android:layout_marginBottom="4dp"
             android:text="Author"
-            android:textSize="15dp"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
             app:layout_constraintStart_toStartOf="parent"></TextView>
 

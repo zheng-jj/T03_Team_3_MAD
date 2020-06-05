@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 
@@ -56,6 +57,16 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             title.setText(receivedbook.getBooktitle());
             synopsis.setText(receivedbook.getBookabout());
             releasedate.setText(receivedbook.getPdate());
+
+            //qh - search author of book by id
+            String authorid = receivedbook.getBookauthor();
+            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            databaseAccess.open();
+            Author authorbook = databaseAccess.searchauthorbyida(authorid);
+            databaseAccess.close();
+
+            author.setText(authorbook.getAuthorname());
+
             String[] splitgenre = receivedbook.getBookgenre().split(",");
             int i = 0;
             for (i = 0; i < splitgenre.length; i++) {
