@@ -119,11 +119,11 @@
 
         <Button
             android:id="@+id/favourite"
-            android:layout_width="80dp"
-            android:layout_height="38dp"
-            android:layout_marginStart="28dp"
+            android:layout_width="160dp"
+            android:layout_height="42dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="320dp"
-            android:text="Add To"
+            android:text="Add To Favourites"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></Button>
 

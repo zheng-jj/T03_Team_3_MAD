@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.Adapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,8 +57,9 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
         //jj-sets text to the different widgets in the cardviews
         viewHolder.userName.setText(mUserlist.get(position).getUsername());
         viewHolder.userDes.setText(mUserlist.get(position).getUserabout());
-        //jj-this needs to change to the corrosponding user profile picture
-        viewHolder.userPic.setImageResource(R.drawable.demo_user_profile_pic);
+        String filename = "user" + mUserlist.get(position).getUseridu()+".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        viewHolder.userPic.setImageBitmap(bmImg);
     }
     @Override
     public int getItemCount() {

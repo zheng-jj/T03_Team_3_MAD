@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,12 +56,15 @@ public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksLis
     }
     @Override
     public void onBindViewHolder(final AdapterFavBooksList.ViewHolder viewHolder, int position) {
+        try{
         viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
         viewHolder.bookDec.setText(mBooklist.get(position).getBookabout());
         viewHolder.like.setText("Unlike");
 
         //jj-this needs to change to the corrosponding user profile picture
-        viewHolder.bookPic.setImageResource(R.drawable.demo_book_pic);
+        String filename = "book" + mBooklist.get(position).getIsbn() +".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        viewHolder.bookPic.setImageBitmap(bmImg);}catch (Exception e){}
         viewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

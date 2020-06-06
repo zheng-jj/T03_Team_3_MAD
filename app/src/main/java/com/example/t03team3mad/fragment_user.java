@@ -40,21 +40,95 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     SharedPreferences Auto_login;
     User usertoView = null;
     View v;
+    List<User> currentlyfollow = new ArrayList<>();
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view;
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
+        //jj-gets the user currently following list
+        try {
+            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+            DBaccess.open();
+            currentlyfollow = DBaccess.getUserFollowing(Integer.toString(MainActivity.loggedinuser.getUseridu()));
+            DBaccess.close();
+        }catch (Exception e){}
         if (bundle.getParcelable("searchuser") != null) {
             Log.v(TAG,"showing search user profile");
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_user,container,false);
+
             usertoView = bundle.getParcelable("searchuser");
             //gets user object from database
             DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess.open();
             usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
             DBaccess.close();
+
+            final Button followthisuser = view.findViewById(R.id.follow1);
+            //jj-checks if logged in user follows this user
+            for(User check : currentlyfollow){
+                if(check.getUseridu()==usertoView.getUseridu()){
+                    followthisuser.setText("Followed");
+                    break;
+                }
+                else{
+                    followthisuser.setText("Follow");
+                }
+            }
+            //jj-sets up button which allows currently logged in user to follow the user
+            followthisuser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Boolean follow = false;
+                    for(User user : currentlyfollow){
+                        //if user is currently following this user, update the boolean
+                        if(user.getUseridu()==usertoView.getUseridu()){
+                            follow=true;
+                            break;
+                        }
+                    }
+                    //if user is currently following this user and wishes to unfollow, update the list
+                    if(follow==true){
+                        for(User user : currentlyfollow){
+                            if(user.getUseridu()==usertoView.getUseridu()){
+                                currentlyfollow.remove(user);
+                            }
+                        }
+                    }
+                    else {
+                        currentlyfollow.add(usertoView);
+                    }
+
+                    //creates the string to be entered into database
+                    String followid = "";
+                    for(User followed : currentlyfollow){
+                        followid=followid+Integer.toString(followed.getUseridu())+";";
+                    }
+                    if(followid.equals("")){
+                    }
+                    else {
+                        //removes the final ";"
+                        followid = followid.substring(0, followid.length() - 1);
+                    }
+                    Log.v(TAG,"Following list "+followid);
+                    DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+                    DBaccess.open();
+                    DBaccess.updateUserFollowing(MainActivity.loggedinuser,followid);
+                    DBaccess.close();
+
+                    //updates text on button
+                    if(currentlyfollow.contains(usertoView)){
+                        followthisuser.setText("Followed");
+                    }
+                    else{
+                        followthisuser.setText("Follow");
+                    }
+
+                }
+            });
+
+
             //jj-removes the arguements so that i will get the reason why this page is loaded
             this.getArguments().putParcelable("searchuser",null);
         }

@@ -243,7 +243,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 ft.show(manager.findFragmentByTag(tag));
             }
             ft.commit();
-
         }
     }
 }

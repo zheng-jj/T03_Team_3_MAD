@@ -317,7 +317,7 @@ public class DatabaseAccess {
         }
         return user1;
     }
-    //gets all the reviews a user has written
+    //jj-gets all the reviews a user has written
     public List<Review> loaduserreviews(User user) {
         List<Review> mReviewlist = new ArrayList<Review>() {};
         temp = db.rawQuery("Select * From Reviews WHERE IDU = '"+user.getUseridu()+"'", new String[]{});
@@ -422,6 +422,17 @@ public class DatabaseAccess {
         }
         else {
             cv.put("FOLLOWING", dbformattedFollowing);
+        }
+        db.update("USER", cv, "IDU="+Integer.toString(user.getUseridu()), null);
+    }
+    //jj-update user following list
+    public void updateUserFollowing(User user, String followingstring){
+        ContentValues cv = new ContentValues();
+        if(followingstring.equals("")){
+            cv.putNull("FOLLOWING");
+        }
+        else {
+            cv.put("FOLLOWING", followingstring);
         }
         db.update("USER", cv, "IDU="+Integer.toString(user.getUseridu()), null);
     }
