@@ -8,52 +8,44 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
-import com.example.t03team3mad.model.SearchClass;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdaptorToViewBookBasedOnGenre extends RecyclerView.Adapter<AdaptorToViewBookBasedOnGenre.ViewHolder>
 {
-    List<String> search = new ArrayList<String>(){};
-    List<String> des = new ArrayList<String>(){};
-    List<SearchClass> searchlist = new ArrayList<SearchClass>(){};
-
-    //set image from string
+    List<Book> booksbygenre;
     private Context context;
     private onclickListener onclickListener;
 
-    //uses onclicklistener to click
+    //Chris - uses onclicklistener to click
     public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        //cardview layout
+        //Chris - cardview layout
         CardView cardView;
-        TextView searchname;
-        ImageView searchpic;
-        TextView searchdes;
+        TextView Bookname;
+        ImageView imageView;
+        TextView Bookdes;
         onclickListener onclickListener;
         ViewHolder(View itemView,onclickListener onclickListener) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.searchCardView);
-            searchname = (TextView)itemView.findViewById(R.id.titleview);
-            searchdes = (TextView)itemView.findViewById(R.id.descriptionview);
-            searchpic = (ImageView)itemView.findViewById(R.id.searchImage);
+            Bookname = (TextView)itemView.findViewById(R.id.titleview);
+            Bookdes = (TextView)itemView.findViewById(R.id.descriptionview);
+            imageView = (ImageView)itemView.findViewById(R.id.searchImage);
             this.onclickListener=onclickListener;
             itemView.setOnClickListener(this);
 
         }
-        @Override//get position of the recycler view when clicked
+        @Override//Chris - get position of the recycler view when clicked
         public void onClick(View v) {
          onclickListener.onclick(getAdapterPosition());
         }
     }
 
 
-    public AdaptorToViewBookBasedOnGenre(List<SearchClass> searchList, onclickListener onclickListener,Context context) {
-        this.searchlist = searchList;
+    public AdaptorToViewBookBasedOnGenre(List<Book> booksbygenre, onclickListener onclickListener,Context context) {
+        this.booksbygenre = booksbygenre;
         this.context = context;
         this.onclickListener=onclickListener;
     }
@@ -68,21 +60,21 @@ public class AdaptorToViewBookBasedOnGenre extends RecyclerView.Adapter<AdaptorT
     }
     @Override
     public void onBindViewHolder(AdaptorToViewBookBasedOnGenre.ViewHolder viewHolder, int position) {
-        viewHolder.searchname.setText(searchlist.get(position).getSearchName());
-        viewHolder.searchdes.setText(searchlist.get(position).getSearchDes());
+        viewHolder.Bookname.setText(booksbygenre.get(position).getBooktitle());
+        viewHolder.Bookdes.setText(booksbygenre.get(position).getBookabout());
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
         databaseAccess.open();
-        Book currentbook = databaseAccess.searchbookbyisbn(searchlist.get(position).getId());
+        Book currentbook = databaseAccess.searchbookbyisbn(booksbygenre.get(position).getIsbn());
         databaseAccess.close();
 
-        //SETS IMAGE FROM STRING
+        //Qh- SETS IMAGE FROM STRING
         String filename = "book" + currentbook.getIsbn()+".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        viewHolder.searchpic.setImageBitmap(bmImg);
+        viewHolder.imageView.setImageBitmap(bmImg);
     }
     @Override
     public int getItemCount() {
-        return searchlist.size();
+        return booksbygenre.size();
     }
     public interface onclickListener{
         void onclick(int position);

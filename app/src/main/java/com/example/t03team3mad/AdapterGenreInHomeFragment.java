@@ -1,6 +1,4 @@
 package com.example.t03team3mad;
-import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +7,9 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-
+//Chris
 public class AdapterGenreInHomeFragment extends RecyclerView.Adapter<AdapterGenreInHomeFragment.ViewHolder>{
     ArrayList<String> data;
     private Context context;
@@ -37,7 +34,6 @@ public class AdapterGenreInHomeFragment extends RecyclerView.Adapter<AdapterGenr
         String s = data.get(position);
         holder.logo.setText(Character.toString(s.trim().charAt(0)));
         holder.txt.setText(s);
-
     }
 
     @Override

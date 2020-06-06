@@ -361,6 +361,8 @@ public class DatabaseAccess {
 
         return mReviewlist;
     }
+
+    //Chris - Add User data into the database
     public boolean addData(String idu,String Name,String about, String favouriteb,String following){
         ContentValues contentValues = new ContentValues();
         contentValues.put("IDU",idu);

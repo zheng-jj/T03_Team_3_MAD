@@ -66,7 +66,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             databaseAccess.close();
 
             author.setText(authorbook.getAuthorname());
-
+            //Chris - list the genre
             String[] splitgenre = receivedbook.getBookgenre().split(",");
             int i = 0;
             for (i = 0; i < splitgenre.length; i++) {
@@ -235,7 +235,8 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         super.onCreate(savedInstanceState);
 
     }
-//For Genre to send genre name to search book by genre
+
+//Chris - For Genre to send genre name to search book by genre
     @Override
     public void OnClick(int postion) {
         String Genre=data.get(postion);

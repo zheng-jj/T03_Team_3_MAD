@@ -3,22 +3,17 @@ package com.example.t03team3mad;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Environment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import com.example.t03team3mad.model.Book;
 
@@ -41,8 +36,8 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         //qh saves all images
         saveimagesmethods();
 
+        //Chris - genre recycler view
         View view = inflater.inflate(R.layout.fragment_home,container,false);
-
         RecyclerView Genre=(RecyclerView)view.findViewById(R.id.genrelistrecyclerview);
         LinearLayoutManager genrelayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         Genre.setLayoutManager(genrelayout);
@@ -50,8 +45,6 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         AdapterGenreInHomeFragment adapterGenreInHomeFragment =
                 new AdapterGenreInHomeFragment(this.getContext(),Ran5ToDisplay,this);
         Genre.setAdapter(adapterGenreInHomeFragment);
-
-
 
 
         //load main popularbooks recyclerview
@@ -77,7 +70,8 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         recommended.setAdapter(bookadapter2);
         return view;
     }
-    //load all books into a list
+
+    //Chris - load all books into a list
     public List<Book> loadAllBooks()
     {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
@@ -86,10 +80,11 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         DBaccess.close();
         return newbooklist;
     }
+
     //Chris - get all the genre in the database
     public void LoadAllGenre()
     {
-        //Chris - the 5 genres to display are different everytime
+        //Chris - the 5 genres to display are different every time
         Ran5ToDisplay.clear();
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();
@@ -98,8 +93,8 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         //Chris - To seperate the long genre string into individual genre
         for(int i = 0; i<newbooklist.size(); i++)
         {
-            String GenreListForATable= newbooklist.get(i).getBookgenre();
-            String[] ToGetIndividualGenre =GenreListForATable.split(",");
+            String GenreListFormATable= newbooklist.get(i).getBookgenre();
+            String[] ToGetIndividualGenre =GenreListFormATable.split(",");
             for (int a=0;a<ToGetIndividualGenre.length;a++)
             {
                 if (!GenreList.contains(ToGetIndividualGenre[a])) {
@@ -122,7 +117,6 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
     @Override
     public void onBookMainClick(int position) {
         Book currentbook = newbooklist.get(position);
-
         bookinfoFragment nextFrag= new bookinfoFragment();
         Bundle bundle = new Bundle();
         bundle.putParcelable("currentbook", currentbook);  // Key, value

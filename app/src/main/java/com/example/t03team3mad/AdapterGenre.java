@@ -37,9 +37,12 @@ public class AdapterGenre extends RecyclerView.Adapter<AdapterGenre.ViewHolder> 
     public int getItemCount() {
         return data.size();
     }
-    public interface OnClickListener {
+
+    public interface OnClickListener
+    {
         void OnClick(int postion);
     }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView txt;
         OnClickListener onClickListener;
