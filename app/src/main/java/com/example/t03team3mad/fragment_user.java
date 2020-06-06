@@ -30,6 +30,7 @@ import com.example.t03team3mad.model.User;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import dalvik.system.InMemoryDexClassLoader;
@@ -89,11 +90,12 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                         }
                     }
                     //if user is currently following this user and wishes to unfollow, update the list
+                    Iterator<User> iter = currentlyfollow.iterator();
                     if(follow==true){
-                        for(User user : currentlyfollow){
-                            if(user.getUseridu()==usertoView.getUseridu()){
-                                currentlyfollow.remove(user);
-                            }
+                        while (iter.hasNext()) {
+                            User user = iter.next();
+                            if (user.getUseridu()==usertoView.getUseridu())
+                                iter.remove();
                         }
                     }
                     else {
