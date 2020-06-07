@@ -50,7 +50,7 @@ public class reviewpageFragment extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviews.setLayoutManager(llm);
         // jo - load data from list into the viewholder
-        AdapterReview adapterReview  = new AdapterReview(loadAllReviews(book.getIsbn()));
+        AdapterReview adapterReview  = new AdapterReview(loadAllReviews(book.getIsbn()),this);
         reviews.setAdapter(adapterReview);
         return view;
     }
