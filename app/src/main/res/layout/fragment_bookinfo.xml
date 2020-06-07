@@ -99,7 +99,7 @@
             android:layout_marginEnd="60dp"
             android:layout_marginBottom="8dp"
             android:text="Add review"
-            android:textSize="10dp"
+            android:textSize="8dp"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
