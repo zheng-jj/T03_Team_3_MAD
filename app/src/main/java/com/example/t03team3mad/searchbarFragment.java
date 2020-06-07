@@ -108,17 +108,14 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             //qh - bring the object into book
             bundle.putParcelable("currentbook", currentbook);  // Key, value
             nextFrag.setArguments(bundle);
-            getActivity().getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment"+currentsearchobject.getSearchName())
-                    .addToBackStack("bookSearch")
-                    .commit();
+            MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
 
         }
         // qh -- if object clicked is author
         if (currentsearchobject.getSearchClass().equals("Author")){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            databaseAccess.open();
             Author currentauthor = databaseAccess.searchauthorbyida(currentsearchobject.getId());
+            databaseAccess.open();
             databaseAccess.close();
 
             authorprofileFragment nextFrag= new authorprofileFragment();
@@ -129,7 +126,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
         }
         //qh -- if object clicked is user
-        if (currentsearchobject.getSearchClass().equals("User")){
+            if (currentsearchobject.getSearchClass().equals("User")){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
             User currentuser = databaseAccess.searchuserbyid(currentsearchobject.getId());
