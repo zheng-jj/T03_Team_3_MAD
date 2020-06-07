@@ -24,7 +24,7 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
     List<Book> mBooklist = new ArrayList<Book>(){};
     AdapterBookMain.OnBookMainListener monBookMainListener;
     private Context context;
-
+    //qh - implemented clicking
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         CardView cardView;
         TextView bookName;

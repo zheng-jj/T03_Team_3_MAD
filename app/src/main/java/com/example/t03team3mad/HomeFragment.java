@@ -113,7 +113,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
 
     }
 
-
+    //qh - clicking to go to book info
     @Override
     public void onBookMainClick(int position) {
         Book currentbook = newbooklist.get(position);
@@ -121,10 +121,8 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         Bundle bundle = new Bundle();
         bundle.putParcelable("currentbook", currentbook);  // Key, value
         nextFrag.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
-                .addToBackStack(null)
-                .commit();
+        //qh - implemented jj's method of moving to new fragment
+        MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment");
     }
 
 
@@ -152,7 +150,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
 
     }
 
-    //calls the methods to save images into internal storage
+    //qh - calls the methods to save images into internal storage
     public void saveimagesmethods(){
         saveimagestointernalstorage("book9780060562533");
         saveimagestointernalstorage("book9780312351649");

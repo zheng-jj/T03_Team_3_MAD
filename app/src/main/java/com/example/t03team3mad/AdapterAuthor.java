@@ -20,7 +20,6 @@ import java.util.List;
 public class AdapterAuthor extends RecyclerView.Adapter<AdapterAuthor.ViewHolder> {
     List<Book> booklist1 = new ArrayList<Book>(){};
     private AdapterAuthor.OnSearchListener mOnSearchListener;
-    //QH- THIS IS IMPORTANT TO SET IMAGE FROM STRING
     private Context context;
 
     //qh -- uses onclicklistener to click

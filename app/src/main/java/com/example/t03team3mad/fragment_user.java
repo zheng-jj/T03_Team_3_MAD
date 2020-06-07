@@ -294,11 +294,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         Pic.setImageBitmap(bmImg);
     }
-    //qh -- the user object that is passed here
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
+
 
 
     @Override

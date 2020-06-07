@@ -37,6 +37,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     RecyclerView Genre;
     //AdapterGenre adapter;
     @Override
+    //qh - assigns the views and transfers the info to them
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final User user;
         View view = inflater.inflate(R.layout.fragment_bookinfo, container, false);
@@ -229,12 +230,6 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         return view;
     }
 
-    //qh -- the book object that is passed here
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
 
 //Chris - For Genre to send genre name to search book by genre
     @Override
