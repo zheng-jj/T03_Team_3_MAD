@@ -114,8 +114,10 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     favourite.setText("Added to list");
                 }
             }
+            //jo - get user id
             user = DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu()));
             Button review = view.findViewById(R.id.reviewpage);
+            //jo - button to review page + send bundles
             review.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,6 +130,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     MainActivity.addFragment(rpage,getActivity(),"reviewpage");
                 }
             });
+            //jo - button to addreview page + send bundles
             Button addreview = view.findViewById(R.id.addreview);
             addreview.setOnClickListener(new View.OnClickListener() {
                 @Override
