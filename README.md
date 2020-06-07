@@ -44,3 +44,18 @@
 # Created add review page 
 # Linked book information fragment to its review page 
 # Linked clicking on name of reviewer on review page to the reviewer's profile
+
+# Chua Qi Heng
+=======================
+# Things Implemented:
+---------------------
+# Added parcelable to Book, Author and User classes so people can bring objects to another fragment
+# Added clicking functionality to adapters
+# Added search functionality
+# Added method to save images to internal storage
+# Added method to set image with String.
+# Added recycler view for author to show published books.
+# Created Author Info page and set all the information inside
+# Passed object information to Book, Author and User Info so that other people can use the info
+# Created methods to search database for the search functionality
+# Created User, Author, Book and Searchclass models
