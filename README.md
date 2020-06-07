@@ -18,7 +18,7 @@ This application also allows users to manage the books they are interested in, o
 
 # Contributions
 
-# Zheng Jiong Jie (Role: Leader)
+# Zheng Jiong Jie
 # Things Implemented:
 ---------------------
 Set up how fragments will be displayed
