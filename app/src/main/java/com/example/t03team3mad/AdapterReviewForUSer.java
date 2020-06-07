@@ -23,6 +23,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForUSer.ViewHolder>
 
 {
+    //jj- adapter for review recycler view in user page
     List<Review> mReviewlist = new ArrayList<Review>(){};
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
