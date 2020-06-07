@@ -1,6 +1,6 @@
 # T03_Team_3_MAD
 
-# Team members
+Team members
 
 Zheng Jiong Jie S10195565
 
@@ -19,7 +19,6 @@ This application also allows users to manage the books they are interested in, o
 # Contributions
 
 # Zheng Jiong Jie (Role: Leader)
-=======================
 # Things Implemented:
 ---------------------
 Set up how fragments will be displayed
@@ -59,7 +58,6 @@ Custom Backstack
 Navigation
 
 # Swah Jian Oon
-=======================
 # Things Implemented:
 ---------------------
 Imported precreated database into android studio
@@ -81,7 +79,6 @@ Linked book information fragment to its review page
 Linked clicking on name of reviewer on review page to the reviewer's profile
 
 # Chua Qi Heng
-=======================
 # Things Implemented:
 ---------------------
 Added parcelable to Book, Author and User classes so people can bring objects to another fragment
@@ -106,7 +103,6 @@ Created User, Author, Book and Searchclass models
 
 
 # Christopher Tey Weixian
-=======================
 # Things Implemented:
 ---------------------
 Created Shared Preferences to check if user is logged in or not
