@@ -3,30 +3,45 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffff"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/favouritebooks"
+            android:layout_marginBottom="-1dp"
+            android:background="#D3D3D3" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/favouritebooks"
+            android:layout_marginTop="-1dp"
+            android:background="#D3D3D3" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_above="@+id/userReviews"
+            android:layout_marginBottom="-1dp"
+            android:background="#D3D3D3" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="35dp"
+            android:layout_marginTop="-1dp"
+            android:layout_above="@+id/userReviews"
+            android:background="#D3D3D3" />
         <ImageView
             android:id="@+id/userPic"
-            android:layout_width="85dp"
-            android:layout_height="95dp"
+            android:layout_width="95dp"
+            android:layout_height="105dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="31dp"
-            android:layout_marginTop="42dp">
-        </ImageView>
-        <Button
-            android:id="@+id/allreviews"
-            style="@android:style/Widget.Holo.Button"
-            android:layout_width="wrap_content"
-            android:layout_height="35dp"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="239dp"
-            android:layout_marginTop="216dp"
-            android:text="View All Reviews Made"
-            android:textSize="14dp" />
+            android:layout_marginStart="25dp"
+            android:layout_marginTop="30dp"></ImageView>
+
 
         <Button
             android:id="@+id/follow1"
@@ -65,19 +80,21 @@
             android:layout_height="35dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="215dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:layout_marginTop="170dp"
             android:textStyle="bold"
-            android:padding="5dp"
+            android:padding="0dp"
             android:text="Past Reviews" />
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/userReviews"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="200dp"
             android:layout_marginStart="0dp"
-            android:padding="5dp"
-            android:layout_marginTop="250dp">
+            android:padding="0dp"
+            android:layout_below="@id/pastreviews"
+            android:layout_marginTop="0dp">
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/userreviewprofile"
                 android:layout_width="match_parent"
@@ -90,10 +107,11 @@
             android:id="@+id/favouritebooks"
             android:layout_width="match_parent"
             android:layout_height="35dp"
-            android:layout_marginStart="0dp"
             android:layout_marginTop="0dp"
             android:textStyle="bold"
-            android:padding="5dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:padding="0dp"
             android:text="Favourite Books" />
 
         <androidx.recyclerview.widget.RecyclerView

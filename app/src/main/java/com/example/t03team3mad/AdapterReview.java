@@ -20,7 +20,9 @@ import com.example.t03team3mad.model.Review;
 public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder>
 
 {
+    // jo - empty list in place of data
     List<Review> mReviewlist = new ArrayList<Review>(){};
+    // jo - viewholder
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView uName;
@@ -34,6 +36,7 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
             uPic = (ImageView)itemView.findViewById(R.id.uimg);
         }
     }
+    // jo- constructor
     public AdapterReview(List<Review> mReviewlist) {
         this.mReviewlist = mReviewlist;
     }
@@ -45,6 +48,7 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
         ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }
+    // jo - onbindviewholder to bind data from list to ids from layout
     @Override
     public void onBindViewHolder(AdapterReview.ViewHolder viewHolder, int position) {
 

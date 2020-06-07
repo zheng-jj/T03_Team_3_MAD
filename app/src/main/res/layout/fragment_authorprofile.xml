@@ -115,14 +115,7 @@
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/divider2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="472dp"
-            android:background="?android:attr/listDivider"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:layout_width="175dp"
@@ -142,7 +135,7 @@
             android:id="@+id/published"
             android:layout_width="409dp"
             android:layout_height="227dp"
-            android:layout_marginTop="424dp"
+            android:layout_marginTop="428dp"
             android:paddingLeft="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

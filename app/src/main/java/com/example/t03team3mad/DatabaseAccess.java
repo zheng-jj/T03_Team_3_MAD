@@ -29,24 +29,29 @@ public class DatabaseAccess {
     String output;
     String output2;
     Integer out;
+    // jo - constructor
     private DatabaseAccess (Context context){
         this.openHelper = new DatabaseOpenHelper(context);
     }
+    // jo -gets state of the database
     public static DatabaseAccess getInstance(Context context){
         if(instance == null){
             instance = new DatabaseAccess(context);
         }
         return instance;
     }
+    // jo - allows us to open the database to be used in fragments
     public void open(){
         this.db = openHelper.getWritableDatabase();
 
     }
+    // jo - close database after use
     public void close(){
         if(db!=null){
             this.db.close();
         }
     }
+    // jo - basic way of extracting data
     public String getElement(String column,String Table,String condition_column,String condition){
         temp = db.rawQuery ("select " + column +" from " + Table +" where " + condition_column + " = '"+ condition + "'",new  String[]{} );
         while(temp.moveToNext()){
@@ -54,6 +59,7 @@ public class DatabaseAccess {
         }
         return output;
     }
+    // jo - get count of all existing tuples in the database from a table
     public String getCount(String column,String Table){
         count = db.rawQuery ("select count(" + column +") from " + Table ,new  String[]{} );
         while(count.moveToNext()){
@@ -61,6 +67,7 @@ public class DatabaseAccess {
         }
         return output2;
     }
+    // jo - addData for reviews
     public boolean addData(String idr,String idu,String review, String ISBN){
         ContentValues contentValues = new ContentValues();
         contentValues.put("IDU",idu);
@@ -340,6 +347,7 @@ public class DatabaseAccess {
         }
         return mReviewlist;
     }
+    // jo- Get all reviews for the book
     public List<Review> extractreviewbybook(String ISBN) {
         List<Review> mReviewlist = new ArrayList<Review>() {
         };

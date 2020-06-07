@@ -24,13 +24,16 @@ public class fragment_addreview extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        // jo -display fragment
         View view = inflater.inflate(R.layout.subfragment_writereview, container, false);
+        // jo - get bundle from another fragment
         Bundle bundle = this.getArguments();
         final User user = bundle.getParcelable("user");
         final Book book = bundle.getParcelable("book");
+        //jo - find viewbyids
         enter =  view.findViewById(R.id.enter);
         editreview = view.findViewById(R.id.reviewinput);
+        // onclick listener for adding review + storing review into database
         enter.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Log.v("Click","Button clicked");
@@ -40,8 +43,8 @@ public class fragment_addreview extends Fragment {
                 idu = Integer.toString(user.getUseridu());
                 String review = editreview.getText().toString();
                 boolean test = insertreview(idr,idu,review,ISBN);
-                Log.d("idrcount",Boolean.toString(test));
-                Log.d("idrcount",getidr());
+                Log.d(TAG,Boolean.toString(test));
+                Log.d(TAG,getidr());
 
 
             }
@@ -49,6 +52,7 @@ public class fragment_addreview extends Fragment {
 
         return view;
     }
+    // get the latest id of reviews so it can be used to +1 to add another review since it is a primary key
     public String getidr(){
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();
@@ -56,6 +60,7 @@ public class fragment_addreview extends Fragment {
         DBaccess.close();
         return idrcount;
     }
+    // add review into the database
     public boolean insertreview(String idr,String idu,String review,String ISBN){
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();

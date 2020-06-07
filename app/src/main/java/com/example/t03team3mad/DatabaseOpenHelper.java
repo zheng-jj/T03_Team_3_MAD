@@ -8,6 +8,7 @@ import com.example.t03team3mad.model.Book;
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
 public class DatabaseOpenHelper extends SQLiteAssetHelper {
+    // jo - basic setup of database
     private static final String DATABASE_NAME="finaldbz.db";
     private static final int DATABASE_VERSION=1;
     public DatabaseOpenHelper(Context context) {

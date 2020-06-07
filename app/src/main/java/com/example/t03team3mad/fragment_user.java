@@ -1,8 +1,10 @@
 package com.example.t03team3mad;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -101,7 +103,6 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     else {
                         currentlyfollow.add(usertoView);
                     }
-
                     //creates the string to be entered into database
                     String followid = "";
                     for(User followed : currentlyfollow){
@@ -126,11 +127,8 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     else{
                         followthisuser.setText("Follow");
                     }
-
                 }
             });
-
-
             //jj-removes the arguements so that i will get the reason why this page is loaded
             this.getArguments().putParcelable("searchuser",null);
         }
@@ -182,10 +180,27 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
             logout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //jj-stops auto login
-                    editor.putBoolean("logged", false);
-                    editor.commit();
-                    ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
+                    //creates alert to log out
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                    builder.setTitle("Delete");
+                    builder.setMessage("Are you sure you want to log out?");
+                    builder.setCancelable(true);
+                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        //jj-stops auto login
+                        editor.putBoolean("logged", false);
+                        editor.commit();
+                        //external library used to restart application
+                        ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
+                        }
+                    });
+                    builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            Log.v(TAG,"user chose not to log out");
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
                 }
             });
 

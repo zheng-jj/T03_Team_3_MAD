@@ -2,6 +2,8 @@ package com.example.t03team3mad;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,20 +32,29 @@ public class reviewpageFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // jo - receive bundle from another fragment
         Bundle bundle = this.getArguments();
         final Book book = bundle.getParcelable("book");
+        // jo - display layout
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
+        // jo - findviewbyids
         TextView booktitle = view.findViewById(R.id.rtitle);
         ImageView bookimage = view.findViewById(R.id.bookimg);
-        bookimage.setImageResource(R.drawable.demo_book_pic);
+        String filename = "book" + book.getIsbn() +".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        bookimage.setImageBitmap(bmImg);
         booktitle.setText(book.getBooktitle());
+        // jo - recyclerview
         RecyclerView reviews = (RecyclerView)view.findViewById(R.id.rRecyclerView);
+        // jo- linear layout manager - set layout to vertical
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviews.setLayoutManager(llm);
+        // jo - load data from list into the viewholder
         AdapterReview adapterReview  = new AdapterReview(loadAllReviews(book.getIsbn()));
         reviews.setAdapter(adapterReview);
         return view;
     }
+    // jo - get reviews from database
     public List<Review> loadAllReviews(String ISBN)
     {
         Log.v(TAG,"loaded reviews");
@@ -55,6 +66,7 @@ public class reviewpageFragment extends Fragment {
 
         return mReviewlist;
     }
+    // jo - get Title from database
     public String Title(String ISBN)
     {
 
