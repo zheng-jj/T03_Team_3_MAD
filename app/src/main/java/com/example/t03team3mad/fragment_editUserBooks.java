@@ -42,6 +42,7 @@ public class fragment_editUserBooks extends Fragment {
 
         Button savebookchanges = view.findViewById(R.id.savebooks);
         final User finalUsertoEdit = usertoEdit;
+        //choose to remove/unremove books from user's list
         savebookchanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

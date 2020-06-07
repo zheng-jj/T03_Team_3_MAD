@@ -5,7 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/editprofile">
+    android:id="@+id/editprofile"
+    android:background="#FFFF">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +22,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="31dp"
             android:layout_marginTop="42dp"
-            android:text="Tap to Upload New Picture">
+            android:text="Tap to Upload New Picture"
+            android:background="#FFFF">
         </ImageButton>
         <EditText
             android:id="@+id/editName"
@@ -57,7 +59,10 @@
             android:layout_height="35dp"
             android:layout_below="@id/editDes"
             android:layout_marginTop="30dp"
-            android:text="Current Favourite books">
+            android:text="Current Favourite books"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:textStyle="bold">
         </TextView>
         <Button
             android:id="@+id/allfavbooks"

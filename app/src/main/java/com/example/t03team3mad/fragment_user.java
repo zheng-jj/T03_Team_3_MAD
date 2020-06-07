@@ -101,7 +101,6 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     else {
                         currentlyfollow.add(usertoView);
                     }
-
                     //creates the string to be entered into database
                     String followid = "";
                     for(User followed : currentlyfollow){
@@ -126,11 +125,8 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     else{
                         followthisuser.setText("Follow");
                     }
-
                 }
             });
-
-
             //jj-removes the arguements so that i will get the reason why this page is loaded
             this.getArguments().putParcelable("searchuser",null);
         }
@@ -185,6 +181,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                     //jj-stops auto login
                     editor.putBoolean("logged", false);
                     editor.commit();
+                    //external library used to restart application
                     ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
                 }
             });

@@ -77,6 +77,7 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
         //onclick listener for button to edit user favourite books
         Button editBooks = view.findViewById(R.id.allfavbooks);
         final User finalUsertoEdit = usertoEdit;
+        //brings user to edit all user books fragment
         editBooks.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -165,7 +166,7 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);
             outStream.flush();
             outStream.close();
-            //media scanner is used to scan all media files without having to restart application
+            //jj-media scanner is used to scan all media files without having to restart application
             MediaScannerConnection.scanFile(getActivity(), new String[] { "/data/data/com.example.t03team3mad/app_imageDir" }, null, new MediaScannerConnection.OnScanCompletedListener() {
                 public void onScanCompleted(String path, Uri uri)
                 {

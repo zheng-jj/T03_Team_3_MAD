@@ -5,23 +5,30 @@
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
+    android:layout_height="104dp"
     android:id="@+id/rcview">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@+id/uimg"
+            android:layout_marginBottom="-1dp"
+            android:background="#D3D3D3" />
         <ImageView
             android:id="@+id/uimg"
             android:layout_width="100dp"
             android:layout_height="match_parent" />
+
         <TextView
-            android:layout_toRightOf="@id/uimg"
             android:id="@+id/uname"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:padding="5dp" />
-
+            android:layout_height="30dp"
+            android:layout_toRightOf="@id/uimg"
+            android:padding="5dp"
+            android:textStyle="bold" />
         <TextView
             android:layout_toRightOf="@id/uimg"
             android:layout_below="@id/uname"
@@ -29,5 +36,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:padding="5dp" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/ureview"
+            android:layout_marginBottom="-1dp"
+            android:background="#2a4d69" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
