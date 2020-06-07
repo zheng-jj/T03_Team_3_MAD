@@ -6,7 +6,6 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,13 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.t03team3mad.model.Book;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
 
 public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMainListener,AdapterGenreInHomeFragment.OnClickListener {
     Bitmap bitmap;
@@ -41,7 +38,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         RecyclerView Genre=(RecyclerView)view.findViewById(R.id.genrelistrecyclerview);
         LinearLayoutManager genrelayout = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         Genre.setLayoutManager(genrelayout);
-        LoadAllGenre();
+        LoadRandom5Genre();
         AdapterGenreInHomeFragment adapterGenreInHomeFragment =
                 new AdapterGenreInHomeFragment(this.getContext(),Ran5ToDisplay,this);
         Genre.setAdapter(adapterGenreInHomeFragment);
@@ -82,7 +79,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
     }
 
     //Chris - get all the genre in the database
-    public void LoadAllGenre()
+    public void LoadRandom5Genre()
     {
         //Chris - the 5 genres to display are different every time
         Ran5ToDisplay.clear();
@@ -91,9 +88,9 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         newbooklist = DBaccess.loadallbooklist();
         DBaccess.close();
         //Chris - To seperate the long genre string into individual genre
-        for(int i = 0; i<newbooklist.size(); i++)
-        {
-            String GenreListFormATable= newbooklist.get(i).getBookgenre();
+            for(int i = 0; i<newbooklist.size(); i++)
+            {
+                String GenreListFormATable= newbooklist.get(i).getBookgenre();
             String[] ToGetIndividualGenre =GenreListFormATable.split(",");
             for (int a=0;a<ToGetIndividualGenre.length;a++)
             {
@@ -171,7 +168,7 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
     @Override
     public void OnClick(int postion) {
         String Genre=Ran5ToDisplay.get(postion);
-        Log.v(TAG,Genre);
+        Log.v(TAG,"Going to display books based on "+Genre);
         Bundle bundle = new Bundle();
         bundle.putString("Genre", Genre);  // Key, value
         Book_ByGenre nextFragment = new Book_ByGenre();  //will go the fragment where it will display all the books of that genre

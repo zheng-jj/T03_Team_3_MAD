@@ -22,6 +22,7 @@ public class AdapterGenreInHomeFragment extends RecyclerView.Adapter<AdapterGenr
     }
     @NonNull
     @Override
+    //CardView
     public AdapterGenreInHomeFragment.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);

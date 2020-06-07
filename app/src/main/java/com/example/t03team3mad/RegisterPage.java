@@ -125,7 +125,7 @@ public class RegisterPage extends AppCompatActivity {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 //Custom message if email is invaild
                                 Toast.makeText(RegisterPage.this, "The email is invaild", Toast.LENGTH_SHORT).show();
-
+                                Log.v(TAG,"The email is invaild");
                             }
 
                             else {

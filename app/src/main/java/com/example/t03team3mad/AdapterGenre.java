@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
-
+//Chris - book info genre adaptor
 public class AdapterGenre extends RecyclerView.Adapter<AdapterGenre.ViewHolder> {
     ArrayList<String> data;
     private OnClickListener clickListener;

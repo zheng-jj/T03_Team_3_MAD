@@ -238,7 +238,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     @Override
     public void OnClick(int postion) {
         String Genre=data.get(postion);
-        Log.v(TAG,Genre);
+        Log.v(TAG,"Going to display books based on "+Genre.trim());
         Bundle bundle = new Bundle();
         bundle.putString("Genre", Genre);  // Key, value
         Book_ByGenre nextFragment = new Book_ByGenre();

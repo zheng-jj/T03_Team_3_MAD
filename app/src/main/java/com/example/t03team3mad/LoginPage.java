@@ -182,7 +182,6 @@ public class LoginPage extends AppCompatActivity {
                 Log.v(TAG,"Going to Register Page");
                 Intent Register=new Intent(LoginPage.this, RegisterPage.class);
                 startActivity(Register);
-                finish();
             }
         });
     }
