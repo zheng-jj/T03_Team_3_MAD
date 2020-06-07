@@ -19,17 +19,24 @@
 =======================
 # Things Implemented:
 ---------------------
+# Set up how fragments will be displayed
+# Created User page
+# Created Logged in user page
+# Created View all user's favourite books page
+# Created Home page
+# Allow user to view own data or other user's data(load data from database)
+# Update user data to database(update content in database)
+# Allow users to make changes to user's profile(image/name/description)
+# Allow users to upload new profile picture from gallery and add to internal storage
+# Allow users to follow other users(and store in database)
+# Allow users to add books to their favourite books list(and store in database)
+# Recyclerview adapters for "AdapterBookMain", "AdapterFavBooksList", "AdapterReviewForUSer", "AdapterUserMain"
+# Implemented on-click listeners which brings users to where they clicked for the various adapters
+# Allow users to manage their current list of books(remove/add)
+# Created Bottom navigation bar
+# LogOut
 # Custom Backstack
 # Navigation
-# Allow user to view own data or other user's data
-# Update user data to database
-# Allow users to make changes to user's profile(image/name/description)
-# Allow users to follow other users
-# Allow users to add books to their favourite books list
-# Recyclerview adapters for "AdapterBookMain", "AdapterFavBooksList", "AdapterReviewForUSer", "AdapterUserMain"
-# Allow users to manage their current list of books
-# Bottom navigation bar
-# LogOut
 
 # Swah Jian Oon
 =======================
@@ -65,26 +72,15 @@
 =======================
 # Things Implemented:
 ---------------------
-#Created Shared Preferences to check if user is logged in or not
-
-#Register Page
-
-#Created Firebase database for creation of new users
-
-#Login Page
-
-#Created method to insert user's data from firebase database into local database
-
-#Created method to check if user's data existed in the local database or not
-
-#Linked Login page to register page and home page 
-
-#Created Genre recycler view in homepage.
-
-#Created a recycler view for books based on the genre that they clicked on the previous page
-
-#Linked the 2 recycler view fragments to each other and linked the bookbygenre fragment to bookinfo fragment
-
-#Created the recycler view for genre in the bookinfo fragment
-
-#Created the adaptors of "AdaptorGenreInHomeFragment" ,"AdaptorGenre" and "AdaptorToViewBookBasedOnGenre".
+# Created Shared Preferences to check if user is logged in or not
+# Register Page
+# Created Firebase database for creation of new users
+# Login Page
+# Created method to insert user's data from firebase database into local database
+# Created method to check if user's data existed in the local database or not
+# Linked Login page to register page and home page 
+# Created Genre recycler view in homepage.
+# Created a recycler view for books based on the genre that they clicked on the previous page
+# Linked the 2 recycler view fragments to each other and linked the bookbygenre fragment to bookinfo fragment
+# Created the recycler view for genre in the bookinfo fragment
+# Created the adaptors of "AdaptorGenreInHomeFragment" ,"AdaptorGenre" and "AdaptorToViewBookBasedOnGenre".
