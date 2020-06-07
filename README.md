@@ -31,13 +31,16 @@
 # Bottom navigation bar
 # LogOut
 
-
-#
-#
-#
-#
-#
-#
-#
-#
-#
+# Swah Jian Oon
+=======================
+# Things Implemented:
+---------------------
+# Imported precreated database into android studio
+# Created local database - DatabaseAccess & DatabaseOpenHelper
+# Created methods to extract data from database
+# Created methods to store data into database
+# Created adapters for AdapterReview
+# Created review page
+# Created add review page 
+# Linked book information fragment to its review page 
+# Linked clicking on name of reviewer on review page to the reviewer's profile
