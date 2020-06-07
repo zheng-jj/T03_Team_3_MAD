@@ -178,9 +178,6 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         bundle.putString("Genre", Genre);  // Key, value
         Book_ByGenre nextFragment = new Book_ByGenre();  //will go the fragment where it will display all the books of that genre
         nextFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFragment, "findThisgenre")
-                .addToBackStack(null)
-                .commit();
+        MainActivity.addFragment(nextFragment,getActivity(),"BookByGenre");
     }
 }

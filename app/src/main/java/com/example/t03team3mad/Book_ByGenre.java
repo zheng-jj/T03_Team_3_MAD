@@ -54,10 +54,7 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
         //Chris - send book as object to bookinfo
         bundle.putParcelable("currentbook", CurrentBookObject);  // Key, value
         nextFrag.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
-                .addToBackStack("book")
-                .commit();
+        MainActivity.addFragment(nextFrag,getActivity(),"BookInfo");
     }
 }
 

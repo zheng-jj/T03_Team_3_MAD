@@ -248,10 +248,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         bundle.putString("Genre", Genre);  // Key, value
         Book_ByGenre nextFragment = new Book_ByGenre();
         nextFragment.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFragment, "findThisgenre")
-                .addToBackStack(null)
-                .commit();
+        MainActivity.addFragment(nextFragment,getActivity(),"BookByGenre");
     }
 }
 
