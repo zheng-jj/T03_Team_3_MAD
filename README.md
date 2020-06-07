@@ -66,14 +66,25 @@
 # Things Implemented:
 ---------------------
 #Created Shared Preferences to check if user is logged in or not
+
 #Register Page
+
 #Created Firebase database for creation of new users
+
 #Login Page
+
 #Created method to insert user's data from firebase database into local database
+
 #Created method to check if user's data existed in the local database or not
+
 #Linked Login page to register page and home page 
+
 #Created Genre recycler view in homepage.
+
 #Created a recycler view for books based on the genre that they clicked on the previous page
+
 #Linked the 2 recycler view fragments to each other and linked the bookbygenre fragment to bookinfo fragment
+
 #Created the recycler view for genre in the bookinfo fragment
+
 #Created the adaptors of "AdaptorGenreInHomeFragment" ,"AdaptorGenre" and "AdaptorToViewBookBasedOnGenre".
