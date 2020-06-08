@@ -1,6 +1,8 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.widget.Adapter;
 import android.view.View;
@@ -74,7 +76,10 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
 
         viewHolder.uName.setText(mReviewlist.get(position).getUname());
         viewHolder.uReview.setText(mReviewlist.get(position).getReviewtext());
-        viewHolder.uPic.setImageResource(R.drawable.demo_user_profile_pic);
+        String filename = "user" + (mReviewlist.get(position).getReviewidu())+".jpg";
+        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+        viewHolder.uPic.setImageBitmap(bmImg);
+
     }
 
     @Override
