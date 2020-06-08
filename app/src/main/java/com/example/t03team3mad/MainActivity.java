@@ -93,7 +93,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                     public void onTabReSelected(int tabId) {
                         getSupportFragmentManager().popBackStack("UserFragment",0);
                         startuserfragment();
-                        getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("UserFragment")).commit();
+                        try {
+                            getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("UserFragment")).commit();
+                        }catch (Exception e){}
                     }
                 });
                 startuserfragment();
