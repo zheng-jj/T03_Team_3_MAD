@@ -182,7 +182,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
                 public void onClick(View v) {
                     //creates alert to log out
                     AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                    builder.setTitle("Delete");
+                    builder.setTitle("Log Out");
                     builder.setMessage("Are you sure you want to log out?");
                     builder.setCancelable(true);
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

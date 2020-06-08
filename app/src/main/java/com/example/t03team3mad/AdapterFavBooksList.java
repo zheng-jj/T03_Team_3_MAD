@@ -68,23 +68,24 @@ public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksLis
         viewHolder.like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Book chosen = mBooklist.get(viewHolder.getAdapterPosition());
-                Log.v(TAG,"clicked on " + chosen.getBooktitle());
-                Log.v(TAG,viewHolder.like.getText().toString()) ;
-                Book[] mBooklistAfterChange;
-                if(viewHolder.like.getText().toString()=="Unlike"){
-                    viewHolder.like.setText("Like");
-                    mBooklistToBeRemoved.add(chosen);
-                }
-                else if(viewHolder.like.getText().toString()=="Like"){
-                    viewHolder.like.setText("Unlike");
-                    mBooklistToBeRemoved.remove(chosen);
-                }
-                String temp = "";
-                for (Book x :mBooklistToBeRemoved){
-                    temp=temp+(x.getBooktitle());
-                }
-                Log.v(TAG,"all books in mBooklist to be removed: "+temp);
+                try {
+                    Book chosen = mBooklist.get(viewHolder.getAdapterPosition());
+                    Log.v(TAG, "clicked on " + chosen.getBooktitle());
+                    Log.v(TAG, viewHolder.like.getText().toString());
+                    Book[] mBooklistAfterChange;
+                    if (viewHolder.like.getText().toString() == "Unlike") {
+                        viewHolder.like.setText("Like");
+                        mBooklistToBeRemoved.add(chosen);
+                    } else if (viewHolder.like.getText().toString() == "Like") {
+                        viewHolder.like.setText("Unlike");
+                        mBooklistToBeRemoved.remove(chosen);
+                    }
+                    String temp = "";
+                    for (Book x : mBooklistToBeRemoved) {
+                        temp = temp + (x.getBooktitle());
+                    }
+                    Log.v(TAG, "all books in mBooklist to be removed: " + temp);
+                }catch (Exception e){}
             }
         });
     }
