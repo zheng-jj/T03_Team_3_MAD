@@ -6,6 +6,7 @@ import android.os.Parcelable;
 public class Book implements Parcelable {
     private String booktitle;
 
+
     protected Book(Parcel in) {
         booktitle = in.readString();
         bookauthor = in.readString();
@@ -83,7 +84,9 @@ public class Book implements Parcelable {
         this.nullbook = new1Name;
     }
 
+    public Book(){
 
+    }
     public Book(String title, String author, String about, String genre, String publish, String bisbn) {
         booktitle = title;
         bookauthor = author;

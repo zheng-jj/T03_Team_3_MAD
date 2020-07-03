@@ -8,20 +8,21 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 import com.roughike.bottombar.*;
 
-import java.security.PublicKey;
+import org.json.JSONException;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
     private static final String TAG = "MainActivity";
@@ -79,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                     public void onTabReSelected(int tabId) {
                         getSupportFragmentManager().popBackStack("SearchFragment",0);
                         startsearchbarfragment();
+                        try {
                         getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("SearchFragment")).commit();
+                        }catch (Exception e){}
                     }
                 });
                 startsearchbarfragment();
@@ -133,12 +136,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         addFragment(fragment,this,"UserFragment");
     }
 
-    private void startsearchbarfragment(){
+    private void startsearchbarfragment() {
         Log.v(TAG, "searchbar fragment launched");
         searchbarFragment searchbar = new searchbarFragment();
-        addFragment(searchbar,this,"SearchFragment");
+        addFragment(searchbar, this, "SearchFragment");
     }
-
 
     //jj-manage backstack plz dont touchy touchy
 

@@ -86,6 +86,7 @@ public class DatabaseAccess {
 
     //jj- this method is used to load the users into a list and returns the list(create one for each table so can load into recyclerview)
     public List<User> loadalluserlist() {
+
         List<User> mUserlist = new ArrayList<User>(){};
         Integer amountofusers =Integer.valueOf(getCount("IDU","USER"));
         cursor = db.rawQuery("Select * From USER",new  String[]{});
@@ -123,6 +124,7 @@ public class DatabaseAccess {
 
     //qh - method to search books in the database
     public List<Book> searchbook(String query) {
+
         List<Book> booklist = new ArrayList<Book>();
         Cursor c = db.rawQuery("SELECT * FROM BOOK WHERE TRIM(TITLE) LIKE '%" + query + "%'", new String[]{});
         if (c.moveToFirst() && c.getCount() >= 1) {
