@@ -147,24 +147,26 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
 
     //qh - method to save the image to internal storage
     public void saveimagestointernalstorage(String filename) {
-
-        int id = getActivity().getApplicationContext().getResources().getIdentifier(filename, "drawable", getActivity().getApplicationContext().getPackageName());
-        Drawable drawable = getResources().getDrawable(id);
-        bitmap = ((BitmapDrawable) drawable).getBitmap();
-        ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
-        File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-        File file = new File(directory, filename + ".jpg");
-        if (!file.exists()) {
-            Log.d("path", file.toString());
-            FileOutputStream fos = null;
-            try {
-                fos = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                fos.flush();
-                fos.close();
-            } catch (java.io.IOException e) {
-                e.printStackTrace();
+        try {
+            int id = getActivity().getApplicationContext().getResources().getIdentifier(filename, "drawable", getActivity().getApplicationContext().getPackageName());
+            Drawable drawable = getResources().getDrawable(id);
+            bitmap = ((BitmapDrawable) drawable).getBitmap();
+            ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
+            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
+            File file = new File(directory, filename + ".jpg");
+            if (!file.exists()) {
+                Log.d("path", file.toString());
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+                    fos.flush();
+                    fos.close();
+                } catch (java.io.IOException e) {
+                    e.printStackTrace();
+                }
             }
+        }catch (Exception e){
         }
 
     }

@@ -3,17 +3,22 @@ package com.example.t03team3mad;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.TaskInfo;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -29,11 +34,16 @@ import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import dalvik.system.InMemoryDexClassLoader;
 
@@ -44,6 +54,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     User usertoView = null;
     View v;
     List<User> currentlyfollow = new ArrayList<>();
+    ImageView Pic;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view;
@@ -217,9 +228,16 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
         //jj - loads user into layout
-        loaduserintoview(view,usertoView);
-        //jj - sets list that will hold user's favourite books and all the reviews he made
-        List<Review> userReviewlist = new ArrayList<Review>(){};
+        try {
+            Pic = view.findViewById(R.id.userPic);
+            String path = getimage(usertoView);
+            loaduserintoview(view,usertoView,path);
+
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         //jj - load favourite user books recyclerview
         RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
@@ -296,21 +314,41 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         return userreviewlist;
     }
     //jj - Loads the user information into the layout
-    public void loaduserintoview(View view, User user){
-        ImageView Pic = view.findViewById(R.id.userPic);
+    public void loaduserintoview(View view, User user, String path) throws InterruptedException {
         TextView Name = view.findViewById(R.id.userName);
         TextView Desc = view.findViewById(R.id.userDescription);
         Name.setText(user.getUsername());
         Desc.setText(user.getUserabout());
 
         Log.v(TAG,"image id being used = user+"+ Integer.toString(user.getUseridu()));
-        //QH = SETS IMAGE FROM STRING
-        String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
-        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        Pic.setImageBitmap(bmImg);
+        //String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
+        //jj gets image from firebase and saves to local storage
+        //sets the profile image
+        File check = new File(path);
+        while(true){
+            Log.v(TAG,"user image is not saved yet");
+            if(check.exists()) {
+                Pic.setImageBitmap(BitmapFactory.decodeFile(path));
+                Pic.invalidate();
+                if(Pic.getDrawable() != null){
+                    TimeUnit.MILLISECONDS.sleep(100);
+                    Pic.setImageBitmap(BitmapFactory.decodeFile(path));
+                    break;
+                }
+                else {
+                    continue;
+                }
+            };
+        }
     }
-
-
+    //jj-method that gets the image and saves to internal storage
+    public String getimage(User user) throws ExecutionException, InterruptedException {
+        String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
+        //jj gets image from firebase and saves to local storage
+        AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
+        String path = task.get();
+        return path;
+    }
 
     @Override
     public void onStart() {

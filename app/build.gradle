@@ -51,6 +51,8 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
+    //firebase storage for images
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
     //used to restart application
     implementation 'com.jakewharton:process-phoenix:2.0.0'
 
