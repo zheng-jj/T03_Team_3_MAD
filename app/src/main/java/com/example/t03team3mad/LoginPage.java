@@ -55,15 +55,6 @@ public class LoginPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_page);
-        EnterEmail=findViewById(R.id.EnterEmail);
-        EnterPassword=findViewById(R.id.EnterPassword);
-        LoginButton=findViewById(R.id.LoginButton);
-        Auth=FirebaseAuth.getInstance();
-        RegisterButton=findViewById(R.id.Register);
-        progressBar =  findViewById(R.id.progressBar);
-        user=Auth.getCurrentUser();
-        databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
 
         //Chris - User is already logged in
@@ -79,6 +70,16 @@ public class LoginPage extends AppCompatActivity {
             startActivity(MainActivity);
             finish();
         }
+        setContentView(R.layout.activity_login_page);
+        EnterEmail=findViewById(R.id.EnterEmail);
+        EnterPassword=findViewById(R.id.EnterPassword);
+        LoginButton=findViewById(R.id.LoginButton);
+        Auth=FirebaseAuth.getInstance();
+        RegisterButton=findViewById(R.id.Register);
+        progressBar =  findViewById(R.id.progressBar);
+        user=Auth.getCurrentUser();
+        databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
+
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,6 +3,7 @@ package com.example.t03team3mad;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -30,6 +31,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
 
 public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickListener {
     private static final String TAG = "bookinfoFragment";
@@ -63,10 +65,15 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             String authorid = receivedbook.getBookauthor();
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            Author authorbook = databaseAccess.searchauthorbyida(authorid);
+            try{
+                Author authorbook = databaseAccess.searchauthorbyida(authorid);
+                author.setText(authorbook.getAuthorname());
+            }catch (Exception e){
+                author.setText(receivedbook.getBookauthor());
+            }
             databaseAccess.close();
 
-            author.setText(authorbook.getAuthorname());
+
             //Chris - list the genre
             String[] splitgenre = receivedbook.getBookgenre().split(",");
             int i = 0;
@@ -94,23 +101,39 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             final Button favourite = view.findViewById(R.id.favourite);
             final DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess.open();
-            DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())));
-            final List<Book> userbooklist = new ArrayList<>();
-            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))){
-                userbooklist.add(DBaccess.searchbookbyisbn(book.getIsbn()));
-            }
+            final ArrayList<Book> userbooklist = new ArrayList<>();
+            try {
+                //foreach book in user's local db favourited books, get it from the api
+                for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
+                    AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
+                    try {
+                        Book temp = tasktogetbook.get();
+                        if (temp != null) {
+                            Log.v(TAG, "Book created = " + temp.getBooktitle());
+                            Log.v(TAG, "Book isbn = " + temp.getIsbn());
+                            Log.v(TAG, "Book about = " + temp.getBookabout());
+                            Log.v(TAG, "Book date = " + temp.getPdate());
+                            Log.v(TAG, "Book genre = " + temp.getBookgenre());
+                            Log.v(TAG, "Book author = " + temp.getBookauthor());
+                            userbooklist.add(temp);
+                        }
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }catch (Exception e){}
 
-            final String Currentisbn = receivedbook.getIsbn();
             DBaccess.close();
             final DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess2.open();
-            final Book CurrentBook = DBaccess.searchbookbyisbn(Currentisbn);
             //searches to see if userbooklist containst this book
             Iterator<Book> itr = userbooklist.iterator();
             while (itr.hasNext())
             {
                 Book book = itr.next();
-                if (book.getIsbn().equals(CurrentBook.getIsbn()))
+                if (book.getIsbn().equals(receivedbook.getIsbn()))
                 {
                     favourite.setText("Added to list");
                 }
@@ -123,8 +146,8 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 @Override
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
-                    bundle.putParcelable("book", CurrentBook);
-                    Log.v(TAG,"book info sending data =  "+ CurrentBook);
+                    bundle.putParcelable("book", receivedbook);
+                    Log.v(TAG,"book info sending data =  "+ receivedbook);
                     reviewpageFragment rpage = new reviewpageFragment();
                     rpage.setArguments(bundle);
                     //jj-updated the way we add fragments into the view
@@ -138,7 +161,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("user", user);
-                    bundle.putParcelable("book", CurrentBook);
+                    bundle.putParcelable("book", receivedbook);
                     Log.v(TAG,"book info sending data =  "+ user);
                     fragment_addreview addrpage = new fragment_addreview();
                     addrpage.setArguments(bundle);
@@ -185,13 +208,13 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 //
 //                        favourite.setText("Add to Favourites");
 //                    }
-                    if(!userbooklist.contains(CurrentBook)){
+                    if(!userbooklist.contains(receivedbook)){
                         Log.v(TAG,"Book list before change :");
                         for(Book x : userbooklist)
                         {
                             Log.v(TAG,x.getIsbn());
                         }
-                        userbooklist.add(CurrentBook);
+                        userbooklist.add(receivedbook);
                         Log.v(TAG,"Book list after change :");
                         for(Book x : userbooklist)
                         {

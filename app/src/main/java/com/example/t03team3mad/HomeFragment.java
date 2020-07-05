@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 
-public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMainListener,AdapterGenreInHomeFragment.OnClickListener {
+public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment.OnClickListener {
     Bitmap bitmap;
     private static final String TAG = "HomeFragment";
     List<Book> newbooklist;
@@ -46,30 +46,35 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         Genre.setAdapter(adapterGenreInHomeFragment);
 
 
+        final List<Book> booklist=loadAllBooks();
         //load main popularbooks recyclerview
         RecyclerView popularbooks = (RecyclerView)view.findViewById(R.id.popularbookrecyclerview);
+
         //jj-layout manager linear layout manager manages the position of the recyclerview items
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         //jj-set the recyclerview's manager to the previously created manager
         popularbooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter  = new AdapterBookMain(loadAllBooks(),this,this.getContext());
+        AdapterBookMain bookadapter  = new AdapterBookMain(booklist,this.getContext());
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
 
 
+
         //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
         AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute("9780980200447");
-        ArrayList<Book> booklist2=new ArrayList<>();
+        final ArrayList<Book> booklist2=new ArrayList<>();
         try {
             Book temp = tasktogetbook.get();
-            Log.v(TAG,"Book created = "+temp.getBooktitle());
-            Log.v(TAG,"Book isbn = "+temp.getIsbn());
-            Log.v(TAG,"Book about = "+temp.getBookabout());
-            Log.v(TAG,"Book date = "+temp.getPdate());
-            Log.v(TAG,"Book genre = "+temp.getBookgenre());
-            Log.v(TAG,"Book author = "+temp.getBookauthor());
-            booklist2.add(temp);
+            if(temp!=null) {
+                Log.v(TAG, "Book created = " + temp.getBooktitle());
+                Log.v(TAG, "Book isbn = " + temp.getIsbn());
+                Log.v(TAG, "Book about = " + temp.getBookabout());
+                Log.v(TAG, "Book date = " + temp.getPdate());
+                Log.v(TAG, "Book genre = " + temp.getBookgenre());
+                Log.v(TAG, "Book author = " + temp.getBookauthor());
+                booklist2.add(temp);
+            };
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -84,20 +89,21 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         //jj-set the recyclerview's manager to the previously created manager
         recommended.setLayoutManager(llm2);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter2  = new AdapterBookMain(booklist2,this,this.getContext());
+        AdapterBookMain bookadapter2  = new AdapterBookMain(booklist2, this.getContext());
         //jj- set the recyclerview object to its adapter
         recommended.setAdapter(bookadapter2);
+
         return view;
     }
 
-    //Chris - load all books into a list
+    //Chris - load all books into a listnewbooklist
     public List<Book> loadAllBooks()
     {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();
-        newbooklist = DBaccess.loadallbooklist();
+        List<Book> booklist = DBaccess.loadallbooklist();
         DBaccess.close();
-        return newbooklist;
+        return booklist;
     }
 
     //Chris - get all the genre in the database
@@ -107,12 +113,12 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
         Ran5ToDisplay.clear();
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();
-        newbooklist = DBaccess.loadallbooklist();
+        List<Book> bookList = DBaccess.loadallbooklist();
         DBaccess.close();
         //Chris - To seperate the long genre string into individual genre
-            for(int i = 0; i<newbooklist.size(); i++)
+            for(int i = 0; i<bookList.size(); i++)
             {
-                String GenreListFormATable= newbooklist.get(i).getBookgenre();
+                String GenreListFormATable= bookList.get(i).getBookgenre();
             String[] ToGetIndividualGenre =GenreListFormATable.split(",");
             for (int a=0;a<ToGetIndividualGenre.length;a++)
             {
@@ -130,18 +136,6 @@ public class HomeFragment extends Fragment implements AdapterBookMain.OnBookMain
             Ran5ToDisplay.add(Genre);
         }
 
-    }
-
-    //qh - clicking to go to book info
-    @Override
-    public void onBookMainClick(int position) {
-        Book currentbook = newbooklist.get(position);
-        bookinfoFragment nextFrag= new bookinfoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("currentbook", currentbook);  // Key, value
-        nextFrag.setArguments(bundle);
-        //qh - implemented jj's method of moving to new fragment
-        MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment");
     }
 
 

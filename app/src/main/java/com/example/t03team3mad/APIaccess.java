@@ -15,7 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
-//jj- async to run in background(not in main thread
+//jj- async to run in background(not in main thread)
+//jj- this class is only used to get books
 public class APIaccess extends AsyncTask<String,Void,Book>{
     //jj- api url
     private String apiurl = "https://openlibrary.org/";

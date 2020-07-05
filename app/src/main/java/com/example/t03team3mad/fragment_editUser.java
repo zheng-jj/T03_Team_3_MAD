@@ -38,7 +38,7 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-public class fragment_editUser extends Fragment implements AdapterBookMain.OnBookMainListener {
+public class fragment_editUser extends Fragment {
     private static final String TAG = "userEditFragment";
     List<Book> userBooklist = null;
 
@@ -71,7 +71,7 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
         //jj-set the recyclerview's manager to the previously created manager
         favouritebooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoEdit),this, this.getContext());
+        AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoEdit), this.getContext());
         //jj- set the recyclerview object to its adapter
         favouritebooks.setAdapter(bookadapter);
         //onclick listener for button to edit user favourite books
@@ -205,10 +205,5 @@ public class fragment_editUser extends Fragment implements AdapterBookMain.OnBoo
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onBookMainClick(int position) {
-
     }
 }

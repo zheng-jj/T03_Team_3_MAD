@@ -1,8 +1,11 @@
 package com.example.t03team3mad;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.Adapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,34 +25,24 @@ import com.example.t03team3mad.model.Book;
 public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHolder>
 {
     List<Book> mBooklist = new ArrayList<Book>(){};
-    AdapterBookMain.OnBookMainListener monBookMainListener;
     private Context context;
     //qh - implemented clicking
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView bookName;
         ImageView bookPic;
-        AdapterBookMain.OnBookMainListener onBookMainListener;
-        ViewHolder(View itemView, OnBookMainListener onBookMainListener) {
+        Book book;
+        ViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.bookCardView);
             //jj-get the widget id and assign them to local variable
             bookName = (TextView)itemView.findViewById(R.id.bookname);
             bookPic = (ImageView)itemView.findViewById(R.id.bookimage);
-
-            this.onBookMainListener = onBookMainListener;
-            itemView.setOnClickListener(this);
-        }
-
-        @Override
-        public void onClick(View v) {
-            onBookMainListener.onBookMainClick(getAdapterPosition());
         }
     }
-    public AdapterBookMain(List<Book> mBooklist , OnBookMainListener onBookMainListener, Context context) {
+    public AdapterBookMain(List<Book> mBooklist , Context context) {
 
         this.mBooklist = mBooklist;
-        this.monBookMainListener = onBookMainListener;
         this.context = context;
     }
     @Override
@@ -57,11 +50,11 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.bookdisplaycardview, parent, false);
-        ViewHolder viewHolder = new ViewHolder(contactView, monBookMainListener);
+        ViewHolder viewHolder = new ViewHolder(contactView);
         return viewHolder;
     }
     @Override
-    public void onBindViewHolder(AdapterBookMain.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final AdapterBookMain.ViewHolder viewHolder, final int position) {
         try{
         viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
         //jj-this needs to change to the corrosponding user profile picture
@@ -70,7 +63,17 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
         String filename = "book" + mBooklist.get(position).getIsbn() +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.bookPic.setImageBitmap(bmImg);}catch (Exception e){}
-
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Book bookchosen = mBooklist.get(viewHolder.getAdapterPosition());
+                bookinfoFragment nextFrag= new bookinfoFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("currentbook", bookchosen);  // Key, value
+                nextFrag.setArguments(bundle);
+                MainActivity.addFragment(nextFrag,viewHolder.bookName.getContext(),"findThisFragment");
+            }
+        });
     }
     @Override
     public int getItemCount() {
@@ -78,9 +81,5 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
     }
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
-    }
-    //qh-- interface for click
-    public interface OnBookMainListener {
-        void onBookMainClick(int position);
     }
 }

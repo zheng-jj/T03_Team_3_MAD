@@ -47,7 +47,7 @@ import java.util.concurrent.TimeUnit;
 
 import dalvik.system.InMemoryDexClassLoader;
 
-public class fragment_user extends Fragment implements AdapterBookMain.OnBookMainListener {
+public class fragment_user extends Fragment {
     private static final String TAG = "userFragment";
     List<Book> newbooklist;
     SharedPreferences Auto_login;
@@ -145,17 +145,19 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         }
 
         //checks if the user is viewing his own profile
-        else if (bundle.getParcelable("loggedin") != null){
+        else {
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
-            usertoView = bundle.getParcelable("loggedin");
             //gets user object from database
-            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            DBaccess.open();
-            usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
-            DBaccess.close();
+//            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+//            DBaccess.open();
+//            usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
+//            DBaccess.close();
+
+            usertoView = MainActivity.loggedinuser;
             //onclick listener to edit profile
             Button editprofile = view.findViewById(R.id.edit);
+
             final User finalUsertoView = usertoView;
             Log.v(TAG,"showing current user profile");
             editprofile.setOnClickListener(new View.OnClickListener() {
@@ -217,13 +219,13 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
 
         }
 
-        else{
-            //jj- inflates the fragment into the container for the fragment
-            view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
-            Log.v(TAG,"No user received, creating demo user object");
-            //jj - this variable is temporary
-            usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
-        }
+//        else{
+//            //jj- inflates the fragment into the container for the fragment
+//            view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
+//            Log.v(TAG,"No user received, creating demo user object");
+//            //jj - this variable is temporary
+//            usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
+//        }
         v=view;
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
@@ -246,7 +248,7 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
         //jj-set the recyclerview's manager to the previously created manager
         favouritebooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoView),this,this.getContext());
+        AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoView),this.getContext());
         //jj- set the recyclerview object to its adapter
         favouritebooks.setAdapter(bookadapter);
 
@@ -298,7 +300,29 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     public List<Book> loaduserbooks(User user){
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         DBaccess.open();
-        List<Book> userbooklist = DBaccess.loaduserbooklist(user);
+        ArrayList<Book> userbooklist = new ArrayList<>();
+        try {
+            //foreach book in user's local db favourited books, get it from the api
+            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
+                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
+                try {
+                    Book temp = tasktogetbook.get();
+                    if (temp != null) {
+                        Log.v(TAG, "Book created = " + temp.getBooktitle());
+                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
+                        Log.v(TAG, "Book about = " + temp.getBookabout());
+                        Log.v(TAG, "Book date = " + temp.getPdate());
+                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
+                        Log.v(TAG, "Book author = " + temp.getBookauthor());
+                        userbooklist.add(temp);
+                    }
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }catch (Exception e){}
         DBaccess.close();
         Log.v(TAG,"fav book list is loaded");
         this.newbooklist=userbooklist;
@@ -359,19 +383,5 @@ public class fragment_user extends Fragment implements AdapterBookMain.OnBookMai
     public void onAttach(@NonNull Context context) {
         Log.v(TAG,"USER FRAGMENT RECREATED");
         super.onAttach(context);
-    }
-
-    @Override
-    public void onBookMainClick(int position) {
-        Book currentbook = newbooklist.get(position);
-
-        bookinfoFragment nextFrag= new bookinfoFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("currentbook", currentbook);  // Key, value
-        nextFrag.setArguments(bundle);
-        getActivity().getSupportFragmentManager().beginTransaction()
-                .replace(R.id.mainactivitycontainer, nextFrag, "findThisFragment")
-                .addToBackStack(null)
-                .commit();
     }
 }
