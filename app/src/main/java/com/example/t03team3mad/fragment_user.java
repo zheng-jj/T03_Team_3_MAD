@@ -338,7 +338,7 @@ public class fragment_user extends Fragment {
         return userreviewlist;
     }
     //jj - Loads the user information into the layout
-    public void loaduserintoview(View view, User user, String path) throws InterruptedException {
+    public void loaduserintoview(View view, User user, String path) throws InterruptedException, ExecutionException {
         TextView Name = view.findViewById(R.id.userName);
         TextView Desc = view.findViewById(R.id.userDescription);
         Name.setText(user.getUsername());
@@ -349,7 +349,8 @@ public class fragment_user extends Fragment {
         //jj gets image from firebase and saves to local storage
         //sets the profile image
         File check = new File(path);
-        while(true){
+        int count = 20;
+        while(count>0){
             Log.v(TAG,"user image is not saved yet");
             if(check.exists()) {
                 Pic.setImageBitmap(BitmapFactory.decodeFile(path));
@@ -362,7 +363,11 @@ public class fragment_user extends Fragment {
                 else {
                     continue;
                 }
-            };
+            }
+            else{
+                Thread.sleep(100);
+            }
+            count=count-1;
         }
     }
     //jj-method that gets the image and saves to internal storage

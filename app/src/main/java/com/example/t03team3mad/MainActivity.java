@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private static final String TAG = "MainActivity";
     private Integer uid = null;
     public static User loggedinuser = null;
+    public static User viewuser = null;
     public List<String> backstacktags = new ArrayList<>();
     BottomBar bottomBar;
     @Override
@@ -40,14 +41,19 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         //jj - receives which user is currently logged in from the login activity
         Bundle receivedloggedin = intent.getExtras().getBundle("User_UID");
 
+
+
+
         if(receivedloggedin!=null) {
             Log.v(TAG,"logged in user received");
             String loggedinuserID = receivedloggedin.getString("User_UID");
             //jj- gets data from firestore
             FireStoreAccess.AccessUser accessUser = new FireStoreAccess.AccessUser();
+            AsyncTask<String, Void, User> task = accessUser.execute(loggedinuserID);
+            Log.v(TAG,"Task status ="+task.getStatus().toString());
             try {
-                AsyncTask<String, Void,User> task = accessUser.execute(loggedinuserID);
                 task.get();
+                Thread.sleep(300);
             } catch (ExecutionException e) {
                 e.printStackTrace();
             } catch (InterruptedException e) {
@@ -58,13 +64,18 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 //            loggedinuser =  DBaccess.searchuserbyid(loggedinuserID);
 //            DBaccess.close();
         }
-//        if(loggedinuser == null)
-//        {
-//            loggedinuser = new User(2,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
-//            uid = loggedinuser.getUseridu();
-//            Log.v(TAG,"no logged in user received");
-//            //startsLoginPage();
-//        }
+        if(loggedinuser == null)
+        {
+            loggedinuser = new User(99,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
+            uid = loggedinuser.getUseridu();
+            Log.v(TAG,"no logged in user received");
+            //startsLoginPage();
+        }
+
+
+
+
+
 
         //jj - this is the code to navigate using the bottom navigation bar
         bottomBar = (BottomBar) findViewById(R.id.bottomBar);
@@ -123,7 +134,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     public static void updateUserLogged(User user){
-        loggedinuser=user;
+        viewuser=user;
+        loggedinuser = user;
     }
 
     private void starthomefragment(){
