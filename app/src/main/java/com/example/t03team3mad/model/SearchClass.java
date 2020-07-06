@@ -5,7 +5,7 @@ public class SearchClass {
     public String getSearchName() {
         return searchName;
     }
-    public void setSearchName(String newsearchName) {
+      public void setSearchName(String newsearchName) {
         this.searchName = newsearchName;
     }
 

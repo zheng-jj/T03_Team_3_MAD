@@ -1,6 +1,7 @@
 package com.example.t03team3mad;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +25,7 @@ import com.example.t03team3mad.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class searchbarFragment extends Fragment implements AdapterSearch.OnSearchListener {
     private static final String TAG = "searchbarFragment";
@@ -51,23 +53,42 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         }
     //qh - takes the search query and displays them (can search for author , books and users)
     public void doMySearch(String query, View view){
-        searchClassList.clear();
+        if (searchClassList.isEmpty()){
+
+        }
+        else{
+            searchClassList.clear();
+        }
         System.out.println(query);
         //qh - opens database to create the object lists
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         databaseAccess.open();
-        List<Book> searchbooks = databaseAccess.searchbook(query);
+        //List<Book> searchbooks = databaseAccess.searchbook(query);
         List<Author> searchauthor = databaseAccess.searchAuthor(query);
         List<User> searchUser = databaseAccess.searchUser(query);
         databaseAccess.close();
         //qh - adds name and description of book, author and user to arraylist
         //qh - i converted them into searchclass because i wanted to show 3 types of objects. search class has the object type, id, name and description.
-        for (Book var : searchbooks)
-        {
-            System.out.println(var.getBooktitle());
-            SearchClass searchClass = new SearchClass(var.getBooktitle(),var.getBookabout(),"Book",String.valueOf(var.getIsbn()));
-            searchClassList.add(searchClass);
+        //for (Book var : searchbooks)
+        //{
+           // System.out.println(var.getBooktitle());
+          //  SearchClass searchClass = new SearchClass(var.getBooktitle(),var.getBookabout(),"Book",String.valueOf(var.getIsbn()));
+          //  searchClassList.add(searchClass);
+      //  }
+
+        //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
+        AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
+        try {
+            searchClassList = searchapiforbooks.get();
+            if(searchClassList!=null) {
+                Log.v(TAG, "Added Searches");
+            };
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
         for (Author var : searchauthor)
         {
             System.out.println(var.getAuthorname());

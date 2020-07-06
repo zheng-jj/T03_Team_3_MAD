@@ -78,6 +78,8 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
     @Override
     protected Book doInBackground(String... urls) {
         try {
+            Log.v(TAG, urls[0]);
+            Log.v(TAG, "TestLOG");
             return searchbookbyisbn(urls[0]);
         } catch (IOException ex) {
             ex.printStackTrace();
