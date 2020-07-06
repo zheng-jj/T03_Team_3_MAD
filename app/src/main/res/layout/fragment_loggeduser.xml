@@ -33,51 +33,52 @@
             android:layout_marginTop="-1dp"
             android:layout_above="@+id/userReviews"
             android:background="#D3D3D3" />
+
         <ImageView
             android:id="@+id/userPic"
-            android:layout_width="95dp"
-            android:layout_height="105dp"
+            android:layout_width="85dp"
+            android:layout_height="85dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="30dp">
-        </ImageView>
+            android:layout_marginStart="35dp"
+            android:layout_marginTop="65dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/error"></ImageView>
 
         <Button
             android:id="@+id/viewfollowing"
-            style="@android:style/Widget.Holo.Button"
-            android:layout_width="150dp"
-            android:layout_height="34dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="242dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginStart="27dp"
+            android:layout_marginTop="164dp"
+            android:background="@drawable/roundedbuttons"
             android:text="View Following"
-            android:textSize="14dp" />
+            android:textSize="10dp" />
 
         <Button
             android:id="@+id/edit"
-            style="@android:style/Widget.Holo.Button"
-            android:layout_width="98dp"
-            android:layout_height="34dp"
-            android:layout_alignParentStart="true"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/cog"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="150dp"
-            android:text="Edit Profile"
-            android:textSize="14dp" />
+            android:layout_marginEnd="80dp"
+            android:layout_marginTop="11dp"/>
 
         <Button
             android:id="@+id/logout"
-            style="@android:style/Widget.Holo.Button"
-            android:layout_width="95dp"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/door"
+            android:layout_width="36dp"
             android:layout_height="36dp"
-            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="306dp"
-            android:layout_marginTop="13dp"
-            android:text="Log Out"
-            android:textSize="14dp" />
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:id="@+id/userName"
@@ -85,17 +86,20 @@
             android:layout_height="35dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="136dp"
-            android:layout_marginTop="44dp"
+            android:layout_marginStart="155dp"
+            android:layout_marginTop="63dp"
             android:text="user name"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textSize="17sp"/>
 
         <TextView
             android:id="@+id/userDescription"
-            android:layout_width="231dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="136dp"
-            android:layout_marginTop="106dp"
+            android:layout_width="238dp"
+            android:layout_height="74dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="155dp"
+            android:layout_marginTop="117dp"
             android:text="user name" />
 
         <TextView
