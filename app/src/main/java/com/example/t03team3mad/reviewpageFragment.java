@@ -38,13 +38,17 @@ public class reviewpageFragment extends Fragment {
     List<Review> reviewlist = new ArrayList<Review>();
     String name;
     AdapterReview adapterReview;
-    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
-    private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
+    String isbncheck;
+    String Title;
+    private CollectionReference mCollectionRefreview = FirebaseFirestore.getInstance().collection("Reviews");
+    private CollectionReference mCollectionRefbook = FirebaseFirestore.getInstance().collection("Books");
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // jo - receive bundle from another fragment
         Bundle bundle = this.getArguments();
         final Book book = bundle.getParcelable("book");
+        isbncheck = book.getIsbn();
         // jo - display layout
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
         // jo - findviewbyids
@@ -73,23 +77,30 @@ public class reviewpageFragment extends Fragment {
     public void loadAllReviews(String ISBN) {
         Log.v("Test",ISBN);
 
-        mCollectionRefbooks.document(ISBN).collection("Reviews").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mCollectionRefreview.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
                     for (DocumentSnapshot dss : data) {
-                        String review = dss.getString("Review");
-                        int points = Integer.parseInt(dss.getString("points"));
-                        int uid = Integer.parseInt(dss.getString("userID"));
-                        String name = dss.getString("userName");
-                        Review r1 = new Review(uid,name,review,points);
-                        reviewlist.add(r1);
-                        Log.v("Test",review);
-                        Log.v("Test", String.valueOf(points));
-                        Log.v("Test", String.valueOf(uid));
-                        Log.v("Test", String.valueOf(name));
+                        String isbn = dss.getString("isbn");
+                        if(isbn.equals(isbncheck)){
+                            String review = dss.getString("review");
+                            int points = Integer.parseInt(dss.getString("vote"));
+                            int uid = Integer.parseInt(dss.getString("uid"));
+                            String name = dss.getString("uname");
+                            Review r1 = new Review(uid,name,review,points,isbn);
+                            reviewlist.add(r1);
+                            Log.v("Test",review);
+                            Log.v("Test", String.valueOf(points));
+                            Log.v("Test", String.valueOf(uid));
+                            Log.v("Test", String.valueOf(name));
+                        }
+                        else{
+                            continue;
+                        }
+
 
 
 
@@ -106,16 +117,7 @@ public class reviewpageFragment extends Fragment {
 
 
     }
-    // jo - get Title from database
-    public String Title(String ISBN)
-    {
 
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        String bname = DBaccess.getElement("Title","Book","ISBN",ISBN);
-        DBaccess.close();
-        return bname;
-    }
 
 
 

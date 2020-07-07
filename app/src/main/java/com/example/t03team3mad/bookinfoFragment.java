@@ -42,6 +42,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     //qh - assigns the views and transfers the info to them
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final User user;
+
         View view = inflater.inflate(R.layout.fragment_bookinfo, container, false);
         TextView title = view.findViewById(R.id.titleview);
         TextView synopsis = view.findViewById(R.id.synopsis);
@@ -299,6 +300,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         Log.v(TAG,"fav book list is loaded");
         return userbooklist;
     }
+
 
 }
 
