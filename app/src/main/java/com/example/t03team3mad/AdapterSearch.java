@@ -74,19 +74,19 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
 
         //SET IMAGE BASED ON CLASS
         //qh -- if object clicked is a book
-        if (searchlist.get(position).getSearchClass() == "Book"){
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
-            databaseAccess.open();
-            Book currentbook = databaseAccess.searchbookbyisbn(searchlist.get(position).getId());
-            databaseAccess.close();
+        //if (searchlist.get(position).getSearchClass() == "Book"){
+            //DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
+            //databaseAccess.open();
+            //Book currentbook = databaseAccess.searchbookbyisbn(searchlist.get(position).getId());
+            //databaseAccess.close();
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "book" + currentbook.getIsbn()+".jpg";
-            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-            viewHolder.searchpic.setImageBitmap(bmImg);
+            //String filename = "book" + currentbook.getIsbn()+".jpg";
+            //Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+            //iewHolder.searchpic.setImageBitmap(bmImg);
 
 
-        }
+        //}
 
         //qh -- if object clicked is a author
         if (searchlist.get(position).getSearchClass() == "Author"){
