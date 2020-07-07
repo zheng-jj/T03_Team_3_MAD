@@ -117,9 +117,9 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         List<Book> bookList = DBaccess.loadallbooklist();
         DBaccess.close();
         //Chris - To seperate the long genre string into individual genre
-            for(int i = 0; i<bookList.size(); i++)
-            {
-                String GenreListFormATable= bookList.get(i).getBookgenre();
+        for(int i = 0; i<bookList.size(); i++)
+        {
+            String GenreListFormATable= bookList.get(i).getBookgenre();
             String[] ToGetIndividualGenre =GenreListFormATable.split(",");
             for (int a=0;a<ToGetIndividualGenre.length;a++)
             {
@@ -133,7 +133,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         {
             String Genre=GenreList.get(new Random().nextInt(GenreList.size()));
             if (!Ran5ToDisplay.contains(Genre))
-            Ran5ToDisplay.add(Genre);
+                Ran5ToDisplay.add(Genre);
         }
 
     }
