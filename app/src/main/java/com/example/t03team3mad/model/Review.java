@@ -70,13 +70,10 @@ public class Review {
         uname  =  username;
         reviewTitle  = title;
     }
-    public Review (int idu, int idr,String username,String title, String text, String isbn, int points) {
+    public Review (int idu, String username, String text, int points) {
         reviewidu = idu;
-        reviewidr = idr;
         reviewtext = text;
-        reviewisbn = isbn;
         uname  =  username;
-        reviewTitle  = title;
         reviewpoints = points;
     }
 }

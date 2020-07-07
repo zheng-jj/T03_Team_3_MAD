@@ -15,11 +15,15 @@ import androidx.fragment.app.Fragment;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.WriteResult;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class fragment_addreview extends Fragment {
@@ -27,7 +31,10 @@ public class fragment_addreview extends Fragment {
     Button enter;
     EditText editreview;
     String idu;
-    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
+
+    int idr;
+    private CollectionReference mCollectionRefbook = FirebaseFirestore.getInstance().collection("Books");
+    private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // jo -display fragment
@@ -43,14 +50,15 @@ public class fragment_addreview extends Fragment {
         enter.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Log.v("Click","Button clicked");
-                Integer idrcount = Integer.parseInt(getidr());
-                String idr = String.valueOf(idrcount + 1);
+
+
                 String ISBN = book.getIsbn();
+                String idr = getidr(ISBN);
+                Log.v("Click",idr);
                 idu = Integer.toString(user.getUseridu());
                 String review = editreview.getText().toString();
-                boolean test = insertreview(idr,idu,review,ISBN);
-                Log.d(TAG,Boolean.toString(test));
-                Log.d(TAG,getidr());
+                addreview(idr,idu,review,ISBN,user.getUsername());
+                Log.v("Click",idr);
 
 
             }
@@ -59,30 +67,38 @@ public class fragment_addreview extends Fragment {
         return view;
     }
     // get the latest id of reviews so it can be used to +1 to add another review since it is a primary key
-    public String getidr(){
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        String idrcount = DBaccess.getCount("IDR","Reviews");
-        DBaccess.close();
-        return idrcount;
-    }
-    // add review into the database
-    public boolean insertreview(String idr,String idu,String review,String ISBN){
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        boolean success = DBaccess.addData(idr,idu,review,ISBN);
-        DBaccess.close();
-        return success;
+    public String getidr(String ISBN){
+
+        mCollectionRefbook.document(ISBN).collection("Reviews").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
+
+                    idr = data.size();
+                }
+                else{
+                    idr = 1;
+                }
+
+
+            }
+        });
+        return String.valueOf(idr);
+
 
     }
-    public void addreview(String idr,String idu,String review,String ISBN){
+
+
+    public void addreview(String idr,String idu,String review,String ISBN,String name){
         // Add document data  with id staffid using a hashmap
         Map<String, Object> data = new HashMap<String,Object>();
-        data.put("ISBN", ISBN);
+
         data.put("userID", idu);
-        data.put("points", 0);
+        data.put("points", "0");
         data.put("Review", review);
-        mCollectionRef.add(data);
+        data.put("userName",name);
+        mCollectionRefbook.document(ISBN).collection("Reviews").document(idr).set(data);
     }
 }
 

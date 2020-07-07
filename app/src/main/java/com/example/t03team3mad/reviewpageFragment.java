@@ -19,9 +19,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
 
@@ -32,7 +35,11 @@ import java.util.List;
 
 public class reviewpageFragment extends Fragment {
     private static final String TAG = "authorprofileFragment";
-    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
+    List<Review> reviewlist = new ArrayList<Review>();
+    String name;
+    AdapterReview adapterReview;
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
+    private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // jo - receive bundle from another fragment
@@ -52,22 +59,52 @@ public class reviewpageFragment extends Fragment {
         // jo- linear layout manager - set layout to vertical
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         reviews.setLayoutManager(llm);
+
         // jo - load data from list into the viewholder
-        AdapterReview adapterReview  = new AdapterReview(loadAllReviews(book.getIsbn()),this);
+        loadAllReviews(book.getIsbn());
+        Log.v("Test", String.valueOf(reviewlist.size()));
+        Log.v("Test", "workign?");
+        adapterReview  = new AdapterReview(reviewlist,this);
+
         reviews.setAdapter(adapterReview);
         return view;
     }
     // jo - get reviews from database
-    public List<Review> loadAllReviews(String ISBN)
-    {
-        Log.v(TAG,"loaded reviews");
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        List<Review> mReviewlist = DBaccess.extractreviewbybook(ISBN);
-        DBaccess.close();
-        Log.d("list",mReviewlist.toString());
+    public void loadAllReviews(String ISBN) {
+        Log.v("Test",ISBN);
 
-        return mReviewlist;
+        mCollectionRefbooks.document(ISBN).collection("Reviews").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for (DocumentSnapshot dss : data) {
+                        String review = dss.getString("Review");
+                        int points = Integer.parseInt(dss.getString("points"));
+                        int uid = Integer.parseInt(dss.getString("userID"));
+                        String name = dss.getString("userName");
+                        Review r1 = new Review(uid,name,review,points);
+                        reviewlist.add(r1);
+                        Log.v("Test",review);
+                        Log.v("Test", String.valueOf(points));
+                        Log.v("Test", String.valueOf(uid));
+                        Log.v("Test", String.valueOf(name));
+
+
+
+                    }
+                    adapterReview.notifyDataSetChanged();
+
+
+
+                }
+
+
+            }
+        });
+
+
     }
     // jo - get Title from database
     public String Title(String ISBN)
