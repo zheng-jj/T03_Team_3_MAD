@@ -82,17 +82,18 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         }
 
 
-        //load recommended books recyclerview
-        //do the same for another recycler view recommendedbooks
-        RecyclerView recommended = (RecyclerView)view.findViewById(R.id.recommendbookrecyclerview);
-        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        //jj-set the recyclerview's manager to the previously created manager
-        recommended.setLayoutManager(llm2);
-        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter2  = new AdapterBookMain(booklist2, this.getContext());
-        //jj- set the recyclerview object to its adapter
-        recommended.setAdapter(bookadapter2);
-
+        if(booklist2!=null) {
+            //load recommended books recyclerview
+            //do the same for another recycler view recommendedbooks
+            RecyclerView recommended = (RecyclerView) view.findViewById(R.id.recommendbookrecyclerview);
+            LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            //jj-set the recyclerview's manager to the previously created manager
+            recommended.setLayoutManager(llm2);
+            //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+            AdapterBookMain bookadapter2 = new AdapterBookMain(booklist2, this.getContext());
+            //jj- set the recyclerview object to its adapter
+            recommended.setAdapter(bookadapter2);
+        }
         return view;
     }
 

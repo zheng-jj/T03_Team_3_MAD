@@ -34,6 +34,7 @@ import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.cloud.datastore.core.number.IndexNumberDecoder;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.jakewharton.processphoenix.ProcessPhoenix;
@@ -259,17 +260,29 @@ public class fragment_user extends Fragment {
             e.printStackTrace();
         }
 
-        //jj - load favourite user books recyclerview
-        RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
-        //jj-layout manager linear layout manager manages the position of the recyclerview items
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-        //jj-set the recyclerview's manager to the previously created manager
-        favouritebooks.setLayoutManager(llm);
-        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoView),this.getContext());
-        //jj- set the recyclerview object to its adapter
-        favouritebooks.setAdapter(bookadapter);
 
+        //user favourite books loaded from firebase
+        ArrayList<Book> userfav = new ArrayList<>();
+        try {
+            userfav = loaduserbooks(usertoView);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if(userfav!= null) {
+            //jj - load favourite user books recyclerview
+            RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
+            //jj-layout manager linear layout manager manages the position of the recyclerview items
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+            //jj-set the recyclerview's manager to the previously created manager
+            favouritebooks.setLayoutManager(llm);
+            //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+            AdapterBookMain bookadapter = new AdapterBookMain(userfav, this.getContext());
+            //jj- set the recyclerview object to its adapter
+            favouritebooks.setAdapter(bookadapter);
+        }
         //list of reviews made by this user
         List<Review> reviewsByUser = loaduserreviews(usertoView);
 
@@ -315,33 +328,37 @@ public class fragment_user extends Fragment {
 //        return mUserlist;
 //    }
     //jj - gets the user's favourite books
-    public List<Book> loaduserbooks(User user){
+    public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
+        //DBaccess.open();
         ArrayList<Book> userbooklist = new ArrayList<>();
-        try {
-            //foreach book in user's local db favourited books, get it from the api
-            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
-                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
-                try {
-                    Book temp = tasktogetbook.get();
-                    if (temp != null) {
-                        Log.v(TAG, "Book created = " + temp.getBooktitle());
-                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
-                        Log.v(TAG, "Book about = " + temp.getBookabout());
-                        Log.v(TAG, "Book date = " + temp.getPdate());
-                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
-                        Log.v(TAG, "Book author = " + temp.getBookauthor());
-                        userbooklist.add(temp);
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }catch (Exception e){}
-        DBaccess.close();
+//        try {
+//            //foreach book in user's local db favourited books, get it from the api
+//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
+//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
+//                try {
+//                    Book temp = tasktogetbook.get();
+//                    if (temp != null) {
+//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
+//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
+//                        Log.v(TAG, "Book about = " + temp.getBookabout());
+//                        Log.v(TAG, "Book date = " + temp.getPdate());
+//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
+//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
+//                        userbooklist.add(temp);
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }catch (Exception e){}
+//        DBaccess.close();
+
+        AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
+
+        userbooklist=task.get();
         Log.v(TAG,"fav book list is loaded");
         this.newbooklist=userbooklist;
         return userbooklist;

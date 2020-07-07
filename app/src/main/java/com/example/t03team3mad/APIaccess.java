@@ -100,7 +100,6 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
             }
         }
     }
-    private Exception exception;
 
     //jj-method that calls the searchbook method and runs it in background
     @Override
@@ -115,7 +114,5 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
             ex.printStackTrace();
         }
         return null;
-    }
-    protected void onPostExecute(Book book) {
     }
 }
