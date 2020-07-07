@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Parcelable;
@@ -37,6 +38,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class fragment_editUser extends Fragment {
     private static final String TAG = "userEditFragment";
@@ -108,6 +110,15 @@ public class fragment_editUser extends Fragment {
                 DBaccess.open();
                 DBaccess.editUserData(finalUsertoEdit1);
                 DBaccess.close();
+                //updates firestore
+                AsyncTask<User,Void,Void> tasktoupdateUser = new updateFireStoreUser.AccessUser().execute(finalUsertoEdit1);
+                try {
+                    tasktoupdateUser.get();
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 //reloads the fragment
                 fragment_user fragment = new fragment_user();
 
@@ -117,7 +128,13 @@ public class fragment_editUser extends Fragment {
                 //updates database on new image
                 Bitmap userprofileimg = ((BitmapDrawable) Pic.getDrawable()).getBitmap();
                 //saves image from gallery to internal storage
-                SaveBitmap(userprofileimg,Integer.toString(finalUsertoEdit1.getUseridu()));
+                try {
+                    SaveBitmap(userprofileimg,Integer.toString(finalUsertoEdit1.getUseridu()));
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
 
                 //jj- bundle to be moved to fragment
                 Bundle bundle = new Bundle();
@@ -152,7 +169,7 @@ public class fragment_editUser extends Fragment {
         }
     }
     //jj- used to save a bitmap to internal storage
-    private void SaveBitmap(Bitmap bitmap, String uid){
+    private void SaveBitmap(Bitmap bitmap, String uid) throws ExecutionException, InterruptedException {
         FileOutputStream outStream = null;
         try {
             File directory = new File("/data/data/com.example.t03team3mad/app_imageDir");
@@ -177,6 +194,15 @@ public class fragment_editUser extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
+
+        //saves bitmap to firestore
+        String filename = "user" +uid +".jpg";
+        imageTaskSaveParameters parameters = new imageTaskSaveParameters(filename,bitmap);
+        //jj gets image from firebase and saves to local storage
+        AsyncTask<imageTaskSaveParameters, Void, Void> task = new FirebaseStorageImageSave().execute(parameters);
+        task.get();
     }
 
     //jj - gets the user's favourite books

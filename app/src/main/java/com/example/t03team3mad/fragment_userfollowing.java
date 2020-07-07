@@ -43,20 +43,21 @@ public class fragment_userfollowing extends Fragment {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        for(User x : userFollowing){
-            Log.v(TAG,"user in list ="+x.getUseridu());
+        if(userFollowing!=null) {
+            for (User x : userFollowing) {
+                Log.v(TAG, "user in list =" + x.getUseridu());
+            }
+            //jj - load favourite user books recyclerview
+            RecyclerView followings = (RecyclerView) view.findViewById(R.id.followerrecycler);
+            //jj-layout manager linear layout manager manages the position of the recyclerview items
+            LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
+            //jj-set the recyclerview's manager to the previously created manager
+            followings.setLayoutManager(llm);
+            //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+            AdapterUserMain UserAdapter = new AdapterUserMain(userFollowing);
+            //jj- set the recyclerview object to its adapter
+            followings.setAdapter(UserAdapter);
         }
-        //jj - load favourite user books recyclerview
-        RecyclerView followings = (RecyclerView) view.findViewById(R.id.followerrecycler);
-        //jj-layout manager linear layout manager manages the position of the recyclerview items
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        //jj-set the recyclerview's manager to the previously created manager
-        followings.setLayoutManager(llm);
-        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterUserMain UserAdapter = new AdapterUserMain(userFollowing);
-        //jj- set the recyclerview object to its adapter
-        followings.setAdapter(UserAdapter);
         return view;
     }
     //jj-loads list of users the user is following

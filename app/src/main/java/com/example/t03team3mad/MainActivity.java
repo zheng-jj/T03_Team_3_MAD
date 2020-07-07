@@ -30,7 +30,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private static final String TAG = "MainActivity";
     private Integer uid = null;
     public static User loggedinuser = null;
-    public static User viewuser = null;
     public List<String> backstacktags = new ArrayList<>();
     BottomBar bottomBar;
     @Override
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         }
         if(loggedinuser == null)
         {
-            loggedinuser = new User(99,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
+            loggedinuser = new User(-1,"error","9780439362139;9780747591061","please re-open application with internet access");
             uid = loggedinuser.getUseridu();
             Log.v(TAG,"no logged in user received");
             //startsLoginPage();
@@ -140,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     }
 
     public static void updateUserLogged(User user){
-        viewuser=user;
         loggedinuser = user;
     }
 
