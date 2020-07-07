@@ -24,7 +24,6 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
         //Chris - get the bundle
         mBundle = getArguments();
         String genre = mBundle.getString("Genre").trim();
-        Log.v(TAG,"reading");
         SearchGenre("genre");
         RecyclerView results = (RecyclerView) view.findViewById(R.id.GenreCardRecyclerView);
         LinearLayoutManager layout = new LinearLayoutManager(getActivity());
