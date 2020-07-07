@@ -73,12 +73,22 @@ public class fragment_user extends Fragment {
             view = inflater.inflate(R.layout.fragment_user,container,false);
 
             usertoView = bundle.getParcelable("searchuser");
-            //gets user object from database
-            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            DBaccess.open();
-            usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
-            DBaccess.close();
+            Log.v(TAG,"currently viewing ="+ String.valueOf(usertoView.getUseridu()));
+            Log.v(TAG, "currently logged in ="+String.valueOf(MainActivity.loggedinuser.getUseridu()));
+            //checks if user is viewing himself
+            if(usertoView.getUseridu()==MainActivity.loggedinuser.getUseridu()){
+                this.getArguments().putParcelable("searchuser",null);
+                fragment_user fragment = new fragment_user();
+                //jj- bundle to be moved to fragment
+                Bundle bundle2 = new Bundle();
+                bundle2.putParcelable("loggedin", MainActivity.loggedinuser);
+                fragment.setArguments(bundle);
+                //jj-updated the way we add fragments into the view
+                MainActivity.addFragment(fragment,getActivity(),"UserFragment");
+            }
 
+
+            //gets user object from database
             final Button followthisuser = view.findViewById(R.id.follow1);
             //jj-checks if logged in user follows this user
             for(User check : currentlyfollow){

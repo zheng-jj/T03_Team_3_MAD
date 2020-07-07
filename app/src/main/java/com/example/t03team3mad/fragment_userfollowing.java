@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class fragment_userfollowing extends Fragment {
     private static final String TAG = "userfollowingFragment";
@@ -27,9 +30,22 @@ public class fragment_userfollowing extends Fragment {
             usertoEdit = bundle.getParcelable("UserToEdit");
             Log.v(TAG, "user edit: username: "+ usertoEdit.getUsername());
         }
-        List<User> userFollowing = loaduserfollowing(Integer.toString(usertoEdit.getUseridu()));
-        for(User user : userFollowing){
-            Log.v(TAG,"following user "+user.getUsername());
+        ArrayList<User> userFollowing = new ArrayList<>();
+        AsyncTask<String, Void, ArrayList<User>> getfollowingtask = new FireStoreAccess.AccessUserList().execute(MainActivity.loggedinuser.getfollowingstring());
+        try {
+            userFollowing=getfollowingtask.get();
+            if(userFollowing!=null) {
+                Log.v(TAG, "Added users");
+            };
+            Thread.sleep(1300);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for(User x : userFollowing){
+            Log.v(TAG,"user in list ="+x.getUseridu());
         }
         //jj - load favourite user books recyclerview
         RecyclerView followings = (RecyclerView) view.findViewById(R.id.followerrecycler);

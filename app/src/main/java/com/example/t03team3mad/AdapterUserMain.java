@@ -3,6 +3,8 @@ package com.example.t03team3mad;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.Log;
 import android.widget.Adapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +19,12 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 
 public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHolder>
 {
+    private static final String TAG = "AdapterUserMain";
     List<User> mUserlist = new ArrayList<User>(){};
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -53,13 +57,26 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
         return viewHolder;
     }
     @Override
-    public void onBindViewHolder(AdapterUserMain.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(final AdapterUserMain.ViewHolder viewHolder, int position) {
         //jj-sets text to the different widgets in the cardviews
         viewHolder.userName.setText(mUserlist.get(position).getUsername());
         viewHolder.userDes.setText(mUserlist.get(position).getUserabout());
         String filename = "user" + mUserlist.get(position).getUseridu()+".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.userPic.setImageBitmap(bmImg);
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                User chosen = mUserlist.get(viewHolder.getAdapterPosition());
+                Log.v(TAG,"chosen ="+chosen.getUseridu());
+                fragment_user nextFrag= new fragment_user();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("searchuser", chosen);  // Key, value
+                nextFrag.setArguments(bundle);
+                MainActivity.addFragment(nextFrag,viewHolder.userName.getContext(),"UserFragmentFromFollow");
+            }
+        });
     }
     @Override
     public int getItemCount() {

@@ -416,24 +416,21 @@ public class DatabaseAccess {
     //jj- edit user data in database
     //jj- just use this part if u need to change database
     public void editUserData(User user){
-        String dbformattedFollowing = "";
-        List<User> followings = getUserFollowing(Integer.toString(user.getUseridu()));
-        Log.v(TAG,Integer.toString(followings.size()));
-        for(User following : followings)
-        {
-            dbformattedFollowing.concat(";");
-            dbformattedFollowing.concat(Integer.toString(following.getUseridu()));
-        }
+        String dbformattedFollowing = user.getfollowingstring();
 
         ContentValues cv = new ContentValues();
         cv.put("NAME",user.getUsername());
         cv.put("ABOUT",user.getUserabout());
         cv.put("FAVOURITEB",user.getUserisbn());
-        if(dbformattedFollowing.equals("")){
-            cv.putNull("FOLLOWING");
+        if(dbformattedFollowing!=null) {
+            if (dbformattedFollowing.equals("")) {
+                cv.putNull("FOLLOWING");
+            } else {
+                cv.put("FOLLOWING", dbformattedFollowing);
+            }
         }
         else {
-            cv.put("FOLLOWING", dbformattedFollowing);
+            cv.put("FOLLOWING","");
         }
         db.update("USER", cv, "IDU="+Integer.toString(user.getUseridu()), null);
     }

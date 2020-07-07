@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import com.example.t03team3mad.model.Book;
@@ -73,8 +74,13 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         }
 
 
+        //removes
 
-
+        //updates local user database to sync data with firestore
+        DatabaseAccess DBaccess = DatabaseAccess.getInstance(this.getApplicationContext());
+        DBaccess.open();
+        DBaccess.editUserData(MainActivity.loggedinuser);
+        DBaccess.close();
 
 
         //jj - this is the code to navigate using the bottom navigation bar
