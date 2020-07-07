@@ -52,23 +52,51 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
             //jj - use this get data from json object to parse into object
             if(bookjsonobj != null) {
                 String booktitle = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("title");
-                String bookauthor = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getJSONArray("authors").getJSONObject(0).getString("name");
-                String genrelist = "";
-                JSONArray subjects = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getJSONArray("subjects");
-                //jj-loops through all the subjects in the list of subjects and adds to a string
-                for (int i = 0; i < subjects.length(); i++) {
-                    genrelist = genrelist + subjects.getString(i) +";";
+                Log.v(TAG,"Creation");
+                Log.v(TAG,booktitle);
+
+                //qh - added this block of code because some books dont have value
+                String bookauthor;
+                if (bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").has("authors")){
+                    bookauthor = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getJSONArray("authors").getJSONObject(0).getString("name");
                 }
-                //jj-removes the last ";" at the end of list of genres
-                String bookgenre = genrelist.substring(0, genrelist.length() - 1);
-                String bookdes = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("description");
+                else{
+                    bookauthor = "Author Data not Available";
+                }
+
+                Log.v(TAG,bookauthor);
+                //qh - added this block of code because some books dont have value
+                String genrelist = "";
+                String bookgenre;
+                if (bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").has("subjects")){
+                    JSONArray subjects = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getJSONArray("subjects");
+                    //jj-loops through all the subjects in the list of subjects and adds to a string
+                    for (int i = 0; i < subjects.length(); i++) {
+                        genrelist = genrelist + subjects.getString(i) +";";
+                    }
+                    //jj-removes the last ";" at the end of list of genres
+                    bookgenre = genrelist.substring(0, genrelist.length() - 1);
+                }
+                else {
+                    bookgenre = "Genres not available";
+                }
+
+                //qh - added this block of code because some books dont have value
+                String bookdes;
+                if (bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").has("description")){
+                    bookdes = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("description");
+                }
+                else{
+                    bookdes = "No Description";
+                }
                 String bookpdate = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("publish_date");
                 //jj-creates the book object with json data
                 Book x = new Book(booktitle,bookauthor,bookdes,bookgenre,bookpdate,isbn);
                 return x;
             }
             else{
-                return null;
+                Book x = new Book("Book data not available","Book data not available","Book data not available","Book data not available","Book data not available","Book data not available");
+                return x;
             }
         }
     }

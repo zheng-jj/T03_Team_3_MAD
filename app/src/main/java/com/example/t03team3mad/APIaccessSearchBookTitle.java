@@ -25,6 +25,8 @@ import java.util.Scanner;
 //qh - followed jj to create search booktitle
 public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchClass>>{
     private String apiurl = "https://www.googleapis.com/";
+    //private String apiurl = "https://openlibrary.org/";
+
     private static final String TAG = "APIaccess2";
 
     public APIaccessSearchBookTitle(){}
@@ -35,6 +37,7 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
         String newtitle = title.replace(' ', '+');
         Log.v(TAG,newtitle);
         URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle&maxResults=15");
+        //URL url = new URL(apiurl+"search.json?q=" + newtitle);
 
         //jj-opens the connection
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -65,12 +68,20 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
             Log.v(TAG, newstring);
             //qh - all the json object stuff
             JSONArray jsonarray = bookjsonobj.getJSONArray("items");
+            //JSONArray jsonarray = bookjsonobj.getJSONArray("docs");
             for (int i = 0; i < jsonarray.length(); i++) {
                 String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("title");
+                //String booktitle = bookjsonobj.getJSONArray("docs").getJSONObject(i).getString("title");
 
                 //String des = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("description");
                 String des = "This book was retrieved from Google Books";
+
                 String isbn = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
+                //String isbn = new String();
+                //JSONArray isbnlist = bookjsonobj.getJSONArray("docs").getJSONObject(i).getJSONArray("isbn");
+                //for (int x = 0; i < 1; i++) {
+                    //isbn = isbnlist.getString(0);
+                //}
                 SearchClass newsearchobject = new SearchClass(booktitle,des,"Book",isbn);
                 booklistBOOK.add(newsearchobject);
             }
