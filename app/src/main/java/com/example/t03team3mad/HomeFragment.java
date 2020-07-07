@@ -126,7 +126,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
                     GenreList.add(ToGetIndividualGenre[a]);
                 }
             }
-
         }
         //Chris - Randomised the genre to be display
         for(int x=1;Ran5ToDisplay.size()<6;x++)

@@ -83,5 +83,13 @@ public class User implements Parcelable {
         }
         return isEqual;
     }
+    private String followingstring;
+    public String getfollowingstring() {
+        return followingstring;
+    }
+    public void setfollowingstring(String followingstring) {
+        this.followingstring = followingstring;
+    }
+
 
 }

@@ -130,7 +130,15 @@ public class fragment_user extends Fragment {
                     DBaccess.open();
                     DBaccess.updateUserFollowing(MainActivity.loggedinuser,followid);
                     DBaccess.close();
-
+                    MainActivity.loggedinuser.setfollowingstring(followid);
+                    AsyncTask<User,Void,Void> tasktoupdateUser = new updateFireStoreUser.AccessUser().execute(MainActivity.loggedinuser);
+                    try {
+                        tasktoupdateUser.get();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     //updates text on button
                     if(currentlyfollow.contains(usertoView)){
                         followthisuser.setText("Followed");
