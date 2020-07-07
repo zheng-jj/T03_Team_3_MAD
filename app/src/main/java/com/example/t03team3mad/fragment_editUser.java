@@ -66,6 +66,16 @@ public class fragment_editUser extends Fragment {
         }
         Pic=view.findViewById(R.id.newprofileimg);
 
+        ArrayList<Book> userfav = new ArrayList<>();
+        try {
+            userfav=loaduserbooks(usertoEdit);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
         //jj - load favourite user books recyclerview
         RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favBooksRecycler);
         //jj-layout manager linear layout manager manages the position of the recyclerview items
@@ -73,9 +83,12 @@ public class fragment_editUser extends Fragment {
         //jj-set the recyclerview's manager to the previously created manager
         favouritebooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter = new AdapterBookMain(loaduserbooks(usertoEdit), this.getContext());
-        //jj- set the recyclerview object to its adapter
-        favouritebooks.setAdapter(bookadapter);
+        AdapterBookMain bookadapter = new AdapterBookMain(userfav, this.getContext());
+        if(userfav!=null) {
+            //jj- set the recyclerview object to its adapter
+            favouritebooks.setAdapter(bookadapter);
+        }
+
         //onclick listener for button to edit user favourite books
         Button editBooks = view.findViewById(R.id.allfavbooks);
         final User finalUsertoEdit = usertoEdit;
@@ -105,11 +118,18 @@ public class fragment_editUser extends Fragment {
                 finalUsertoEdit1.setUsername(Name.getText().toString());
                 finalUsertoEdit1.setUserabout(Desc.getText().toString());
                 Log.v(TAG,"new user name: "+finalUsertoEdit1.getUsername()+" New user desc: "+finalUsertoEdit1.getUserabout());
+                User todatabase = finalUsertoEdit1;
+                if(todatabase.getUserisbn()==""){
+                    todatabase.setUserisbn(null);
+                }
                 //jj-updates database on new user details
                 DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
                 DBaccess.open();
-                DBaccess.editUserData(finalUsertoEdit1);
+                DBaccess.editUserData(todatabase);
                 DBaccess.close();
+                if(finalUsertoEdit.getUserisbn()==null){
+                    finalUsertoEdit.setUserisbn("");
+                }
                 //updates firestore
                 AsyncTask<User,Void,Void> tasktoupdateUser = new updateFireStoreUser.AccessUser().execute(finalUsertoEdit1);
                 try {
@@ -205,13 +225,38 @@ public class fragment_editUser extends Fragment {
         task.get();
     }
 
-    //jj - gets the user's favourite books
-    public List<Book> loaduserbooks(User user){
+    public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        List<Book> userbooklist = DBaccess.loaduserbooklist(user);
-        DBaccess.close();
-        Log.v(TAG,"list is loaded");
+        //DBaccess.open();
+        ArrayList<Book> userbooklist = new ArrayList<>();
+//        try {
+//            //foreach book in user's local db favourited books, get it from the api
+//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
+//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
+//                try {
+//                    Book temp = tasktogetbook.get();
+//                    if (temp != null) {
+//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
+//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
+//                        Log.v(TAG, "Book about = " + temp.getBookabout());
+//                        Log.v(TAG, "Book date = " + temp.getPdate());
+//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
+//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
+//                        userbooklist.add(temp);
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }catch (Exception e){}
+//        DBaccess.close();
+
+        AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
+
+        userbooklist=task.get();
+        Log.v(TAG,"fav book list is loaded");
         return userbooklist;
     }
     //jj - Loads the user information into the layout

@@ -249,6 +249,18 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     DBaccess.open();
                     DBaccess.editUserData(MainActivity.loggedinuser);
                     DBaccess.close();
+                    if(MainActivity.loggedinuser.getUserisbn()==null){
+                        MainActivity.loggedinuser.setUserisbn("");
+                    }
+                    //jj-updates firestore
+                    AsyncTask<User,Void,Void> tasktoupdateUser = new updateFireStoreUser.AccessUser().execute(MainActivity.loggedinuser);
+                    try {
+                        tasktoupdateUser.get();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                     Log.v(TAG,"-==========-");
                 }
             });

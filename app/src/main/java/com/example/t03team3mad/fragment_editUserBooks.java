@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class fragment_editUserBooks extends Fragment {
     private static final String TAG = "edituserbooksFragment";
@@ -27,7 +30,15 @@ public class fragment_editUserBooks extends Fragment {
             usertoEdit = bundle.getParcelable("UserToEdit");
             Log.v(TAG, "user edit: username: "+ usertoEdit.getUsername());
         }
-        final List<Book> userfav = loaduserbooks(usertoEdit);
+
+        ArrayList<Book> userfav = new ArrayList<>();
+        try {
+            userfav = loaduserbooks(usertoEdit);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         //jj - load favourite user books recyclerview
         final RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.edituserbookrecycler);
         //jj-layout manager linear layout manager manages the position of the recyclerview items
@@ -36,31 +47,39 @@ public class fragment_editUserBooks extends Fragment {
         favouritebooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
         final AdapterFavBooksList bookadapter = new AdapterFavBooksList(userfav);
-        //jj- set the recyclerview object to its adapter
-        favouritebooks.setAdapter(bookadapter);
+        if(userfav!=null) {
+            //jj- set the recyclerview object to its adapter
+            favouritebooks.setAdapter(bookadapter);
+        }
 
 
         Button savebookchanges = view.findViewById(R.id.savebooks);
         final User finalUsertoEdit = usertoEdit;
         //choose to remove/unremove books from user's list
+        final ArrayList<Book> finalUserfav = userfav;
         savebookchanges.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(Book x: userfav){
-                    Log.v(TAG,"Previously in list book :"+x.getBooktitle() + " "+x.getIsbn());
+                if(finalUserfav!=null) {
+                    for (Book x : finalUserfav) {
+                        Log.v(TAG, "Previously in list book :" + x.getBooktitle() + " " + x.getIsbn());
+                    }
                 }
                 String isbn = "";
-                for(Book favoritebook : bookadapter.mBooklistToBeRemoved){
-                    Log.v(TAG,"Removing book :"+favoritebook.getBooktitle() + " "+favoritebook.getIsbn());
-                    userfav.remove(favoritebook);
+                if(finalUserfav!=null) {
+                    for (Book favoritebook : bookadapter.mBooklistToBeRemoved) {
+                        Log.v(TAG, "Removing book :" + favoritebook.getBooktitle() + " " + favoritebook.getIsbn());
+                        finalUserfav.remove(favoritebook);
+                    }
                 }
-
-                for(Book remainbooks : userfav){
-                    Log.v(TAG,"Currently in list book :"+remainbooks.getBooktitle() + " "+remainbooks.getIsbn());
-                    isbn=isbn+remainbooks.getIsbn()+";";
+                if(finalUserfav!=null) {
+                    for (Book remainbooks : finalUserfav) {
+                        Log.v(TAG, "Currently in list book :" + remainbooks.getBooktitle() + " " + remainbooks.getIsbn());
+                        isbn = isbn + remainbooks.getIsbn() + ";";
+                    }
                 }
                 if (isbn.equals("")){
-                    isbn=null;
+                    isbn="";
                 }
                 else {
                     isbn.substring(0, isbn.length() - 1);
@@ -80,12 +99,39 @@ public class fragment_editUserBooks extends Fragment {
         return view;
     }
     //jj-loads the books user liked
-    public List<Book> loaduserbooks(User user){
+    //jj - gets the user's favourite books
+    public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        List<Book> userbooklist = DBaccess.loaduserbooklist(user);
-        DBaccess.close();
-        Log.v(TAG,"list is loaded" + Integer.toString(userbooklist.size()));
+        //DBaccess.open();
+        ArrayList<Book> userbooklist = new ArrayList<>();
+//        try {
+//            //foreach book in user's local db favourited books, get it from the api
+//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
+//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
+//                try {
+//                    Book temp = tasktogetbook.get();
+//                    if (temp != null) {
+//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
+//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
+//                        Log.v(TAG, "Book about = " + temp.getBookabout());
+//                        Log.v(TAG, "Book date = " + temp.getPdate());
+//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
+//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
+//                        userbooklist.add(temp);
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }catch (Exception e){}
+//        DBaccess.close();
+
+        AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
+
+        userbooklist=task.get();
+        Log.v(TAG,"fav book list is loaded");
         return userbooklist;
     }
 }
