@@ -17,7 +17,7 @@
             android:layout_marginTop="7dp"
             android:paddingTop="20dp"
             android:paddingLeft='15dp'
-            android:text="TITLE"
+            android:text="Data not available"
             android:textSize="30dp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -44,7 +44,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
-            android:text="Author"
+            android:text="Author Data not available"
             android:textColor="#0000FF"
             android:textSize="20dp"
             android:textStyle="bold"
@@ -60,7 +60,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:paddingLeft='10dp'
-            android:text="Rating"
+            android:text="Rating Data not available"
             android:textSize="30dp"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/releasedateview"
@@ -78,7 +78,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="8dp"
             android:paddingLeft='10dp'
-            android:text="Date"
+            android:text="Date Data not available"
             android:textColor="#000000"
             android:textSize="20dp"
             app:layout_constraintBottom_toTopOf="@+id/genreview_layout"
