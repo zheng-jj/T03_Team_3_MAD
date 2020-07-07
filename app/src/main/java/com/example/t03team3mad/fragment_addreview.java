@@ -15,13 +15,19 @@ import androidx.fragment.app.Fragment;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firestore.v1.WriteResult;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class fragment_addreview extends Fragment {
     private static final String TAG = "authorprofileFragment";
     Button enter;
     EditText editreview;
     String idu;
-
+    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // jo -display fragment
@@ -68,6 +74,15 @@ public class fragment_addreview extends Fragment {
         DBaccess.close();
         return success;
 
+    }
+    public void addreview(String idr,String idu,String review,String ISBN){
+        // Add document data  with id staffid using a hashmap
+        Map<String, Object> data = new HashMap<String,Object>();
+        data.put("ISBN", ISBN);
+        data.put("userID", idu);
+        data.put("points", 0);
+        data.put("Review", review);
+        mCollectionRef.add(data);
     }
 }
 

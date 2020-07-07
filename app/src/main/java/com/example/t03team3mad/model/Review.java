@@ -55,6 +55,13 @@ public class Review {
         this.reviewisbn = newReviewisbn;
     }
 
+    private int reviewpoints;
+    public int getReviewpoints() {
+        return reviewpoints;
+    }
+    public void setReviewpoints(int newReviewpoints) {
+        this.reviewpoints = newReviewpoints;
+    }
     public Review (int idu, int idr,String username,String title, String text, String isbn) {
         reviewidu = idu;
         reviewidr = idr;
@@ -62,5 +69,14 @@ public class Review {
         reviewisbn = isbn;
         uname  =  username;
         reviewTitle  = title;
+    }
+    public Review (int idu, int idr,String username,String title, String text, String isbn, int points) {
+        reviewidu = idu;
+        reviewidr = idr;
+        reviewtext = text;
+        reviewisbn = isbn;
+        uname  =  username;
+        reviewTitle  = title;
+        reviewpoints = points;
     }
 }
