@@ -115,14 +115,26 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         SearchClass currentsearchobject = searchClassList.get(position);
 
         //qh -- if object clicked is a book
-
-
+        //qh - added jjs code to transfer info
+        Book currentbook = null;
         if (currentsearchobject.getSearchClass().equals("Book")){
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            //qh searching book by isbn
-            databaseAccess.open();
-            Book currentbook = databaseAccess.searchbookbyisbn(currentsearchobject.getId());
-            databaseAccess.close();
+            AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(currentsearchobject.getId());
+            final ArrayList<Book> booklist2=new ArrayList<>();
+            try {
+                currentbook = tasktogetbook.get();
+                if(currentbook!=null) {
+                    Log.v(TAG, "Book created = " + currentbook.getBooktitle());
+                    Log.v(TAG, "Book isbn = " + currentbook.getIsbn());
+                    Log.v(TAG, "Book about = " + currentbook.getBookabout());
+                    Log.v(TAG, "Book date = " + currentbook.getPdate());
+                    Log.v(TAG, "Book genre = " + currentbook.getBookgenre());
+                    Log.v(TAG, "Book author = " + currentbook.getBookauthor());
+                };
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             bookinfoFragment nextFrag= new bookinfoFragment();
             Bundle bundle = new Bundle();
