@@ -15,6 +15,8 @@ public class Book implements Parcelable {
         pdate = in.readString();
         isbn = in.readString();
         nullbook = in.readString();
+        rating = in.readInt();
+        imglink = in.readString();
     }
 
     public static final Creator<Book> CREATOR = new Creator<Book>() {
@@ -76,6 +78,7 @@ public class Book implements Parcelable {
         this.isbn = new1Name;
     }
 
+
     private String nullbook;
     public String getNullbook() {
         return isbn;
@@ -84,8 +87,33 @@ public class Book implements Parcelable {
         this.nullbook = new1Name;
     }
 
+
+    private int rating;
+    public int getrating() {
+        return rating;
+    }
+    public void setratng(int newName) {
+        this.rating = newName;
+    }
+
+    private String imglink;
+    public String getimglink() {
+        return imglink;
+    }
+    public void setimglink(String newName) {
+        this.imglink = newName;
+    }
     public Book(){
 
+    }
+    public Book(String title, String author, String about, String genre, String publish, String bisbn,int ratings) {
+        booktitle = title;
+        bookauthor = author;
+        bookabout = about;
+        bookgenre = genre;
+        pdate = publish;
+        isbn = bisbn;
+        rating = ratings;
     }
     public Book(String title, String author, String about, String genre, String publish, String bisbn) {
         booktitle = title;
@@ -94,6 +122,7 @@ public class Book implements Parcelable {
         bookgenre = genre;
         pdate = publish;
         isbn = bisbn;
+
     }
 
     @Override
@@ -110,6 +139,8 @@ public class Book implements Parcelable {
         dest.writeString(pdate);
         dest.writeString(isbn);
         dest.writeString(nullbook);
+        dest.writeString(imglink);
+        dest.writeInt(rating);
     }
     public String ToString(){
         return booktitle+isbn;

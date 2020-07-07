@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
@@ -29,7 +32,7 @@ import java.util.List;
 
 public class reviewpageFragment extends Fragment {
     private static final String TAG = "authorprofileFragment";
-
+    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // jo - receive bundle from another fragment
