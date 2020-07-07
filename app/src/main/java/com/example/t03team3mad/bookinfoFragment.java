@@ -101,29 +101,16 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             final Button favourite = view.findViewById(R.id.favourite);
             final DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess.open();
-            final ArrayList<Book> userbooklist = new ArrayList<>();
+
+            //user favourite books loaded from firebase
+            ArrayList<Book> userbooklist = new ArrayList<>();
             try {
-                //foreach book in user's local db favourited books, get it from the api
-                for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
-                    AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
-                    try {
-                        Book temp = tasktogetbook.get();
-                        if (temp != null) {
-                            Log.v(TAG, "Book created = " + temp.getBooktitle());
-                            Log.v(TAG, "Book isbn = " + temp.getIsbn());
-                            Log.v(TAG, "Book about = " + temp.getBookabout());
-                            Log.v(TAG, "Book date = " + temp.getPdate());
-                            Log.v(TAG, "Book genre = " + temp.getBookgenre());
-                            Log.v(TAG, "Book author = " + temp.getBookauthor());
-                            userbooklist.add(temp);
-                        }
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }catch (Exception e){}
+                userbooklist = loaduserbooks(MainActivity.loggedinuser);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             DBaccess.close();
             final DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
@@ -170,8 +157,10 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 }
             });
 
+            final ArrayList<Book> finalUserbooklist = userbooklist;
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
+                //jj-add book record to local db and firestore
                 public void onClick(View v) {
                     String isbn="";
                     //does not work :(
@@ -208,60 +197,55 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 //
 //                        favourite.setText("Add to Favourites");
 //                    }
-                    if(!userbooklist.contains(receivedbook)){
-                        Log.v(TAG,"Book list before change :");
-                        for(Book x : userbooklist)
-                        {
-                            Log.v(TAG,x.getIsbn());
-                        }
-                        userbooklist.add(receivedbook);
-                        Log.v(TAG,"Book list after change :");
-                        for(Book x : userbooklist)
-                        {
-                            Log.v(TAG,x.getIsbn());
-                            isbn=isbn+x.getIsbn()+';';
+                    ArrayList<String> isbnlist = new ArrayList<>();
+                    for(Book x: finalUserbooklist){
+                        isbnlist.add(x.getIsbn());
+                    }
+                    if(!isbnlist.contains(receivedbook.getIsbn())) {
+                        //jj-adds book to list
+                        finalUserbooklist.add(receivedbook);
+                        for (Book x : finalUserbooklist) {
+                            isbn = isbn + x.getIsbn() + ';';
                         }
                         //removes the ";" at the end of isbn string
                         isbn.substring(0, isbn.length() - 1);
                         favourite.setText("Added to list");
-                    }
 
-                    //removes duplicates
-                    List<String> isbns = new ArrayList<>(Arrays.asList(isbn.split(";")));
-                    Set<String> set = new LinkedHashSet<>(isbns);
-                    isbns.clear();
-                    isbns.addAll(set);
-                    isbn="";
-                    for(String x:isbns){
-                        isbn=isbn+x+";";
+                        //removes duplicates
+                        List<String> isbns = new ArrayList<>(Arrays.asList(isbn.split(";")));
+                        Set<String> set = new LinkedHashSet<>(isbns);
+                        isbns.clear();
+                        isbns.addAll(set);
+                        isbn = "";
+                        for (String x : isbns) {
+                            isbn = isbn + x + ";";
+                        }
+                        if (isbn.equals("")) {
+                            isbn = null;
+                        } else {
+                            isbn.substring(0, isbn.length() - 1);
+                        }
+                        Log.v(TAG, "new isbn string added to db=" + isbn);
+                        //updates user data in database
+                        MainActivity.loggedinuser.setUserisbn(isbn);
+                        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+                        DBaccess.open();
+                        DBaccess.editUserData(MainActivity.loggedinuser);
+                        DBaccess.close();
+                        if (MainActivity.loggedinuser.getUserisbn() == null) {
+                            MainActivity.loggedinuser.setUserisbn("");
+                        }
+                        //jj-updates firestore
+                        AsyncTask<User, Void, Void> tasktoupdateUser = new updateFireStoreUser.AccessUser().execute(MainActivity.loggedinuser);
+                        try {
+                            tasktoupdateUser.get();
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        Log.v(TAG, "-==========-");
                     }
-                    if(isbn.equals(""))
-                    {
-                        isbn=null;
-                    }
-                    else {
-                        isbn.substring(0, isbn.length() - 1);
-                    }
-                    Log.v(TAG,"new isbn string added to db="+isbn);
-                    //updates user data in database
-                    MainActivity.loggedinuser.setUserisbn(isbn);
-                    DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-                    DBaccess.open();
-                    DBaccess.editUserData(MainActivity.loggedinuser);
-                    DBaccess.close();
-                    if(MainActivity.loggedinuser.getUserisbn()==null){
-                        MainActivity.loggedinuser.setUserisbn("");
-                    }
-                    //jj-updates firestore
-                    AsyncTask<User,Void,Void> tasktoupdateUser = new updateFireStoreUser.AccessUser().execute(MainActivity.loggedinuser);
-                    try {
-                        tasktoupdateUser.get();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    Log.v(TAG,"-==========-");
                 }
             });
         }
@@ -280,5 +264,41 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         nextFragment.setArguments(bundle);
         MainActivity.addFragment(nextFragment,getActivity(),"BookByGenre");
     }
+    //jj - gets the user's favourite books
+    public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
+        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+        //DBaccess.open();
+        ArrayList<Book> userbooklist = new ArrayList<>();
+//        try {
+//            //foreach book in user's local db favourited books, get it from the api
+//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
+//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
+//                try {
+//                    Book temp = tasktogetbook.get();
+//                    if (temp != null) {
+//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
+//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
+//                        Log.v(TAG, "Book about = " + temp.getBookabout());
+//                        Log.v(TAG, "Book date = " + temp.getPdate());
+//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
+//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
+//                        userbooklist.add(temp);
+//                    }
+//                } catch (ExecutionException e) {
+//                    e.printStackTrace();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }catch (Exception e){}
+//        DBaccess.close();
+
+        AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
+
+        userbooklist=task.get();
+        Log.v(TAG,"fav book list is loaded");
+        return userbooklist;
+    }
+
 }
 
