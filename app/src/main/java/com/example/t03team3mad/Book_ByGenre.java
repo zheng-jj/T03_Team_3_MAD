@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGenre.onclickListener {
     private static final String TAG = "SearchByGenreFragment";
@@ -22,10 +24,8 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
         //Chris - get the bundle
         mBundle = getArguments();
         String genre = mBundle.getString("Genre").trim();
-        Log.v(TAG,genre);
-        //Chris - do a search in the database based on the genre pressed
-        SearchGenre(genre);
-
+        Log.v(TAG,"reading");
+        SearchGenre("genre");
         RecyclerView results = (RecyclerView) view.findViewById(R.id.GenreCardRecyclerView);
         LinearLayoutManager layout = new LinearLayoutManager(getActivity());
         results.setLayoutManager(layout);
@@ -38,11 +38,23 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
     //Chris - method to do the search
     public void SearchGenre(String genre) {
         BookByGenre.clear();
-        //Chris - opens database to create the object lists
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        databaseAccess.open();
-        BookByGenre = databaseAccess.searchgenre(genre);
-        databaseAccess.close();
+
+        AsyncTask<String, Void, Book> tasktogetbook = new APIaccessSearchGenre().execute("reading");
+
+        try {
+            Book temp = tasktogetbook.get();
+            Log.v(TAG,"Book created = "+temp.getBooktitle());
+            Log.v(TAG,"Book isbn = "+temp.getIsbn());
+            Log.v(TAG,"Book about = "+temp.getBookabout());
+            Log.v(TAG,"Book date = "+temp.getPdate());
+            Log.v(TAG,"Book genre = "+temp.getBookgenre());
+            Log.v(TAG,"Book author = "+temp.getBookauthor());
+            BookByGenre.add(temp);
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override //Chris - what will happened if user click the book

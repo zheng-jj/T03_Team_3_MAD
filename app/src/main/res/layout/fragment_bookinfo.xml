@@ -18,7 +18,7 @@
             android:paddingTop="20dp"
             android:paddingLeft='15dp'
             android:text="Data not available"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:textStyle="bold"
             android:textColor="#000000"
             app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
             android:gravity="center"
             android:text="Author Data not available"
             android:textColor="#0000FF"
-            android:textSize="20dp"
+            android:textSize="18dp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/synopsis"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,7 +61,7 @@
             android:layout_marginBottom="20dp"
             android:paddingLeft='10dp'
             android:text="Rating Data not available"
-            android:textSize="30dp"
+            android:textSize="25dp"
             android:textColor="#000000"
             app:layout_constraintBottom_toTopOf="@+id/releasedateview"
             app:layout_constraintEnd_toEndOf="parent"
@@ -80,7 +80,7 @@
             android:paddingLeft='10dp'
             android:text="Date Data not available"
             android:textColor="#000000"
-            android:textSize="20dp"
+            android:textSize="18dp"
             app:layout_constraintBottom_toTopOf="@+id/genreview_layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.607"

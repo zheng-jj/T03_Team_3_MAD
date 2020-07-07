@@ -64,13 +64,10 @@ public class AdaptorToViewBookBasedOnGenre extends RecyclerView.Adapter<AdaptorT
         viewHolder.Bookdes.setText(booksbygenre.get(position).getBookabout());
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
         databaseAccess.open();
-        Book currentbook = databaseAccess.searchbookbyisbn(booksbygenre.get(position).getIsbn());
+        Book currentbook = databaseAccess.searchbookbyisbn(booksbygenre.get(position).getBookgenre());
         databaseAccess.close();
 
-        //Qh- SETS IMAGE FROM STRING
-        String filename = "book" + currentbook.getIsbn()+".jpg";
-        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        viewHolder.imageView.setImageBitmap(bmImg);
+
     }
     @Override
     public int getItemCount() {
