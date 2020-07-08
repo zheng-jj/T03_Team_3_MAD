@@ -17,6 +17,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.List;
 public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksList.ViewHolder>
 {
     private static final String TAG = "AdapterFavBooksList";
+    Context context;
     List<Book> mBooklist = new ArrayList<Book>(){};
     List<Book> mBooklistToBeRemoved = new ArrayList<Book>(){};
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +50,7 @@ public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksLis
     }
     @Override
     public AdapterFavBooksList.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        this.context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.favbookscardview, parent, false);
         ViewHolder viewHolder = new ViewHolder(contactView);
@@ -56,38 +58,44 @@ public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksLis
     }
     @Override
     public void onBindViewHolder(final AdapterFavBooksList.ViewHolder viewHolder, int position) {
-        try{
-        viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
-        viewHolder.bookDec.setText(mBooklist.get(position).getBookabout());
-        viewHolder.like.setText("Unlike");
+        try {
+            viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
+            viewHolder.bookDec.setText(mBooklist.get(position).getBookabout());
+            viewHolder.like.setText("Unlike");
 
-        //jj-this needs to change to the corrosponding user profile picture
-        String filename = "book" + mBooklist.get(position).getIsbn() +".jpg";
-        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        viewHolder.bookPic.setImageBitmap(bmImg);}catch (Exception e){}
-        viewHolder.like.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    Book chosen = mBooklist.get(viewHolder.getAdapterPosition());
-                    Log.v(TAG, "clicked on " + chosen.getBooktitle());
-                    Log.v(TAG, viewHolder.like.getText().toString());
-                    Book[] mBooklistAfterChange;
-                    if (viewHolder.like.getText().toString() == "Unlike") {
-                        viewHolder.like.setText("Like");
-                        mBooklistToBeRemoved.add(chosen);
-                    } else if (viewHolder.like.getText().toString() == "Like") {
-                        viewHolder.like.setText("Unlike");
-                        mBooklistToBeRemoved.remove(chosen);
-                    }
-                    String temp = "";
-                    for (Book x : mBooklistToBeRemoved) {
-                        temp = temp + (x.getBooktitle());
-                    }
-                    Log.v(TAG, "all books in mBooklist to be removed: " + temp);
-                }catch (Exception e){}
+            //jj-this needs to change to the corrosponding user profile picture
+            if (mBooklist.get(position).getimglink() == null || mBooklist.get(position).getimglink() == "") {
+                viewHolder.bookPic.setImageResource(R.drawable.empty);
+            } else {
+                Picasso.with(context).load(mBooklist.get(position).getimglink()).into(viewHolder.bookPic);
             }
-        });
+            Log.v(TAG, "loading image from " + mBooklist.get(position).getimglink());
+            viewHolder.like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        Book chosen = mBooklist.get(viewHolder.getAdapterPosition());
+                        Log.v(TAG, "clicked on " + chosen.getBooktitle());
+                        Log.v(TAG, viewHolder.like.getText().toString());
+                        Book[] mBooklistAfterChange;
+                        if (viewHolder.like.getText().toString() == "Unlike") {
+                            viewHolder.like.setText("Like");
+                            mBooklistToBeRemoved.add(chosen);
+                        } else if (viewHolder.like.getText().toString() == "Like") {
+                            viewHolder.like.setText("Unlike");
+                            mBooklistToBeRemoved.remove(chosen);
+                        }
+                        String temp = "";
+                        for (Book x : mBooklistToBeRemoved) {
+                            temp = temp + (x.getBooktitle());
+                        }
+                        Log.v(TAG, "all books in mBooklist to be removed: " + temp);
+                    } catch (Exception e) {
+                    }
+                }
+            });
+        } catch (Exception e){
+        }
     }
     @Override
     public int getItemCount() {

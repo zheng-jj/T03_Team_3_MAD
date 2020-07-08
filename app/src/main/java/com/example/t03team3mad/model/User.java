@@ -5,13 +5,13 @@ import android.os.Parcelable;
 //qh - added parcelable
 public class User implements Parcelable {
 
-    private int useridu;
+    private int idu;
 
     protected User(Parcel in) {
-        useridu = in.readInt();
-        username = in.readString();
-        userisbn = in.readString();
-        userabout = in.readString();
+        idu = in.readInt();
+        name = in.readString();
+        isbn = in.readString();
+        desc = in.readString();
     }
 
     public static final Creator<User> CREATOR = new Creator<User>() {
@@ -27,41 +27,41 @@ public class User implements Parcelable {
     };
 
     public int getUseridu() {
-        return useridu;
+        return idu;
     }
-    public void setUseridudu(int newUseridu) {
-        this.useridu = newUseridu;
+    public void setUseridu(int newUseridu) {
+        this.idu = newUseridu;
     }
 
-    private String username;
+    private String name;
     public String getUsername() {
-        return username;
+        return name;
     }
     public void setUsername(String newUsername) {
-        this.username = newUsername;
+        this.name = newUsername;
     }
 
-    private String userisbn;
+    private String isbn;
     public String getUserisbn() {
-        return userisbn;
+        return isbn;
     }
     public void setUserisbn(String newUserisbn) {
-        this.userisbn = newUserisbn;
+        this.isbn = newUserisbn;
     }
 
-    private String userabout;
+    private String desc;
     public String getUserabout() {
-        return userabout;
+        return desc;
     }
     public void setUserabout(String newUserabout) {
-        this.userabout = newUserabout;
+        this.desc = newUserabout;
     }
-
-    public User(int idu, String name, String isbn, String about) {
-        useridu = idu;
-        username = name;
-        userisbn = isbn;
-        userabout = about;
+    public User(){}
+    public User(int Idu, String Name, String Isbn, String about) {
+        idu = Idu;
+        name = Name;
+        isbn = Isbn;
+        desc = about;
     }
 
     @Override
@@ -71,15 +71,15 @@ public class User implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(useridu);
-        dest.writeString(username);
-        dest.writeString(userisbn);
-        dest.writeString(userabout);
+        dest.writeInt(idu);
+        dest.writeString(name);
+        dest.writeString(isbn);
+        dest.writeString(desc);
     }
     public boolean equal(Book book) {
         boolean isEqual=false;
         if(book!=null && book instanceof Book) {
-            isEqual=(this.userisbn==book.getIsbn());
+            isEqual=(this.isbn==book.getIsbn());
         }
         return isEqual;
     }

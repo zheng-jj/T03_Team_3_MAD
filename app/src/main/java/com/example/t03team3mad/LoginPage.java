@@ -56,7 +56,7 @@ public class LoginPage extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
-
+        Auto_login.edit().putBoolean("logged",false).apply();
         //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){
             //Chris - get uid from shared preferences

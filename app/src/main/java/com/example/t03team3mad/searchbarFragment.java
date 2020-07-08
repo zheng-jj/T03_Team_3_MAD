@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -33,11 +34,14 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     private static final String TAG = "searchbarFragment";
     ListView listviewitem;
     List<SearchClass> searchClassList = new ArrayList<SearchClass>();
+    private ProgressBar progressbar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fragment_searchbar,container,false);
         SearchView searchbar = view.findViewById(R.id.searchView);
+        progressbar = view.findViewById(R.id.progressBar2);
+        progressbar.setMax(100);
         //qh - simple search
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -55,6 +59,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         }
     //qh - takes the search query and displays them (can search for author , books and users)
     public void doMySearch(String query, View view){
+        progressbar.setVisibility(View.VISIBLE);
         if (searchClassList.isEmpty()){
 
         }
@@ -66,17 +71,9 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         databaseAccess.open();
         //List<Book> searchbooks = databaseAccess.searchbook(query);
-        List<Author> searchauthor = databaseAccess.searchAuthor(query);
+        //List<Author> searchauthor = databaseAccess.searchAuthor(query);
         List<User> searchUser = databaseAccess.searchUser(query);
         databaseAccess.close();
-        //qh - adds name and description of book, author and user to arraylist
-        //qh - i converted them into searchclass because i wanted to show 3 types of objects. search class has the object type, id, name and description.
-        //for (Book var : searchbooks)
-        //{
-           // System.out.println(var.getBooktitle());
-          //  SearchClass searchClass = new SearchClass(var.getBooktitle(),var.getBookabout(),"Book",String.valueOf(var.getIsbn()));
-          //  searchClassList.add(searchClass);
-      //  }
 
         //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
         AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
@@ -88,30 +85,32 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
-        
-        List<SearchClass> toremove = new ArrayList<>();
+
+        //List<SearchClass> toremove = new ArrayList<>();
         //qh- to prevent books from showing up that dont have information at all
-        for (SearchClass i : searchClassList){
-            Book newbook = null;
-            AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(i.getId());
-            try {
-                newbook = tasktogetbook.get();
-                if(newbook!=null) {
-                    Log.v(TAG, "Book created = " + newbook.getBooktitle());
-                    Log.v(TAG, "Book isbn = " + newbook.getIsbn());
-                    Log.v(TAG, "Book about = " + newbook.getBookabout());
-                    Log.v(TAG, "Book date = " + newbook.getPdate());
-                    Log.v(TAG, "Book genre = " + newbook.getBookgenre());
-                    Log.v(TAG, "Book author = " + newbook.getBookauthor());
-                }
-                else{
-                    toremove.add(i);
-                };
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        searchClassList.removeAll(toremove);
+        //for (SearchClass i : searchClassList){
+            //Book newbook = null;
+            //AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(i.getId());
+            //try {
+               // newbook = tasktogetbook.get();
+                //if(newbook!=null) {
+                   // Log.v(TAG, "Book created = " + newbook.getBooktitle());
+                   // Log.v(TAG, "Book isbn = " + newbook.getIsbn());
+                    //Log.v(TAG, "Book about = " + newbook.getBookabout());
+                   // Log.v(TAG, "Book date = " + newbook.getPdate());
+                   // Log.v(TAG, "Book genre = " + newbook.getBookgenre());
+                   // Log.v(TAG, "Book author = " + newbook.getBookauthor());
+               // }
+               // else{
+                  //  toremove.add(i);
+               // }
+            //} catch (ExecutionException | InterruptedException e) {
+             //   e.printStackTrace();
+            //}
+
+       // }
+       // searchClassList.removeAll(toremove);
+
 
         //for (Author var : searchauthor)
         //{
@@ -197,6 +196,9 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             MainActivity.addFragment(nextFrag,getActivity(),"findUser"+currentsearchobject.getSearchName());
         }
     }
+
+
+
 }
 
 

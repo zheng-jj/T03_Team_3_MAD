@@ -19,10 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-//qh - followed jj to create search booktitle
+//qh - followed jj to create search genre
 public class APIaccessSearchGenre extends AsyncTask<String, Void, Book> {
     private String apiurl = "https://openlibrary.org/";
-    //private String apiurl = "https://openlibrary.org/";
 
     private static final String TAG = "APIaccess2";
 
@@ -34,8 +33,7 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, Book> {
         String newtitle = genre.replace(' ', '+');
         Log.v(TAG,newtitle);
         URL url = new URL(apiurl+"api/books?bibkeys=subjects:"+genre+"&jscmd=details&format=json&maxResults=15");
-        //        //URL url = new URL(apiurl+"search.json?q=" + newtitle);
-        //
+
         //        //jj-opens the connection
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod("GET");

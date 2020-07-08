@@ -187,9 +187,14 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     MainActivity.addFragment(addrpage,getActivity(),"addreviewPage");
                 }
             });
-
-
-            final ArrayList<Book> finalUserbooklist = userbooklist;
+            ArrayList<Book> Userbooklist = new ArrayList<>();
+            if(userbooklist==null){
+                Userbooklist = new ArrayList<>();
+            }
+            else {
+                Userbooklist = userbooklist;
+            }
+            final ArrayList<Book>[] finalUserbooklist = new ArrayList[]{userbooklist};
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 //jj-add book record to local db and firestore
@@ -230,13 +235,18 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 //                        favourite.setText("Add to Favourites");
 //                    }
                     ArrayList<String> isbnlist = new ArrayList<>();
-                    for(Book x: finalUserbooklist){
-                        isbnlist.add(x.getIsbn());
+                    if(finalUserbooklist[0] !=null) {
+                        for (Book x : finalUserbooklist[0]) {
+                            isbnlist.add(x.getIsbn());
+                        }
+                    }
+                    else{
+                        finalUserbooklist[0] = new ArrayList<>();
                     }
                     if(!isbnlist.contains(receivedbook.getIsbn())) {
                         //jj-adds book to list
-                        finalUserbooklist.add(receivedbook);
-                        for (Book x : finalUserbooklist) {
+                        finalUserbooklist[0].add(receivedbook);
+                        for (Book x : finalUserbooklist[0]) {
                             isbn = isbn + x.getIsbn() + ';';
                         }
                         //removes the ";" at the end of isbn string
