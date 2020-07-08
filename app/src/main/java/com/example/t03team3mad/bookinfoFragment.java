@@ -95,20 +95,29 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             String authorid = receivedbook.getBookauthor();
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            try{
+            try {
                 Author authorbook = databaseAccess.searchauthorbyida(authorid);
                 author.setText(authorbook.getAuthorname());
-            }catch (Exception e){
+            } catch (Exception e) {
                 author.setText(receivedbook.getBookauthor());
             }
             databaseAccess.close();
 
 
             //Chris - list the genre
+            if(receivedbook.getBookgenre().contains(",")) {
             String[] splitgenre = receivedbook.getBookgenre().split(",");
             int i = 0;
             for (i = 0; i < splitgenre.length; i++) {
                 data.add(splitgenre[i]);
+                }
+            }
+            if(receivedbook.getBookgenre().contains(";")) {
+                String[] genre = receivedbook.getBookgenre().split(";");
+                int x = 0;
+                for (x = 0; x < genre.length; x++) {
+                    data.add(genre[x]);
+                }
             }
             AdapterGenre mAdapter =
                     new AdapterGenre(data,this);
