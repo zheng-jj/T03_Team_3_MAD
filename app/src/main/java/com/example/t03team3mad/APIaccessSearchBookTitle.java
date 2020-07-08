@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 //qh - followed jj to create search booktitle
 public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchClass>>{
@@ -36,7 +37,7 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
         BufferedReader reader = null;
         String newtitle = title.replace(' ', '+');
         Log.v(TAG,newtitle);
-        URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle&maxResults=15");
+        URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle&maxResults=5");
         //URL url = new URL(apiurl+"search.json?q=" + newtitle);
 
         //jj-opens the connection
@@ -75,15 +76,22 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
 
                 //String des = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("description");
                 String des = "This book was retrieved from Google Books";
-
-                String isbn = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
+                String isbn = new String();
+                if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("industryIdentifiers")){
+                    isbn = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
+                }
+                else {
+                    isbn = "";
+                }
                 //String isbn = new String();
                 //JSONArray isbnlist = bookjsonobj.getJSONArray("docs").getJSONObject(i).getJSONArray("isbn");
                 //for (int x = 0; i < 1; i++) {
                     //isbn = isbnlist.getString(0);
                 //}
+
                 SearchClass newsearchobject = new SearchClass(booktitle,des,"Book",isbn);
                 booklistBOOK.add(newsearchobject);
+
             }
 
             return booklistBOOK;
