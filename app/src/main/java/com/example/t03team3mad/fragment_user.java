@@ -353,7 +353,7 @@ public class fragment_user extends Fragment {
 
                                 int uid = Integer.parseInt(dss.getString("uid"));
 
-                                Review r1 = new Review(uid,review,title,isbn);
+                                Review r1 = new Review(uid, review,title,isbn);
                                 r1.setReviewisbn(isbn);
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);

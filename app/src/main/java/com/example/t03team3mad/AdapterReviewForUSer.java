@@ -57,7 +57,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
     }
     @Override
     public AdapterReviewForUSer.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        this.context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View contactView = inflater.inflate(R.layout.reviewcardviewuser, parent, false);
         ViewHolder viewHolder = new ViewHolder(contactView);
@@ -65,11 +65,8 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
     }
     @Override
     public void onBindViewHolder(AdapterReviewForUSer.ViewHolder viewHolder, int position) {
-        viewHolder.uName.setText(mReviewlist.get(position).getBookName());
+        viewHolder.uName.setText(mReviewlist.get(position).getReviewTitle());
         viewHolder.uReview.setText(mReviewlist.get(position).getReviewtext());
-        String filename = "book" + mReviewlist.get(position).getReviewisbn() +".jpg";
-        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        viewHolder.uPic.setImageBitmap(bmImg);
         if(mReviewlist.get(position).getimglink()== null||mReviewlist.get(position).getimglink()=="") {
             viewHolder.uPic.setImageResource(R.drawable.empty);
         }

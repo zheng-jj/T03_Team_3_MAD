@@ -10,8 +10,12 @@ public class Review {
         reviewidu = uid;
         reviewtext = review;
 
-        reviewtext = title;
+        reviewTitle = title;
         reviewisbn = isbn;
+
+    }
+
+    public Review() {
 
     }
 
