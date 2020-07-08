@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Adapter;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
     // jo - empty list in place of data
     List<Review> mReviewlist = new ArrayList<Review>(){};
     // jo - viewholder
-    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Reviews");
+    private CollectionReference mCollectionRefreview = FirebaseFirestore.getInstance().collection("Reviews");
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView uName;
@@ -67,7 +68,9 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
             upvote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mCollectionRefbooks.document(String.valueOf(mReviewlist.get(getAdapterPosition()).getReviewidr())).update("vote", FieldValue.increment(1));
+                    Log.v("Test","Upvote CLicked");
+                    Log.v("Test",String.valueOf(mReviewlist.get(getAdapterPosition()).getReviewidr()));
+                    mCollectionRefreview.document(String.valueOf(mReviewlist.get(getAdapterPosition()).getReviewidr())).update("vote", FieldValue.increment(1));
                 }
             });
         }

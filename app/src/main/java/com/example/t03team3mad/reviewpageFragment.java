@@ -75,9 +75,40 @@ public class reviewpageFragment extends Fragment {
 
 
         adapterReview  = new AdapterReview(reviewlist,this);
+        mCollectionRefreview
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                        @Nullable FirebaseFirestoreException e) {
+
+                        if (e != null) {
+                            Log.w("YourTag", "Listen failed.", e);
+                            return;
+                        }
+
+                        for (QueryDocumentSnapshot dss : queryDocumentSnapshots) {
+                            reviewlist = new ArrayList<Review>();
+                            if (dss.exists()){
+
+                                String isbn = dss.getString("isbn");
+                                if(isbn.equals(isbncheck)) {
+                                    String review = dss.getString("review");
+                                    int points = Integer.parseInt(String.valueOf(dss.getLong("vote")));
+                                    int uid = Integer.parseInt(dss.getString("uid"));
+                                    int rid = Integer.parseInt(dss.getId());
+                                    String name = dss.getString("uname");
+                                    Review r1 = new Review(rid,uid, name, review, points, isbn);
+
+                                    reviewlist.add(r1);
+                                    adapterReview.notifyDataSetChanged();
+                                }
+                            }
+                        }
+
+                    }
+                });
 
         reviews.setAdapter(adapterReview);
-        
 
 
         return view;

@@ -117,7 +117,7 @@ public class fragment_addreview extends Fragment {
         Map<String, Object> data = new HashMap<String,Object>();
 
         data.put("uid", idu);
-        data.put("vote", "0");
+        data.put("vote", 0);
         data.put("review", review);
         data.put("uname",name);
         data.put("isbn",ISBN);
