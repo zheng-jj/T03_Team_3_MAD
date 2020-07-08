@@ -429,9 +429,7 @@ public class fragment_user extends Fragment {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
                     for(Review review : reviewsByUser){
-                        Log.v(TAG,"Bookloop="+review.getReviewisbn());
                         for(DocumentSnapshot doc : data){
-                            Log.v(TAG,"Docloop="+doc.getReference().getId());
                             if(doc.getReference().getId().equals(review.getReviewisbn())){
                                 review.setImglink(doc.getString("coverurl"));
                             }

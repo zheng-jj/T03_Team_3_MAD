@@ -49,6 +49,14 @@ public class User implements Parcelable {
         this.isbn = newUserisbn;
     }
 
+    private String imgurl;
+    public String getimgurl() {
+        return imgurl;
+    }
+    public void setimgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
     private String desc;
     public String getUserabout() {
         return desc;

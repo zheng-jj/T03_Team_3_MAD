@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -8,17 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -76,9 +82,39 @@ public class fragment_userfollowing extends Fragment {
                             continue;
                         }
                     }
+                    for(User user : userFollowing){
+                        loaduserURL(user);
+                        Log.v(TAG,"User image urls = "+user.getimgurl());
+                    }
                     UserAdapter.notifyDataSetChanged();
                 }
             }
         });
+    }
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
+
+    public Void loaduserURL(final User user) {
+        storageRef.child("user"+user.getUseridu()+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                Log.v(TAG,"uri is ="+uri.toString());
+                user.setimgurl(uri.toString());
+                for(User x : userFollowing){
+                    if (x.getUseridu()==user.getUseridu()){
+                        x.setimgurl(user.getimgurl());
+                    }
+                }
+                UserAdapter.notifyDataSetChanged();
+                }
+        })
+        .addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                user.setimgurl("");
+            }
+        });
+        return null;
     }
 }

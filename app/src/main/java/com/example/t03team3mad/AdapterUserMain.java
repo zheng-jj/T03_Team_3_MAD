@@ -3,6 +3,7 @@ package com.example.t03team3mad;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Adapter;
@@ -12,8 +13,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -21,9 +25,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
+import com.squareup.picasso.Picasso;
 
 public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHolder>
 {
+    Context context;
     private static final String TAG = "AdapterUserMain";
     List<User> mUserlist = new ArrayList<User>(){};
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +54,7 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
     }
     @Override
     public AdapterUserMain.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Context context = parent.getContext();
+        this.context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         //jj-Complete the card view for users
         View contactView = inflater.inflate(R.layout.usercardview, parent, false);
@@ -61,9 +67,16 @@ public class AdapterUserMain extends RecyclerView.Adapter<AdapterUserMain.ViewHo
         //jj-sets text to the different widgets in the cardviews
         viewHolder.userName.setText(mUserlist.get(position).getUsername());
         viewHolder.userDes.setText(mUserlist.get(position).getUserabout());
-        String filename = "user" + mUserlist.get(position).getUseridu()+".jpg";
-        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        viewHolder.userPic.setImageBitmap(bmImg);
+
+        if(mUserlist.get(position).getimgurl()== null||mUserlist.get(position).getimgurl()==""){
+            viewHolder.userPic.setImageResource(R.drawable.empty);
+        }
+        else {
+            Picasso.with(context).load(mUserlist.get(position).getimgurl()).into(viewHolder.userPic);
+        }
+        Log.v(TAG,"loading image from "+mUserlist.get(position).getimgurl());
+        //loading image
+
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
