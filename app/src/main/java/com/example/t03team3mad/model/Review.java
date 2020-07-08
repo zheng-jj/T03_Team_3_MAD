@@ -1,93 +1,98 @@
 package com.example.t03team3mad.model;
 
 public class Review {
-
-
-    private String isbn;
-    private String uid;
+    private int reviewidu;
+    public int getReviewidu() {
+        return reviewidu;
+    }
+    public void setReviewidu(int newReviewidu) {
+        this.reviewidu = newReviewidu;
+    }
     private String uname;
-    private int vote;
-    private String review;
-    private String bookName;
-    private String rid;
-    private String imglink;
-
-
-
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String issbn) {
-        this.isbn = issbn;
-    }
-
-
-
-    public String getUname() {
+    public String getUname(){
         return uname;
     }
-
-    public void setUname(String uname) {
-        this.uname = uname;
+    public void setUName(String newUname){
+        this.reviewtext = newUname;
+    }
+    private String reviewTitle;
+    public String getReviewTitle(){
+        return reviewTitle;
+    }
+    public void setReviewTitle(String newReviewTitle){
+        this.reviewtext = newReviewTitle;
     }
 
-    public int getVote() {
-        return vote;
-    }
-
-    public void setVote(int vote) {
-        this.vote = vote;
-    }
-
-    public String getReview() {
-        return review;
-    }
-
-    public void setReview(String review) {
-        this.review = review;
-    }
-
-    public String getBookName() {
+    private String bookName;
+    public String getBookName(){
         return bookName;
     }
-
-    public void setBookName(String bookName) {
-        this.bookName = bookName;
+    public void setBookName(String newbookName){
+        this.bookName = newbookName;
     }
 
-    public String getRid() {
-        return rid;
+    private int reviewidr;
+    public int getReviewidr() {
+        return reviewidr;
+    }
+    public void setReviewidr(int newReviewidr) {
+        this.reviewidu = newReviewidr;
     }
 
-    public void setRid(String rid) {
-        this.rid = rid;
+    private String reviewtext;
+    public String getReviewtext() {
+        return reviewtext;
+    }
+    public void setReviewtext(String newReviewtext) {
+        this.reviewtext = newReviewtext;
     }
 
-    public String getImglink() {
+    private String reviewisbn;
+    public String getReviewisbn() {
+        return reviewisbn;
+    }
+    public void setReviewisbn(String newReviewisbn) {
+        this.reviewisbn = newReviewisbn;
+    }
+
+    private String imglink;
+    public String getimglink() {
         return imglink;
     }
-
     public void setImglink(String imglink) {
         this.imglink = imglink;
     }
-    public Review(int uid, String name, String review, int points, String userID){}
-    public Review(String idu, String idr,String name,String title, String Review, String ISBN){
-        uid = idu;
-        rid= idr;
-        uname = name;
-        bookName = title;
-        review =Review;
-         isbn = ISBN;
-    }
-    public Review(){}
 
-    public String getUid() {
-        return uid;
+    private int reviewpoints;
+    public int getReviewpoints() {
+        return reviewpoints;
     }
+    public void setReviewpoints(int newReviewpoints) {
+        this.reviewpoints = newReviewpoints;
+    }
+    public Review (int idu, int idr,String username,String title, String text, String isbn) {
+        reviewidu = idu;
+        reviewidr = idr;
+        reviewtext = text;
+        reviewisbn = isbn;
+        uname  =  username;
+        reviewTitle  = title;
+    }
+    public Review (int idu, int idr,String username, String text, int points, String isbn) {
+        reviewidr = idr;
+        reviewidu = idu;
+        reviewtext = text;
+        uname  =  username;
+        reviewpoints = points;
+        reviewisbn = isbn;
+    }
+    public Review (int idu,String username, String text, int points, String isbn) {
 
-    public void setUid(String uid) {
-        this.uid = uid;
+        reviewidu = idu;
+        reviewtext = text;
+        uname  =  username;
+        reviewpoints = points;
+        reviewisbn = isbn;
     }
 }
+

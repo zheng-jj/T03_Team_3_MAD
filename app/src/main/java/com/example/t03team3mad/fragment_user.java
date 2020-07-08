@@ -186,7 +186,7 @@ public class fragment_user extends Fragment {
                     fragment_editUser.setArguments(bundle);
                     //jj-updated the way we add fragments into the view
                     MainActivity.addFragment(fragment_editUser,getActivity(),"EditUser");
-                    }
+                }
             });
             Button following = view.findViewById(R.id.viewfollowing);
             following.setOnClickListener(new View.OnClickListener() {
@@ -216,11 +216,11 @@ public class fragment_user extends Fragment {
                     builder.setCancelable(true);
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                        //jj-stops auto login
-                        editor.putBoolean("logged", false);
-                        editor.commit();
-                        //external library used to restart application
-                        ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
+                            //jj-stops auto login
+                            editor.putBoolean("logged", false);
+                            editor.commit();
+                            //external library used to restart application
+                            ProcessPhoenix.triggerRebirth(logout.getRootView().getContext());
                         }
                     });
                     builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -320,7 +320,7 @@ public class fragment_user extends Fragment {
                                 int uid = Integer.parseInt(dss.getString("uid"));
                                 String name = dss.getString("uname");
                                 Review r1 = new Review(uid, name, review, points, userID);
-                                r1.setIsbn(isbn);
+                                r1.setReviewisbn(isbn);
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);
                                 Log.v("Test", String.valueOf(points));
@@ -397,10 +397,10 @@ public class fragment_user extends Fragment {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
                     for(Review review : reviewsByUser){
-                        Log.v(TAG,"Bookloop="+review.getIsbn());
+                        Log.v(TAG,"Bookloop="+review.getReviewisbn());
                         for(DocumentSnapshot doc : data){
                             Log.v(TAG,"Docloop="+doc.getReference().getId());
-                            if(doc.getReference().getId().equals(review.getIsbn())){
+                            if(doc.getReference().getId().equals(review.getReviewisbn())){
                                 review.setImglink(doc.getString("coverurl"));
                             }
                         }
