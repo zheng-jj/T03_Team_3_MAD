@@ -115,6 +115,9 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
                             bookdes = "No Description";
                         }
                         String bookpdate = bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").getString("publish_date");
+
+
+
                         //jj-creates the book object with json data
                         Book x = new Book(booktitle, bookauthor, bookdes, bookgenre, bookpdate, isbntosearch);
                         Log.v(TAG, "added+" + x.getIsbn());

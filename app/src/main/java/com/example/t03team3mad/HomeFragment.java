@@ -16,9 +16,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.t03team3mad.model.Book;
+import com.example.t03team3mad.model.Review;
+import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
@@ -27,8 +39,19 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     Bitmap bitmap;
     private static final String TAG = "HomeFragment";
     List<Book> newbooklist;
+
     ArrayList<String> GenreList=new ArrayList<>();
     ArrayList<String> Ran5ToDisplay=new ArrayList<>();
+
+
+    //jj- these are mainly to load the recyclerviews
+    List<Book> booklist=new ArrayList<>();
+    List<Book> booklist2=new ArrayList<>();
+    private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
+    AdapterBookMain bookadapter;
+    AdapterBookMain bookadapter2;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -46,7 +69,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         Genre.setAdapter(adapterGenreInHomeFragment);
 
 
-        final List<Book> booklist=loadAllBooks();
+        booklist=loadAllBooks();
         //load main popularbooks recyclerview
         RecyclerView popularbooks = (RecyclerView)view.findViewById(R.id.popularbookrecyclerview);
 
@@ -54,8 +77,9 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         //jj-set the recyclerview's manager to the previously created manager
         popularbooks.setLayoutManager(llm);
+        loadBookurlsfav();
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter  = new AdapterBookMain(booklist,this.getContext());
+        bookadapter  = new AdapterBookMain(booklist,this.getContext());
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
 
@@ -63,7 +87,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
 
         //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
         AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute("9780980200447");
-        final ArrayList<Book> booklist2=new ArrayList<>();
         try {
             Book temp = tasktogetbook.get();
             if(temp!=null) {
@@ -89,8 +112,9 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
             //jj-set the recyclerview's manager to the previously created manager
             recommended.setLayoutManager(llm2);
+            loadBookurlsreco();
             //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-            AdapterBookMain bookadapter2 = new AdapterBookMain(booklist2, this.getContext());
+            bookadapter2 = new AdapterBookMain(booklist2, this.getContext());
             //jj- set the recyclerview object to its adapter
             recommended.setAdapter(bookadapter2);
         }
@@ -192,5 +216,49 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         Book_ByGenre nextFragment = new Book_ByGenre();  //will go the fragment where it will display all the books of that genre
         nextFragment.setArguments(bundle);
         MainActivity.addFragment(nextFragment,getActivity(),"BookByGenre");
+    }
+
+
+    //jj -  loads the url into book objects for recommended books
+    public void loadBookurlsreco() {
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Book book : booklist2){
+                        Log.v(TAG,"Bookloop="+book.getIsbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(book.getIsbn())){
+                                book.setimglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    bookadapter2.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    //jj -  loads the url into book objects for favouritebooks
+    public void loadBookurlsfav() {
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Book book : booklist){
+                        Log.v(TAG,"Bookloop="+book.getIsbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(book.getIsbn())){
+                                book.setimglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    bookadapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }

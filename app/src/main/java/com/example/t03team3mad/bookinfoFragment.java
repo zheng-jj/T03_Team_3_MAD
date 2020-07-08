@@ -114,16 +114,17 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             }
 
             DBaccess.close();
+
             final DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess2.open();
-            //searches to see if userbooklist containst this book
-            Iterator<Book> itr = userbooklist.iterator();
-            while (itr.hasNext())
-            {
-                Book book = itr.next();
-                if (book.getIsbn().equals(receivedbook.getIsbn()))
-                {
-                    favourite.setText("Added to list");
+            if(userbooklist!=null) {
+                //searches to see if userbooklist containst this book
+                Iterator<Book> itr = userbooklist.iterator();
+                while (itr.hasNext()) {
+                    Book book = itr.next();
+                    if (book.getIsbn().equals(receivedbook.getIsbn())) {
+                        favourite.setText("Added to list");
+                    }
                 }
             }
             //jo - get user id
@@ -249,6 +250,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     }
                 }
             });
+
         }
         return view;
     }
