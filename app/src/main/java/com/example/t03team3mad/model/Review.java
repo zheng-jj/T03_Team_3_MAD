@@ -55,6 +55,14 @@ public class Review {
         this.reviewisbn = newReviewisbn;
     }
 
+    private String imglink;
+    public String getimglink() {
+        return imglink;
+    }
+    public void setImglink(String imglink) {
+        this.imglink = imglink;
+    }
+
     private int reviewpoints;
     public int getReviewpoints() {
         return reviewpoints;

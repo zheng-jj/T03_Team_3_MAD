@@ -1,24 +1,15 @@
 package com.example.t03team3mad;
 
-import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.PendingIntent;
-import android.app.TaskInfo;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaScannerConnection;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,13 +21,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
-import com.google.cloud.datastore.core.number.IndexNumberDecoder;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.io.File;
@@ -46,8 +38,6 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import dalvik.system.InMemoryDexClassLoader;
-
 public class fragment_user extends Fragment {
     private static final String TAG = "userFragment";
     List<Book> newbooklist;
@@ -55,6 +45,18 @@ public class fragment_user extends Fragment {
     User usertoView = null;
     View v;
     List<User> currentlyfollow = new ArrayList<>();
+
+    //list of reviews made by this user
+    List<Review> reviewsByUser = new ArrayList<>();
+    private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionBook2 = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionRefreview = FirebaseFirestore.getInstance().collection("Reviews");
+    AdapterReviewForUSer reviewadapter;
+
+    //list of books
+    ArrayList<Book> userfav = new ArrayList<>();
+    AdapterBookMain bookadapter;
+
     ImageView Pic;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -167,11 +169,6 @@ public class fragment_user extends Fragment {
         else {
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
-            //gets user object from database
-//            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-//            DBaccess.open();
-//            usertoView = DBaccess.searchuserbyid(Integer.toString(usertoView.getUseridu()));
-//            DBaccess.close();
 
             usertoView = MainActivity.loggedinuser;
             //onclick listener to edit profile
@@ -238,13 +235,6 @@ public class fragment_user extends Fragment {
 
         }
 
-//        else{
-//            //jj- inflates the fragment into the container for the fragment
-//            view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
-//            Log.v(TAG,"No user received, creating demo user object");
-//            //jj - this variable is temporary
-//            usertoView = new User(1,"JIONG JIE","9780439362139;9780747591061","hey this is jj");
-//        }
         v=view;
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
@@ -262,7 +252,7 @@ public class fragment_user extends Fragment {
 
 
         //user favourite books loaded from firebase
-        ArrayList<Book> userfav = new ArrayList<>();
+
         try {
             userfav = loaduserbooks(usertoView);
         } catch (ExecutionException e) {
@@ -279,12 +269,11 @@ public class fragment_user extends Fragment {
             //jj-set the recyclerview's manager to the previously created manager
             favouritebooks.setLayoutManager(llm);
             //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-            AdapterBookMain bookadapter = new AdapterBookMain(userfav, this.getContext());
+            loadBookurlsbooks();
+            bookadapter = new AdapterBookMain(userfav, this.getContext());
             //jj- set the recyclerview object to its adapter
             favouritebooks.setAdapter(bookadapter);
         }
-        //list of reviews made by this user
-        List<Review> reviewsByUser = loaduserreviews(usertoView);
 
         //jj - load user reviews recyclerview
         RecyclerView pastReviews = (RecyclerView) view.findViewById(R.id.userreviewprofile);
@@ -292,70 +281,21 @@ public class fragment_user extends Fragment {
         LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         //jj-set the recyclerview's manager to the previously created manager
         pastReviews.setLayoutManager(llm2);
+
+        //loads data from firestore into list
+        loaduserreviews(usertoView);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterReviewForUSer reviewadapter = new AdapterReviewForUSer(reviewsByUser);
+        reviewadapter = new AdapterReviewForUSer(reviewsByUser);
         //jj- set the recyclerview object to its adapter
         pastReviews.setAdapter(reviewadapter);
 
-//        //jj- follow buttom(NOT YET IMPLEMENTED)
-//        Button follow = view.findViewById(R.id.follow1);
-//        follow.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Log.v(TAG,"Follow button clicked");
-//            }
-//        });
-//        //jj-gets the recyclerview object
-//        RecyclerView users = (RecyclerView)view.findViewById(R.id.userreviewprofile);
-//        //jj-layout manager linear layout manager manages the position of the recyclerview items
-//        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-//        //jj-set the recyclerview's manager to the previously created manager
-//        users.setLayoutManager(llm);
-//        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-//        AdapterUserMain useradapter  = new AdapterUserMain(loadAllusers());
-//        //jj- set the recyclerview object to its adapter
-//        users.setAdapter(useradapter);
-
-        //jj-removes the arguements so that i will get the reason why this page is loaded
         return view;
     }
-//    public List<User> loadAllusers()
-//    {
-//        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-//        DBaccess.open();
-//        List<User> mUserlist = DBaccess.loadalluserlist();
-//        DBaccess.close();
-//        return mUserlist;
-//    }
     //jj - gets the user's favourite books
     public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
         DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        //DBaccess.open();
-        ArrayList<Book> userbooklist = new ArrayList<>();
-//        try {
-//            //foreach book in user's local db favourited books, get it from the api
-//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
-//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
-//                try {
-//                    Book temp = tasktogetbook.get();
-//                    if (temp != null) {
-//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
-//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
-//                        Log.v(TAG, "Book about = " + temp.getBookabout());
-//                        Log.v(TAG, "Book date = " + temp.getPdate());
-//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
-//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
-//                        userbooklist.add(temp);
-//                    }
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }catch (Exception e){}
-//        DBaccess.close();
 
+        ArrayList<Book> userbooklist = new ArrayList<>();
         AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
 
         userbooklist=task.get();
@@ -364,13 +304,38 @@ public class fragment_user extends Fragment {
         return userbooklist;
     }
     //jj- get user reviews made
-    public List<Review> loaduserreviews(User user){
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        List<Review> userreviewlist = DBaccess.loaduserreviews(user);
-        DBaccess.close();
-        Log.v(TAG,"review list is loaded");
-        return userreviewlist;
+    public void loaduserreviews(final User user){
+        mCollectionRefreview.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for (DocumentSnapshot dss : data) {
+                        String userID = dss.getString("uid");
+                        if(userID!=null) {
+                            if (userID.equals(String.valueOf(user.getUseridu()))) {
+                                String review = dss.getString("review");
+                                String isbn = dss.getString("isbn");
+                                int points = Integer.parseInt(dss.getString("vote"));
+                                int uid = Integer.parseInt(dss.getString("uid"));
+                                String name = dss.getString("uname");
+                                Review r1 = new Review(uid, name, review, points, userID);
+                                r1.setReviewisbn(isbn);
+                                reviewsByUser.add(r1);
+                                Log.v("Test", review);
+                                Log.v("Test", String.valueOf(points));
+                                Log.v("Test", String.valueOf(uid));
+                                Log.v("Test", String.valueOf(name));
+                            } else {
+                                continue;
+                            }
+                        }
+                    }
+                    loadBookurlsreviews();
+                    reviewadapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
     //jj - Loads the user information into the layout
     public void loaduserintoview(View view, User user, String path) throws InterruptedException, ExecutionException {
@@ -423,5 +388,46 @@ public class fragment_user extends Fragment {
     public void onAttach(@NonNull Context context) {
         Log.v(TAG,"USER FRAGMENT RECREATED");
         super.onAttach(context);
+    }
+    //jj -  loads the url into book objects for recommended books
+    public void loadBookurlsreviews() {
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Review review : reviewsByUser){
+                        Log.v(TAG,"Bookloop="+review.getReviewisbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(review.getReviewisbn())){
+                                review.setImglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    reviewadapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    public void loadBookurlsbooks() {
+        mCollectionBook2.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Book book : userfav){
+                        Log.v(TAG,"Bookloop="+book.getIsbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(book.getIsbn())){
+                                book.setimglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    bookadapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }

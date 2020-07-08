@@ -20,6 +20,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForUSer.ViewHolder>
 
 {
+    Context context;
     String Isbn;
     private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Reviews");
     //jj- adapter for review recycler view in user page
@@ -77,6 +79,12 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.uPic.setImageBitmap(bmImg);
         viewHolder.points.setText(mReviewlist.get(position).getReviewpoints());
+        if(mReviewlist.get(position).getimglink()== null) {
+            viewHolder.uPic.setImageResource(R.drawable.empty);
+        }
+        else{
+            Picasso.with(context).load(mReviewlist.get(position).getimglink()).into(viewHolder.uPic);
+        }
         Log.v(TAG,"Review for :"+mReviewlist.get(position).getBookName());
     }
 

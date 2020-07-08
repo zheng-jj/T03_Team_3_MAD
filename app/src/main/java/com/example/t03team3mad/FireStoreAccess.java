@@ -63,7 +63,7 @@ public class FireStoreAccess {
         protected void onPostExecute(User user) {
         }
     }
-    //for list of users
+    //jj-for list of users(this takes time)
     public static class AccessUserList extends AsyncTask<String,Void, ArrayList<User>> {
         private static final String TAG = "AccessUser";
         final ArrayList<User> found = new ArrayList<>();

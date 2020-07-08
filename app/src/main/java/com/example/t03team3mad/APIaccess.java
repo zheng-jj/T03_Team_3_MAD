@@ -90,6 +90,7 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
                     bookdes = "No Description";
                 }
                 String bookpdate = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("publish_date");
+
                 //jj-creates the book object with json data
                 Book x = new Book(booktitle,bookauthor,bookdes,bookgenre,bookpdate,isbn);
                 return x;

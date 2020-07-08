@@ -38,7 +38,6 @@ public class FirebaseStorageImageSave extends AsyncTask<imageTaskSaveParameters,
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
             }
         });
         return null;
