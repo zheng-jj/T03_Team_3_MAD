@@ -55,9 +55,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        //qh saves all images
-        saveimagesmethods();
-
         //Chris - genre recycler view
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         RecyclerView Genre=(RecyclerView)view.findViewById(R.id.genrelistrecyclerview);
@@ -189,21 +186,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
 
     }
 
-    //qh - calls the methods to save images into internal storage
-    public void saveimagesmethods(){
-        saveimagestointernalstorage("book9780060562533");
-        saveimagestointernalstorage("book9780312351649");
-        saveimagestointernalstorage("book0380802325");
-        saveimagestointernalstorage("book9780060091293");
-        saveimagestointernalstorage("book0380802317");
-        saveimagestointernalstorage("book9780312351663");
-        saveimagestointernalstorage("book0380811065");
-        saveimagestointernalstorage("book9780380781225");
-        saveimagestointernalstorage("user1");
-        saveimagestointernalstorage("user2");
-        saveimagestointernalstorage("user3");
-        saveimagestointernalstorage("author1");
-    }
 
 
     //Chris - if user click on the genre on the recycler view
