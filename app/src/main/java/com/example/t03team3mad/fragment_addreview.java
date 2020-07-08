@@ -174,7 +174,7 @@ public class fragment_addreview extends Fragment {
         data3.put("isbn",ISBN);
         data3.put("rid",idr);
         mCollectionRefbooks.document(ISBN).collection("Reviews").document(idr).set(data);
-        mCollectionRef.document(idr).set(data2);
+        mCollectionRef.add(data2);
         mCollectionRefuser.whereArrayContains("followingstring",String.valueOf(idu)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
