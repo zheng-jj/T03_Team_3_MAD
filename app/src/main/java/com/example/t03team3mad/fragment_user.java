@@ -316,16 +316,15 @@ public class fragment_user extends Fragment {
                             if (userID.equals(String.valueOf(user.getUseridu()))) {
                                 String review = dss.getString("review");
                                 String isbn = dss.getString("isbn");
-                                int points = Integer.parseInt(String.valueOf(dss.getLong("vote")));
+                                String title = dss.getString("title");
+
                                 int uid = Integer.parseInt(dss.getString("uid"));
-                                String name = dss.getString("uname");
-                                Review r1 = new Review(uid, name, review, points, userID);
+
+                                Review r1 = new Review(uid,review,title,isbn);
                                 r1.setReviewisbn(isbn);
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);
-                                Log.v("Test", String.valueOf(points));
-                                Log.v("Test", String.valueOf(uid));
-                                Log.v("Test", String.valueOf(name));
+
                             } else {
                                 continue;
                             }

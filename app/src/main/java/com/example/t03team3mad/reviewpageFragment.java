@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
+import com.example.t03team3mad.model.Reviews;
 import com.example.t03team3mad.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -49,12 +50,12 @@ import java.util.Map;
 
 public class reviewpageFragment extends Fragment {
     private static final String TAG = "authorprofileFragment";
-    Map<Integer, Review> data = new HashMap<Integer, Review>();
+    Map<Integer, Reviews> data = new HashMap<Integer, Reviews>();
     String name;
     Fragment f;
     String isbn;
     String Title;
-    Review model1;
+    Reviews model1;
     private RecyclerView mFirestoreList;
     private FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerAdapter adapter;
@@ -84,9 +85,9 @@ public class reviewpageFragment extends Fragment {
 
         Query query = firebaseFirestore.collection("Book").document(isbn).collection("Reviews").orderBy("vote", Query.Direction.DESCENDING);
 
-        FirestoreRecyclerOptions<Review> options = new FirestoreRecyclerOptions.Builder<Review>().setQuery(query,Review.class).build();
+        FirestoreRecyclerOptions<Reviews> options = new FirestoreRecyclerOptions.Builder<Reviews>().setQuery(query,Reviews.class).build();
 
-        adapter = new FirestoreRecyclerAdapter<Review, ReviewViewHolder>(options) {
+        adapter = new FirestoreRecyclerAdapter<Reviews, ReviewViewHolder>(options) {
             @NonNull
             @Override
             public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -95,9 +96,7 @@ public class reviewpageFragment extends Fragment {
             }
 
             @Override
-            protected void onBindViewHolder(@NonNull ReviewViewHolder holder, int position, @NonNull final Review model) {
-
-
+            protected void onBindViewHolder(@NonNull ReviewViewHolder holder, int position, @NonNull final Reviews model) {
                 holder.uName.setText(model.getUname());
                 holder.uReview.setText(model.getReview());
                 String filename = "user" + (model.getIsbn())+".jpg";
@@ -137,15 +136,13 @@ public class reviewpageFragment extends Fragment {
 
         return view;
     }
-
-
     private class ReviewViewHolder extends RecyclerView.ViewHolder{
-        private CardView cardView;
-        private TextView uName;
-        private TextView uReview;
-        private ImageView uPic;
-        private Button upvote;
-        private TextView points;
+        CardView cardView;
+        TextView uName;
+        TextView uReview;
+        ImageView uPic;
+        Button upvote;
+        TextView points;
 
         public ReviewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -163,7 +160,7 @@ public class reviewpageFragment extends Fragment {
 
 
 
-    }
+    };
 
     @Override
     public void onStart() {
@@ -171,3 +168,5 @@ public class reviewpageFragment extends Fragment {
         adapter.startListening();
     }
 }
+
+

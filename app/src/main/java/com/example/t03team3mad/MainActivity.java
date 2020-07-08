@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
             }
             if (tabId == R.id.tab_feed) {
             }
+
             if (tabId == R.id.tab_profile) {
                 bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
                     @Override

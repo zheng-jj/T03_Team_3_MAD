@@ -2,6 +2,19 @@ package com.example.t03team3mad.model;
 
 public class Review {
     private int reviewidu;
+
+    public Review(String idus, String idrs, String uname, String title, String review, String isbn) {
+    }
+
+    public Review(int uid, String review,String title,String isbn) {
+        reviewidu = uid;
+        reviewtext = review;
+
+        reviewtext = title;
+        reviewisbn = isbn;
+
+    }
+
     public int getReviewidu() {
         return reviewidu;
     }
@@ -78,7 +91,7 @@ public class Review {
         uname  =  username;
         reviewTitle  = title;
     }
-    public Review (int idu, int idr,String username, String text, int points, String isbn) {
+    public Review (int idu, int idr, String username, String text, int points, String isbn) {
         reviewidr = idr;
         reviewidu = idu;
         reviewtext = text;

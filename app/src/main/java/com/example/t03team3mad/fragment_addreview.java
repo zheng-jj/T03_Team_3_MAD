@@ -23,11 +23,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import com.google.firebase.firestore.WriteBatch;
+import com.google.firestore.v1.Document;
 import com.google.firestore.v1.WriteResult;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +47,9 @@ public class fragment_addreview extends Fragment {
     RatingBar ratings;
     String review;
     String name;
+    String title;
+    int aid;
+    List<String> uids = new ArrayList<String>();
 
 
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
@@ -58,7 +64,8 @@ public class fragment_addreview extends Fragment {
         Bundle bundle = this.getArguments();
         final User user = bundle.getParcelable("user");
         final Book book = bundle.getParcelable("book");
-
+        idu = Integer.toString(user.getUseridu());
+        title=  book.getBooktitle();
         //jo - find viewbyids
         enter =  view.findViewById(R.id.enter);
         editreview = view.findViewById(R.id.reviewinput);
@@ -73,7 +80,7 @@ public class fragment_addreview extends Fragment {
         enter.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Log.v("Click","Button clicked");
-                idu = Integer.toString(user.getUseridu());
+
                 review = editreview.getText().toString();
                 name = user.getUsername();
                 ratevalue = ratings.getRating();
@@ -117,6 +124,32 @@ public class fragment_addreview extends Fragment {
 
 
     }
+    public void getaid(final String id, final Map<String, Object> data3){
+        mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
+
+                    aid = data.size()+1;
+                    mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
+
+
+
+                }
+                else{
+                    aid = 1;
+                    mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
+
+
+                }
+
+
+
+
+            }
+        });
+    }
 
 
     public void addreview(String idr,String idu,String review,String ISBN,String name){
@@ -130,13 +163,34 @@ public class fragment_addreview extends Fragment {
         data.put("isbn",ISBN);
         data.put("rid",idr);
         Map<String, Object> data2= new HashMap<String,Object>();
-
-
-        data.put("review", review);
-        data.put("isbn",ISBN);
-        data.put("rid",idr);
+        data2.put("review", review);
+        data2.put("isbn",ISBN);
+        data2.put("uid", idu);
+        data2.put("title",title);
+        final Map<String, Object> data3 = new HashMap<String,Object>();
+        data3.put("Activity","Review");
+        data3.put("Rating",ratevalue);
+        data3.put("Review", review);
+        data3.put("isbn",ISBN);
+        data3.put("rid",idr);
         mCollectionRefbooks.document(ISBN).collection("Reviews").document(idr).set(data);
-        mCollectionRefuser.document(idu).collection("Reviews").document(idr).set(data2);
+        mCollectionRef.document(idr).set(data2);
+        mCollectionRefuser.whereArrayContains("followingstring",String.valueOf(idu)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot i:queryDocumentSnapshots){
+                    uids.add(String.valueOf(i.getLong("useridu").intValue()));
+                    Log.v("uid",String.valueOf(i.getLong("useridu").intValue()));
+                }
+                for(String i :uids){
+                    getaid(i,data3);
+
+                }
+
+            }
+        });
+
+
 
 
 
