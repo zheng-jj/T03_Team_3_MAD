@@ -33,6 +33,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -44,7 +45,7 @@ public class fragment_user extends Fragment {
     SharedPreferences Auto_login;
     User usertoView = null;
     View v;
-    List<User> currentlyfollow = new ArrayList<>();
+
 
     //list of reviews made by this user
     List<Review> reviewsByUser = new ArrayList<>();
@@ -56,7 +57,7 @@ public class fragment_user extends Fragment {
     //list of books
     ArrayList<Book> userfav = new ArrayList<>();
     AdapterBookMain bookadapter;
-
+    View pageview;
     ImageView Pic;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,17 +65,14 @@ public class fragment_user extends Fragment {
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
         //jj-gets the user currently following list
-        try {
-            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            DBaccess.open();
-            currentlyfollow = DBaccess.getUserFollowing(Integer.toString(MainActivity.loggedinuser.getUseridu()));
-            DBaccess.close();
-        }catch (Exception e){}
+
+
+
         if (bundle.getParcelable("searchuser") != null) {
             Log.v(TAG,"showing search user profile");
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_user,container,false);
-
+            this.pageview = view;
             usertoView = bundle.getParcelable("searchuser");
             Log.v(TAG,"currently viewing ="+ String.valueOf(usertoView.getUseridu()));
             Log.v(TAG, "currently logged in ="+String.valueOf(MainActivity.loggedinuser.getUseridu()));
@@ -90,12 +88,16 @@ public class fragment_user extends Fragment {
                 MainActivity.addFragment(fragment,getActivity(),"UserFragment");
             }
 
-
             //gets user object from database
             final Button followthisuser = view.findViewById(R.id.follow1);
+
+
+            final List<String> listofid = new ArrayList<String>(Arrays.asList(MainActivity.loggedinuser.getfollowingstring().split(";")));
+            Log.v(TAG,"list of user following ="+MainActivity.loggedinuser.getfollowingstring());
+            Log.v(TAG,"viewing user ="+usertoView.getUseridu());
             //jj-checks if logged in user follows this user
-            for(User check : currentlyfollow){
-                if(check.getUseridu()==usertoView.getUseridu()){
+            for(String id : listofid){
+                if(id.equals(Integer.toString(usertoView.getUseridu()))){
                     followthisuser.setText("Followed");
                     break;
                 }
@@ -108,35 +110,37 @@ public class fragment_user extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Boolean follow = false;
-                    for(User user : currentlyfollow){
+                    for(String id : listofid){
                         //if user is currently following this user, update the boolean
-                        if(user.getUseridu()==usertoView.getUseridu()){
+                        if(id.equals(Integer.toString(usertoView.getUseridu()))){
                             follow=true;
                             break;
                         }
                     }
                     //if user is currently following this user and wishes to unfollow, update the list
-                    Iterator<User> iter = currentlyfollow.iterator();
+                    Iterator<String> iter = listofid.iterator();
                     if(follow==true){
                         while (iter.hasNext()) {
-                            User user = iter.next();
-                            if (user.getUseridu()==usertoView.getUseridu())
+                            String user = iter.next();
+                            if (user.equals(Integer.toString(usertoView.getUseridu()))) {
                                 iter.remove();
+                            }
                         }
                     }
                     else {
-                        currentlyfollow.add(usertoView);
+                        listofid.add(Integer.toString(usertoView.getUseridu()));
                     }
                     //creates the string to be entered into database
                     String followid = "";
-                    for(User followed : currentlyfollow){
-                        followid=followid+Integer.toString(followed.getUseridu())+";";
-                    }
-                    if(followid.equals("")){
-                    }
-                    else {
-                        //removes the final ";"
-                        followid = followid.substring(0, followid.length() - 1);
+                    if(listofid!=null) {
+                        for (String followed : listofid) {
+                            followid = followid + followed + ";";
+                        }
+                        if (followid.equals("")) {
+                        } else {
+                            //removes the final ";"
+                            followid = followid.substring(0, followid.length() - 1);
+                        }
                     }
                     Log.v(TAG,"Following list "+followid);
                     DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
@@ -153,7 +157,7 @@ public class fragment_user extends Fragment {
                         e.printStackTrace();
                     }
                     //updates text on button
-                    if(currentlyfollow.contains(usertoView)){
+                    if(listofid.contains(Integer.toString(usertoView.getUseridu()))){
                         followthisuser.setText("Followed");
                     }
                     else{
@@ -409,6 +413,8 @@ public class fragment_user extends Fragment {
             }
         });
     }
+
+    //jj loads the url into book objc
     public void loadBookurlsbooks() {
         mCollectionBook2.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -429,4 +435,5 @@ public class fragment_user extends Fragment {
             }
         });
     }
+
 }
