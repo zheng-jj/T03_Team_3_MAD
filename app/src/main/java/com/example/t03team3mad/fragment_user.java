@@ -65,7 +65,7 @@ public class fragment_user extends Fragment {
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
         //jj-gets the user currently following list
-
+        reviewsByUser = new ArrayList<>();
 
 
         if (bundle.getParcelable("searchuser") != null||MainActivity.viewuser != null) {
@@ -350,11 +350,9 @@ public class fragment_user extends Fragment {
                                 String review = dss.getString("review");
                                 String isbn = dss.getString("isbn");
                                 String title = dss.getString("title");
-
                                 int uid = Integer.parseInt(dss.getString("uid"));
-
                                 Review r1 = new Review(uid, review,title,isbn);
-                                r1.setReviewisbn(isbn);
+
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);
 
