@@ -14,6 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +26,9 @@ import java.util.concurrent.ExecutionException;
 
 public class fragment_editUserBooks extends Fragment {
     private static final String TAG = "edituserbooksFragment";
+    ArrayList<Book> userfav = new ArrayList<>();
+    AdapterFavBooksList bookadapter;
+    private CollectionReference mCollectionBook2 = FirebaseFirestore.getInstance().collection("Book");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edituserbooks,container,false);
@@ -31,7 +39,7 @@ public class fragment_editUserBooks extends Fragment {
             Log.v(TAG, "user edit: username: "+ usertoEdit.getUsername());
         }
 
-        ArrayList<Book> userfav = new ArrayList<>();
+
         try {
             userfav = loaduserbooks(usertoEdit);
         } catch (ExecutionException e) {
@@ -45,8 +53,10 @@ public class fragment_editUserBooks extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         //jj-set the recyclerview's manager to the previously created manager
         favouritebooks.setLayoutManager(llm);
+
+        loadBookurlsbooks();
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        final AdapterFavBooksList bookadapter = new AdapterFavBooksList(userfav);
+        bookadapter = new AdapterFavBooksList(userfav);
         if(userfav!=null) {
             //jj- set the recyclerview object to its adapter
             favouritebooks.setAdapter(bookadapter);
@@ -133,5 +143,25 @@ public class fragment_editUserBooks extends Fragment {
         userbooklist=task.get();
         Log.v(TAG,"fav book list is loaded");
         return userbooklist;
+    }
+    public void loadBookurlsbooks() {
+        mCollectionBook2.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Book book : userfav){
+                        Log.v(TAG,"Bookloop="+book.getIsbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(book.getIsbn())){
+                                book.setimglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    bookadapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }
