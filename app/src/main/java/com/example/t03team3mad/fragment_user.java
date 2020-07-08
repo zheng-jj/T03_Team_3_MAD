@@ -312,21 +312,23 @@ public class fragment_user extends Fragment {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
                     for (DocumentSnapshot dss : data) {
                         String userID = dss.getString("uid");
-                        if (userID.equals(String.valueOf(user.getUseridu()))) {
-                            String review = dss.getString("review");
-                            String isbn = dss.getString("isbn");
-                            int points = Integer.parseInt(dss.getString("vote"));
-                            int uid = Integer.parseInt(dss.getString("uid"));
-                            String name = dss.getString("uname");
-                            Review r1 = new Review(uid, name, review, points, userID);
-                            r1.setReviewisbn(isbn);
-                            reviewsByUser.add(r1);
-                            Log.v("Test", review);
-                            Log.v("Test", String.valueOf(points));
-                            Log.v("Test", String.valueOf(uid));
-                            Log.v("Test", String.valueOf(name));
-                        } else {
-                            continue;
+                        if(userID!=null) {
+                            if (userID.equals(String.valueOf(user.getUseridu()))) {
+                                String review = dss.getString("review");
+                                String isbn = dss.getString("isbn");
+                                int points = Integer.parseInt(dss.getString("vote"));
+                                int uid = Integer.parseInt(dss.getString("uid"));
+                                String name = dss.getString("uname");
+                                Review r1 = new Review(uid, name, review, points, userID);
+                                r1.setReviewisbn(isbn);
+                                reviewsByUser.add(r1);
+                                Log.v("Test", review);
+                                Log.v("Test", String.valueOf(points));
+                                Log.v("Test", String.valueOf(uid));
+                                Log.v("Test", String.valueOf(name));
+                            } else {
+                                continue;
+                            }
                         }
                     }
                     loadBookurlsreviews();
