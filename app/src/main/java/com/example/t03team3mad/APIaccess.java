@@ -44,7 +44,6 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
                 String temps = sc.nextLine();
                 //jj-converts string into json object to use
                 bookjsonobj = new JSONObject(temps);
-                Log.v(TAG,"json created here "+bookjsonobj);
                 //jj- i only need 1 record, hence break after 1 loop
                 break;
             }
