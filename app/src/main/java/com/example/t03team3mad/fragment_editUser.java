@@ -285,12 +285,14 @@ public class fragment_editUser extends Fragment {
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
-                    for(Book book : userfav){
-                        Log.v(TAG,"Bookloop="+book.getIsbn());
-                        for(DocumentSnapshot doc : data){
-                            Log.v(TAG,"Docloop="+doc.getReference().getId());
-                            if(doc.getReference().getId().equals(book.getIsbn())){
-                                book.setimglink(doc.getString("coverurl"));
+                    if(userfav!=null) {
+                        for (Book book : userfav) {
+                            Log.v(TAG, "Bookloop=" + book.getIsbn());
+                            for (DocumentSnapshot doc : data) {
+                                Log.v(TAG, "Docloop=" + doc.getReference().getId());
+                                if (doc.getReference().getId().equals(book.getIsbn())) {
+                                    book.setimglink(doc.getString("coverurl"));
+                                }
                             }
                         }
                     }
