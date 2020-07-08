@@ -57,7 +57,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     TextView showrating;
     String isbn;
 
-    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
     //AdapterGenre adapter;
 
 

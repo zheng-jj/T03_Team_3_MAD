@@ -94,7 +94,7 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
         String filename = "user" + (mReviewlist.get(position).getReviewidu())+".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.uPic.setImageBitmap(bmImg);
-        viewHolder.points.setText(mReviewlist.get(position).getReviewpoints());
+        viewHolder.points.setText(String.valueOf(mReviewlist.get(position).getReviewpoints()));
 
     }
 

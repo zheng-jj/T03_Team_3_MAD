@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -23,7 +25,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Text;
@@ -51,6 +57,7 @@ public class reviewpageFragment extends Fragment {
         isbncheck = book.getIsbn();
         // jo - display layout
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
+
         // jo - findviewbyids
         TextView booktitle = view.findViewById(R.id.rtitle);
         ImageView bookimage = view.findViewById(R.id.bookimg);
@@ -65,58 +72,44 @@ public class reviewpageFragment extends Fragment {
         reviews.setLayoutManager(llm);
 
         // jo - load data from list into the viewholder
-        loadAllReviews(book.getIsbn());
-        Log.v("Test", String.valueOf(reviewlist.size()));
-        Log.v("Test", "workign?");
+
+
         adapterReview  = new AdapterReview(reviewlist,this);
+        mCollectionRefreview
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                        @Nullable FirebaseFirestoreException e) {
 
-        reviews.setAdapter(adapterReview);
-        return view;
-    }
-    // jo - get reviews from database
-    public void loadAllReviews(String ISBN) {
-        Log.v("Test",ISBN);
-
-        mCollectionRefreview.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
-                    for (DocumentSnapshot dss : data) {
-                        String isbn = dss.getString("isbn");
-                        if(isbn.equals(isbncheck)){
-                            String review = dss.getString("review");
-                            int points = Integer.parseInt(dss.getString("vote"));
-                            int uid = Integer.parseInt(dss.getString("uid"));
-                            String name = dss.getString("uname");
-                            Review r1 = new Review(uid,name,review,points,isbn);
-                            reviewlist.add(r1);
-                            Log.v("Test",review);
-                            Log.v("Test", String.valueOf(points));
-                            Log.v("Test", String.valueOf(uid));
-                            Log.v("Test", String.valueOf(name));
-                        }
-                        else{
-                            continue;
+                        if (e != null) {
+                            Log.w("YourTag", "Listen failed.", e);
+                            return;
                         }
 
-
-
+                        for (QueryDocumentSnapshot dss : queryDocumentSnapshots) {
+                            if (dss.exists()){
+                                String isbn = dss.getString("isbn");
+                                if(isbn.equals(isbncheck)) {
+                                    String review = dss.getString("review");
+                                    int points = Integer.parseInt(dss.getString("vote"));
+                                    int uid = Integer.parseInt(dss.getString("uid"));
+                                    String name = dss.getString("uname");
+                                    Review r1 = new Review(uid, name, review, points, isbn);
+                                    reviewlist.add(r1);
+                                    adapterReview.notifyDataSetChanged();
+                                }
+                            }
+                        }
 
                     }
-                    adapterReview.notifyDataSetChanged();
+                });
+
+        reviews.setAdapter(adapterReview);
 
 
-
-                }
-
-
-            }
-        });
-
-
+        return view;
     }
+
 
 
 
