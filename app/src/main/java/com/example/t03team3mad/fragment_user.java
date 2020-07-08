@@ -316,7 +316,7 @@ public class fragment_user extends Fragment {
                             if (userID.equals(String.valueOf(user.getUseridu()))) {
                                 String review = dss.getString("review");
                                 String isbn = dss.getString("isbn");
-                                int points = Integer.parseInt(dss.getString("vote"));
+                                int points = Integer.parseInt(String.valueOf(dss.getLong("vote")));
                                 int uid = Integer.parseInt(dss.getString("uid"));
                                 String name = dss.getString("uname");
                                 Review r1 = new Review(uid, name, review, points, userID);
