@@ -37,7 +37,7 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
         BufferedReader reader = null;
         String newtitle = title.replace(' ', '+');
         Log.v(TAG,newtitle);
-        URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle&maxResults=5");
+        URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle&maxResults=15");
         //URL url = new URL(apiurl+"search.json?q=" + newtitle);
 
         //jj-opens the connection
