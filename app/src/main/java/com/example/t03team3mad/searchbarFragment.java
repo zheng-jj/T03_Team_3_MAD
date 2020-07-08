@@ -1,40 +1,45 @@
 package com.example.t03team3mad;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
 
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
-
-import org.json.JSONException;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class searchbarFragment extends Fragment implements AdapterSearch.OnSearchListener {
+    AdapterSearch searchadapter;
     private static final String TAG = "searchbarFragment";
     ListView listviewitem;
     List<SearchClass> searchClassList = new ArrayList<SearchClass>();
     private ProgressBar progressbar;
+    private CollectionReference userscollection = FirebaseFirestore.getInstance().collection("User");
+    String isbn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,11 +75,8 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         //qh - opens database to create the object lists
         DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
         databaseAccess.open();
-        //List<Book> searchbooks = databaseAccess.searchbook(query);
-        //List<Author> searchauthor = databaseAccess.searchAuthor(query);
         List<User> searchUser = databaseAccess.searchUser(query);
         databaseAccess.close();
-
         //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
         AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
         try {
@@ -118,17 +120,20 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
            // SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author",String.valueOf(var.getAuthorid()));
            // searchClassList.add(searchClass);
         //}
-        for (User var : searchUser)
-        {
-            System.out.println(var.getUsername());
-            SearchClass searchClass = new SearchClass(var.getUsername(),var.getUserabout(),"User",String.valueOf(var.getUseridu()));
-            searchClassList.add(searchClass);
-        }
+        //for (User var : searchUser)
+        //{
+            //System.out.println(var.getUsername());
+           // SearchClass searchClass = new SearchClass(var.getUsername(),var.getUserabout(),"User",String.valueOf(var.getUseridu()));
+           // searchClassList.add(searchClass);
+        //}
+        Log.d(TAG, "Running User Code Now");
+
         //qh - puts all the results into recycler view to display
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
-        AdapterSearch searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
+        searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
+        getuser(query);
         searchresults.setAdapter(searchadapter);
     }
 
@@ -167,35 +172,55 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
 
         }
-        // qh -- if object clicked is author
-        //if (currentsearchobject.getSearchClass().equals("Author")){
-           // DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-           // databaseAccess.open();
-           // Author currentauthor = databaseAccess.searchauthorbyida(currentsearchobject.getId());
-           // databaseAccess.close();
 
-           // authorprofileFragment nextFrag= new authorprofileFragment();
-           // Bundle bundle = new Bundle();
-           // bundle.putParcelable("currentauthor", currentauthor);  // Key, value
-           // nextFrag.setArguments(bundle);
-            //jj-updated the way we add fragments into the view
-           // MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
-        //}
         //qh -- if object clicked is user
-            if (currentsearchobject.getSearchClass().equals("User")){
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            databaseAccess.open();
-            User currentuser = databaseAccess.searchuserbyid(currentsearchobject.getId());
-            databaseAccess.close();
+        if (currentsearchobject.getSearchClass().equals("User")){
+            //qh - gets user
+            AsyncTask<String,Void, User> getbook = new FireStoreAccess.AccessUser().execute(currentsearchobject.getId());
+            User currentuser = null;
+            try {
+                currentuser = getbook.get();
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+
 
             fragment_user nextFrag= new fragment_user();
             Bundle bundle = new Bundle();
-            bundle.putParcelable("searchuser", currentuser);  // Key, value
-
+            bundle.putParcelable("currentuser", currentuser);
             nextFrag.setArguments(bundle);//jj-updated the way we add fragments into the view
             MainActivity.addFragment(nextFrag,getActivity(),"findUser"+currentsearchobject.getSearchName());
         }
     }
+
+
+
+    //qh - get user from firebase
+    public void getuser (final String query){
+        Log.d(TAG, "getuser method");
+        userscollection.whereEqualTo("name",query).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot i : queryDocumentSnapshots){
+                    Log.d(TAG, "getuser232232323 dsds");
+                    String id =   i.getId();
+                    Log.d(TAG, id);
+                    String username = i.getString("name");
+                    String userabout = i.getString("desc");
+                    SearchClass new1 = new SearchClass(username,userabout,"User",id);
+                    searchClassList.add(new1);
+                    Log.d(TAG, "getuser232232323 method");
+                }
+            }
+        });
+
+        searchadapter.notifyDataSetChanged();
+        return;
+    }
+
+
+
+
 
 
 

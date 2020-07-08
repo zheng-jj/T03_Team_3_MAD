@@ -102,17 +102,17 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         }
 
         //qh -- if object clicked is a user
-        if (searchlist.get(position).getSearchClass() == "User"){
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
-            databaseAccess.open();
-            User currentuser = databaseAccess.searchuserbyid(searchlist.get(position).getId());
-            databaseAccess.close();
+        //if (searchlist.get(position).getSearchClass() == "User"){
+          //  DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
+            //databaseAccess.open();
+          //  User currentuser = databaseAccess.searchuserbyid(searchlist.get(position).getId());
+           // databaseAccess.close();
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "user" + currentuser.getUseridu()+".jpg";
-            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-            viewHolder.searchpic.setImageBitmap(bmImg);
-        }
+           // String filename = "user" + currentuser.getUseridu()+".jpg";
+           // Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+           // viewHolder.searchpic.setImageBitmap(bmImg);
+        //}
 
     }
     @Override
