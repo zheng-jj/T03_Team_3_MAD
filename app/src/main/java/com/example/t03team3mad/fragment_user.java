@@ -48,9 +48,14 @@ public class fragment_user extends Fragment {
 
     //list of reviews made by this user
     List<Review> reviewsByUser = new ArrayList<>();
-
+    private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionBook2 = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefreview = FirebaseFirestore.getInstance().collection("Reviews");
     AdapterReviewForUSer reviewadapter;
+
+    //list of books
+    ArrayList<Book> userfav = new ArrayList<>();
+    AdapterBookMain bookadapter;
 
     ImageView Pic;
     @Override
@@ -247,7 +252,7 @@ public class fragment_user extends Fragment {
 
 
         //user favourite books loaded from firebase
-        ArrayList<Book> userfav = new ArrayList<>();
+
         try {
             userfav = loaduserbooks(usertoView);
         } catch (ExecutionException e) {
@@ -264,7 +269,8 @@ public class fragment_user extends Fragment {
             //jj-set the recyclerview's manager to the previously created manager
             favouritebooks.setLayoutManager(llm);
             //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-            AdapterBookMain bookadapter = new AdapterBookMain(userfav, this.getContext());
+            loadBookurlsbooks();
+            bookadapter = new AdapterBookMain(userfav, this.getContext());
             //jj- set the recyclerview object to its adapter
             favouritebooks.setAdapter(bookadapter);
         }
@@ -308,10 +314,12 @@ public class fragment_user extends Fragment {
                         String userID = dss.getString("uid");
                         if (userID.equals(String.valueOf(user.getUseridu()))) {
                             String review = dss.getString("review");
+                            String isbn = dss.getString("isbn");
                             int points = Integer.parseInt(dss.getString("vote"));
                             int uid = Integer.parseInt(dss.getString("uid"));
                             String name = dss.getString("uname");
                             Review r1 = new Review(uid, name, review, points, userID);
+                            r1.setReviewisbn(isbn);
                             reviewsByUser.add(r1);
                             Log.v("Test", review);
                             Log.v("Test", String.valueOf(points));
@@ -321,6 +329,7 @@ public class fragment_user extends Fragment {
                             continue;
                         }
                     }
+                    loadBookurlsreviews();
                     reviewadapter.notifyDataSetChanged();
                 }
             }
@@ -377,5 +386,46 @@ public class fragment_user extends Fragment {
     public void onAttach(@NonNull Context context) {
         Log.v(TAG,"USER FRAGMENT RECREATED");
         super.onAttach(context);
+    }
+    //jj -  loads the url into book objects for recommended books
+    public void loadBookurlsreviews() {
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Review review : reviewsByUser){
+                        Log.v(TAG,"Bookloop="+review.getReviewisbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(review.getReviewisbn())){
+                                review.setImglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    reviewadapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    public void loadBookurlsbooks() {
+        mCollectionBook2.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Book book : userfav){
+                        Log.v(TAG,"Bookloop="+book.getIsbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(book.getIsbn())){
+                                book.setimglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    bookadapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 }
