@@ -41,7 +41,7 @@ public class reviewpageFragment extends Fragment {
     String isbncheck;
     String Title;
     private CollectionReference mCollectionRefreview = FirebaseFirestore.getInstance().collection("Reviews");
-    private CollectionReference mCollectionRefbook = FirebaseFirestore.getInstance().collection("Books");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

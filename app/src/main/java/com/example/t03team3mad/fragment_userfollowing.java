@@ -37,7 +37,7 @@ public class fragment_userfollowing extends Fragment {
             if(userFollowing!=null) {
                 Log.v(TAG, "Added users");
             };
-            Thread.sleep(2000);
+            Thread.sleep(3000);
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

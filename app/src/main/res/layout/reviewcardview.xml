@@ -31,18 +31,24 @@
                 android:orientation="horizontal">
                 <TextView
                     android:layout_width="0dp"
-                    android:layout_weight="0.8"
+                    android:layout_weight="0.6"
                     android:layout_height="match_parent"
                     android:id="@+id/uname"
                     android:layout_marginStart="5dp"
                     android:background="@drawable/imageview">
 
                 </TextView>
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="0.2"
+                    android:layout_height="match_parent"
+                    android:id="@+id/points"></TextView>
                 <Button
                     android:layout_width="0dp"
                     android:layout_weight="0.2"
                     android:layout_height="match_parent"
-                    android:background="@drawable/imageview">
+                    android:background="@drawable/imageview"
+                    android:id="@+id/upvote">
 
                 </Button>
 

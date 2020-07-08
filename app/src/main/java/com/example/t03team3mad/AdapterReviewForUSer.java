@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,6 +15,11 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Review;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +29,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForUSer.ViewHolder>
 
 {
+    String Isbn;
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Reviews");
     //jj- adapter for review recycler view in user page
     List<Review> mReviewlist = new ArrayList<Review>(){};
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -30,16 +38,28 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
         TextView uName;
         TextView uReview;
         ImageView uPic;
+        Button upvote;
+        TextView points;
+
         ViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.rcview);
             uName = (TextView)itemView.findViewById(R.id.uname);
             uReview = (TextView)itemView.findViewById(R.id.ureview);
             uPic = (ImageView)itemView.findViewById(R.id.uimg);
+            points = itemView.findViewById(R.id.points);
+            upvote = itemView.findViewById(R.id.upvote);
+            upvote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCollectionRefbooks.document(String.valueOf(mReviewlist.get(getAdapterPosition()).getReviewidr())).update("vote", FieldValue.increment(1));
+                }
+            });
         }
     }
     public AdapterReviewForUSer(List<Review> mReviewlist) {
         this.mReviewlist = mReviewlist;
+
     }
     @Override
     public AdapterReviewForUSer.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,6 +76,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
         String filename = "book" + mReviewlist.get(position).getReviewisbn() +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.uPic.setImageBitmap(bmImg);
+        viewHolder.points.setText(mReviewlist.get(position).getReviewpoints());
         Log.v(TAG,"Review for :"+mReviewlist.get(position).getBookName());
     }
 

@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RatingBar;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
@@ -18,6 +20,7 @@ import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firestore.v1.WriteResult;
@@ -28,12 +31,18 @@ import java.util.Map;
 
 public class fragment_addreview extends Fragment {
     private static final String TAG = "authorprofileFragment";
+    TextView rtitle2;
     Button enter;
     EditText editreview;
     String idu;
     String ISBN;
     int idr;
+    float ratevalue;
+    RatingBar ratings;
+    String review;
+    String name;
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,27 +55,38 @@ public class fragment_addreview extends Fragment {
         //jo - find viewbyids
         enter =  view.findViewById(R.id.enter);
         editreview = view.findViewById(R.id.reviewinput);
+        rtitle2 = view.findViewById(R.id.rtitle2);
+        rtitle2.setText(book.getBooktitle());
         ISBN = book.getIsbn();
-        getidr(ISBN);
+
+        ratings = view.findViewById(R.id.ratingBar);
+
+
         // onclick listener for adding review + storing review into database
         enter.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 Log.v("Click","Button clicked");
-
-
                 idu = Integer.toString(user.getUseridu());
-                String review = editreview.getText().toString();
-                addreview(String.valueOf(idr),idu,review,ISBN,user.getUsername());
-                Log.v("idr", String.valueOf(idr));
-                getidr(ISBN);
-
+                review = editreview.getText().toString();
+                name = user.getUsername();
+                ratevalue = ratings.getRating();
+                Log.v("RateValue", String.valueOf(ratevalue));
+                getidr();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("user", user);
+                bundle.putParcelable("currentbook", book);
+                Log.v(TAG,"book info sending data =  "+ user);
+                HomeFragment home = new HomeFragment();
+                home.setArguments(bundle);
+                //jj-updated the way we add fragments into the view
+                MainActivity.addFragment(home,getActivity(),"homepg");
             }
         });
 
         return view;
     }
     // get the latest id of reviews so it can be used to +1 to add another review since it is a primary key
-    public void getidr(String ISBN){
+    public void getidr(){
 
         mCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -76,10 +96,14 @@ public class fragment_addreview extends Fragment {
 
                     idr = data.size()+1;
                     Log.v("idr", String.valueOf(idr));
+                    addreview(String.valueOf(idr),idu,review,ISBN,name);
+                    compilerating();
 
                 }
                 else{
                     idr = 1;
+                    addreview(String.valueOf(idr),idu,review,ISBN,name);
+                    compilerating();
                 }
 
 
@@ -104,6 +128,10 @@ public class fragment_addreview extends Fragment {
         data.put("uname",name);
         data.put("isbn",ISBN);
         mCollectionRef.document(idr).set(data);
+    }
+    public void compilerating(){
+        mCollectionRefbooks.document(ISBN).update("ratecount", FieldValue.increment(1));
+        mCollectionRefbooks.document(ISBN).update("TotalRating", FieldValue.increment(ratevalue));
     }
 }
 

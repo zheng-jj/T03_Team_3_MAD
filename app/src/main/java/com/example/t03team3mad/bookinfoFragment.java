@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -23,27 +26,49 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
-public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickListener {
+public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickListener  {
     private static final String TAG = "bookinfoFragment";
     ArrayList<String>data = new ArrayList<>();
     RecyclerView Genre;
+    int viewcount;
+    String coverurl;
+    int rating;
+    int ratecount;
+    TextView showrating;
+    String isbn;
+
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
     //AdapterGenre adapter;
+
+
+
     @Override
     //qh - assigns the views and transfers the info to them
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        final User user;
 
-        View view = inflater.inflate(R.layout.fragment_bookinfo, container, false);
+
+        final View view = inflater.inflate(R.layout.fragment_bookinfo, container, false);
+        final User user;
         TextView title = view.findViewById(R.id.titleview);
         TextView synopsis = view.findViewById(R.id.synopsis);
         TextView releasedate = view.findViewById(R.id.releasedateview);
@@ -51,9 +76,13 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         TextView author = view.findViewById(R.id.authorview);
         ImageView image = view.findViewById(R.id.imageView2);
 
+        showrating = view.findViewById(R.id.showrate);
         Bundle bundle = this.getArguments();
         if (bundle.getParcelable("currentbook") != null) {
             final Book receivedbook = bundle.getParcelable("currentbook"); // Key
+            isbn = receivedbook.getIsbn();
+            getdata();
+            viewcount(receivedbook.getIsbn());
             System.out.println(receivedbook.getBooktitle());
             System.out.println(receivedbook.getBooktitle());
             System.out.println(receivedbook.getBooktitle());
@@ -158,6 +187,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 }
             });
 
+
             final ArrayList<Book> finalUserbooklist = userbooklist;
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -254,7 +284,8 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     }
 
 
-//Chris - For Genre to send genre name to search book by genre
+
+    //Chris - For Genre to send genre name to search book by genre
     @Override
     public void OnClick(int postion) {
         String Genre=data.get(postion);
@@ -299,7 +330,79 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         userbooklist=task.get();
         Log.v(TAG,"fav book list is loaded");
         return userbooklist;
+
     }
+    public void viewcount(String isbn){
+
+
+        mCollectionRefbooks.document(isbn).update("viewcount", FieldValue.increment(1));
+    }
+    public void calculateRatings(){
+        String showratings;
+        Log.d("Test","Calulcateratings ratecount: " +ratecount);
+        Log.d("Test","Calulcateratings ratecount: " +rating);
+        if(ratecount == 0){
+            showratings = "Ratings unavailable";
+        }
+        else{
+            float temp = rating/ratecount;
+            showratings = String.valueOf(temp);
+            Log.d("Test","Calulcateratings ratecount: " +showratings);
+        }
+
+
+        showrating.setText(showratings);
+
+    }
+    public void generaterecord(){
+        Map<String, Object> data = new HashMap<String,Object>();
+
+        data.put("viewcount", Long.valueOf(1));
+        data.put("TotalRating", Long.valueOf(0));
+        data.put("ratecount", Long.valueOf(0));
+        data.put("coverurl","");
+
+        mCollectionRefbooks.document(isbn).set(data);
+    }
+    public void getdata() {
+        mCollectionRefbooks.document(isbn).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    viewcount = documentSnapshot.getLong("viewcount").intValue();
+                    rating = documentSnapshot.getLong("TotalRating").intValue();
+                    ratecount = documentSnapshot.getLong("ratecount").intValue();
+                    coverurl = documentSnapshot.getString("coverurl");
+                    Log.d("FireStore","Viewcount :" + viewcount);
+                    Log.d("FireStore","rating :" + rating);
+                    Log.d("FireStore","ratecount :" + ratecount);
+                    Log.d("FireStore","url :" + coverurl);
+
+                    calculateRatings();
+                }
+                else{
+                    generaterecord();
+                    calculateRatings();
+                }
+            }
+
+        });
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 }
