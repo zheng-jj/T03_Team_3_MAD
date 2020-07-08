@@ -9,7 +9,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -19,14 +22,15 @@ import java.util.Scanner;
 //jj- this class is only used to get books
 public class APIaccess extends AsyncTask<String,Void,Book>{
     //jj- api url
-    private String apiurl = "https://openlibrary.org/";
+    private String apiurl = "https://www.googleapis.com/";
     private static final String TAG = "APIaccess";
     //jj-empty contructor
     public APIaccess(){}
     //jj - search book by isbn using API
     public Book searchbookbyisbn(String isbn) throws IOException, JSONException {
+        BufferedReader reader = null;
         //jj-sets the url to GET data as json
-        URL url = new URL(apiurl+"api/books?bibkeys=ISBN:"+isbn+"&jscmd=details&format=json");
+        URL url = new URL(apiurl+"books/v1/volumes?q=isbn:"+isbn+"&maxResults=1");
         //jj-opens the connection
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod("GET");
@@ -37,38 +41,37 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
         else
         {
             //jj - gets the string from the url
-            Scanner sc = new Scanner(url.openStream());
             JSONObject bookjsonobj = null;
-            while(sc.hasNext())
-            {
-                String temps = sc.nextLine();
-                //jj-converts string into json object to use
-                bookjsonobj = new JSONObject(temps);
-                //jj- i only need 1 record, hence break after 1 loop
-                break;
+            InputStream stream = conn.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(stream));
+
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line + "\n");
             }
-            sc.close();
+            String newstring = buffer.toString();
+            bookjsonobj = new JSONObject(newstring);
             //jj - use this get data from json object to parse into object
             if(bookjsonobj != null) {
-                String booktitle = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("title");
+                String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
                 Log.v(TAG,"Creation");
                 Log.v(TAG,booktitle);
 
                 //qh - added this block of code because some books dont have value
                 String bookauthor;
-                if (bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").has("authors")){
-                    bookauthor = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getJSONArray("authors").getJSONObject(0).getString("name");
+                if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("authors")){
+                    bookauthor = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
                 }
                 else{
                     bookauthor = "Author Data not Available";
                 }
-
                 Log.v(TAG,bookauthor);
                 //qh - added this block of code because some books dont have value
                 String genrelist = "";
                 String bookgenre;
-                if (bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").has("subjects")){
-                    JSONArray subjects = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getJSONArray("subjects");
+                if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("categories")){
+                    JSONArray subjects = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("categories");
                     //jj-loops through all the subjects in the list of subjects and adds to a string
                     for (int i = 0; i < subjects.length(); i++) {
                         genrelist = genrelist + subjects.getString(i) +";";
@@ -82,17 +85,21 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
 
                 //qh - added this block of code because some books dont have value
                 String bookdes;
-                if (bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").has("description")){
-                    bookdes = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("description");
+                if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("description")){
+                    bookdes = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("description");
                 }
                 else{
                     bookdes = "No Description";
                 }
-                String bookpdate = bookjsonobj.getJSONObject("ISBN:"+isbn).getJSONObject("details").getString("publish_date");
+                String bookpdate = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
 
                 //jj-creates the book object with json data
-                Book x = new Book(booktitle,bookauthor,bookdes,bookgenre,bookpdate,isbn);
+
+                Book x = new Book(booktitle, bookauthor, bookdes, bookgenre, bookpdate, isbn);
+                Log.v(TAG,"Book created ="+x.getIsbn()+"===="+x.getBookgenre()+"===="+x.getBooktitle()+"===="+x.getBookabout());
+                Log.v(TAG, "added+" + x.getIsbn());
                 return x;
+
             }
             else{
                 Book x = new Book("Book data not available","Book data not available","Book data not available","Book data not available","Book data not available","Book data not available");
