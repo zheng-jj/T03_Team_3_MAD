@@ -55,7 +55,12 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
     public void onBindViewHolder(AdapterReviewForUSer.ViewHolder viewHolder, int position) {
         viewHolder.uName.setText(mReviewlist.get(position).getBookName());
         viewHolder.uReview.setText(mReviewlist.get(position).getReviewtext());
-        Picasso.with(context).load(mReviewlist.get(position).getimglink()).into(viewHolder.uPic);
+        if(mReviewlist.get(position).getimglink()== null) {
+            viewHolder.uPic.setImageResource(R.drawable.empty);
+        }
+        else{
+            Picasso.with(context).load(mReviewlist.get(position).getimglink()).into(viewHolder.uPic);
+        }
         Log.v(TAG,"Review for :"+mReviewlist.get(position).getBookName());
     }
 

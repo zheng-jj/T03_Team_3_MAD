@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.cloud.datastore.core.number.IndexNumberDecoder;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -72,8 +73,12 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
             viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
             //jj-this needs to change to the corrosponding user profile picture
             //jj-set image from url
-            Picasso.with(context).load(mBooklist.get(position).getimglink()).into(viewHolder.bookPic);
-
+            if(mBooklist.get(position).getimglink()== null){
+                viewHolder.bookPic.setImageResource(R.drawable.empty);
+            }
+            else {
+                Picasso.with(context).load(mBooklist.get(position).getimglink()).into(viewHolder.bookPic);
+            }
             Log.v(TAG,"loading image from "+mBooklist.get(position).getimglink());
 
 
