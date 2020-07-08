@@ -29,6 +29,9 @@ public class APIaccess extends AsyncTask<String,Void,Book>{
     //jj - search book by isbn using API
     public Book searchbookbyisbn(String isbn) throws IOException, JSONException {
         BufferedReader reader = null;
+        if(isbn==null||isbn==""){
+            return null;
+        }
         //jj-sets the url to GET data as json
         URL url = new URL(apiurl+"books/v1/volumes?q=isbn:"+isbn+"&maxResults=1");
         //jj-opens the connection

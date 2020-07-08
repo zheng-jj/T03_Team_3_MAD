@@ -1,6 +1,7 @@
 package com.example.t03team3mad;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -297,6 +298,19 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                         }
                         Log.v(TAG, "-==========-");
                     }
+                }
+            });
+            Button getBook = view.findViewById(R.id.getBook);
+            getBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle passdata = new Bundle();
+                    passdata.putString("User_UID",String.valueOf(MainActivity.loggedinuser.getUseridu()));
+                    passdata.putParcelable("book",receivedbook);
+                    Intent ViewGetDetails= new Intent(getContext(),ViewGetDetails.class);
+                    ViewGetDetails.putExtra("Bundle", passdata);
+                    Log.v(TAG,"sending this book to view where to get "+receivedbook.getBooktitle());
+                    startActivity(ViewGetDetails);
                 }
             });
 

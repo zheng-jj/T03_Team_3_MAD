@@ -294,19 +294,17 @@ public class fragment_user extends Fragment {
             e.printStackTrace();
         }
 
-        if(userfav!= null) {
-            //jj - load favourite user books recyclerview
-            RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
-            //jj-layout manager linear layout manager manages the position of the recyclerview items
-            LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            //jj-set the recyclerview's manager to the previously created manager
-            favouritebooks.setLayoutManager(llm);
-            //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-            loadBookurlsbooks();
-            bookadapter = new AdapterBookMain(userfav, this.getContext());
-            //jj- set the recyclerview object to its adapter
-            favouritebooks.setAdapter(bookadapter);
-        }
+        //jj - load favourite user books recyclerview
+        RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
+        //jj-layout manager linear layout manager manages the position of the recyclerview items
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        //jj-set the recyclerview's manager to the previously created manager
+        favouritebooks.setLayoutManager(llm);
+        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+        loadBookurlsbooks();
+        bookadapter = new AdapterBookMain(userfav, this.getContext());
+        //jj- set the recyclerview object to its adapter
+        favouritebooks.setAdapter(bookadapter);
 
         //jj - load user reviews recyclerview
         RecyclerView pastReviews = (RecyclerView) view.findViewById(R.id.userreviewprofile);

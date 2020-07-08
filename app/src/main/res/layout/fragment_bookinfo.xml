@@ -4,10 +4,12 @@
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
 
         <TextView
@@ -150,6 +152,15 @@
             app:layout_constraintHorizontal_bias="0.97"
             app:layout_constraintStart_toEndOf="@+id/imageView2" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/getBook"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="get this book"
+            tools:layout_editor_absoluteX="263dp"
+            tools:layout_editor_absoluteY="69dp"
+            tools:ignore="MissingConstraints" />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 </FrameLayout>
