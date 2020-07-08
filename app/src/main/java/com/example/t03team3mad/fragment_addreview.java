@@ -19,10 +19,13 @@ import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import com.google.firebase.firestore.WriteBatch;
 import com.google.firestore.v1.WriteResult;
 
 import java.util.HashMap;
@@ -42,7 +45,9 @@ public class fragment_addreview extends Fragment {
     String review;
     String name;
 
-    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
+
+    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
+    private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
 
     @Override
@@ -124,7 +129,17 @@ public class fragment_addreview extends Fragment {
         data.put("uname",name);
         data.put("isbn",ISBN);
         data.put("rid",idr);
-        mCollectionRef.document(ISBN).collection("Reviews").document(idr).set(data);
+        Map<String, Object> data2= new HashMap<String,Object>();
+
+
+        data.put("review", review);
+        data.put("isbn",ISBN);
+        data.put("rid",idr);
+        mCollectionRefbooks.document(ISBN).collection("Reviews").document(idr).set(data);
+        mCollectionRefuser.document(idu).collection("Reviews").document(idr).set(data2);
+
+
+
     }
     public void compilerating(){
         mCollectionRefbooks.document(ISBN).update("ratecount", FieldValue.increment(1));
