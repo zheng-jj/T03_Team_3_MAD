@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Adapter;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
@@ -21,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder>
 
@@ -29,11 +33,14 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
     // jo - empty list in place of data
     List<Review> mReviewlist = new ArrayList<Review>(){};
     // jo - viewholder
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Reviews");
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView uName;
         TextView uReview;
         ImageView uPic;
+        Button upvote;
+        TextView points;
         ViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView)itemView.findViewById(R.id.rcview);
@@ -53,6 +60,14 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
                     upage.setArguments(bundle);
                     //jj-updated the way we add fragments into the view
                     MainActivity.addFragment(upage,f.getActivity(),"userpage");
+                }
+            });
+            points = itemView.findViewById(R.id.points);
+            upvote = itemView.findViewById(R.id.upvote);
+            upvote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mCollectionRefbooks.document(String.valueOf(mReviewlist.get(getAdapterPosition()).getReviewidr())).update("vote", FieldValue.increment(1));
                 }
             });
         }
@@ -79,6 +94,7 @@ public class AdapterReview extends RecyclerView.Adapter<AdapterReview.ViewHolder
         String filename = "user" + (mReviewlist.get(position).getReviewidu())+".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.uPic.setImageBitmap(bmImg);
+        viewHolder.points.setText(mReviewlist.get(position).getReviewpoints());
 
     }
 

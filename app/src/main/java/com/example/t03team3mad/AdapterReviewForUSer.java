@@ -32,7 +32,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
 {
     Context context;
     String Isbn;
-    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Reviews");
+
     //jj- adapter for review recycler view in user page
     List<Review> mReviewlist = new ArrayList<Review>(){};
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,8 +40,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
         TextView uName;
         TextView uReview;
         ImageView uPic;
-        Button upvote;
-        TextView points;
+
 
         ViewHolder(View itemView) {
             super(itemView);
@@ -49,14 +48,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
             uName = (TextView)itemView.findViewById(R.id.uname);
             uReview = (TextView)itemView.findViewById(R.id.ureview);
             uPic = (ImageView)itemView.findViewById(R.id.uimg);
-            points = itemView.findViewById(R.id.points);
-            upvote = itemView.findViewById(R.id.upvote);
-            upvote.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mCollectionRefbooks.document(String.valueOf(mReviewlist.get(getAdapterPosition()).getReviewidr())).update("vote", FieldValue.increment(1));
-                }
-            });
+
         }
     }
     public AdapterReviewForUSer(List<Review> mReviewlist) {
@@ -78,7 +70,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
         String filename = "book" + mReviewlist.get(position).getReviewisbn() +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.uPic.setImageBitmap(bmImg);
-        viewHolder.points.setText(mReviewlist.get(position).getReviewpoints());
+
         if(mReviewlist.get(position).getimglink()== null) {
             viewHolder.uPic.setImageResource(R.drawable.empty);
         }
