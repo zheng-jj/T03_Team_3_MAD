@@ -103,7 +103,7 @@ public class Book implements Parcelable {
     public void setimglink(String newName) {
         this.imglink = newName;
     }
-    public Book(){
+    public Book(String booktitle, String des, String book, String isbn){
 
     }
     public Book(String title, String author, String about, String genre, String publish, String bisbn,int ratings) {

@@ -24,7 +24,7 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
         //Chris - get the bundle
         mBundle = getArguments();
         String genre = mBundle.getString("Genre").trim();
-        SearchGenre("genre");
+        SearchGenre(genre);
         RecyclerView results = (RecyclerView) view.findViewById(R.id.GenreCardRecyclerView);
         LinearLayoutManager layout = new LinearLayoutManager(getActivity());
         results.setLayoutManager(layout);
@@ -38,17 +38,11 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
     public void SearchGenre(String genre) {
         BookByGenre.clear();
 
-        AsyncTask<String, Void, Book> tasktogetbook = new APIaccessSearchGenre().execute("reading");
+        AsyncTask<String, Void, ArrayList<Book>> tasktogetbook = new APIaccessSearchGenre().execute(genre);
 
         try {
-            Book temp = tasktogetbook.get();
-            Log.v(TAG,"Book created = "+temp.getBooktitle());
-            Log.v(TAG,"Book isbn = "+temp.getIsbn());
-            Log.v(TAG,"Book about = "+temp.getBookabout());
-            Log.v(TAG,"Book date = "+temp.getPdate());
-            Log.v(TAG,"Book genre = "+temp.getBookgenre());
-            Log.v(TAG,"Book author = "+temp.getBookauthor());
-            BookByGenre.add(temp);
+            BookByGenre=tasktogetbook.get();
+
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
