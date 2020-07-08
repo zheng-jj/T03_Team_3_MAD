@@ -68,12 +68,17 @@ public class fragment_user extends Fragment {
 
 
 
-        if (bundle.getParcelable("searchuser") != null) {
+        if (bundle.getParcelable("searchuser") != null||MainActivity.viewuser != null) {
             Log.v(TAG,"showing search user profile");
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_user,container,false);
             this.pageview = view;
-            usertoView = bundle.getParcelable("searchuser");
+            if(MainActivity.viewuser!=null) {
+                usertoView = MainActivity.viewuser;
+            }
+            else {
+                usertoView = bundle.getParcelable("searchuser");
+            }
             Log.v(TAG,"currently viewing ="+ String.valueOf(usertoView.getUseridu()));
             Log.v(TAG, "currently logged in ="+String.valueOf(MainActivity.loggedinuser.getUseridu()));
             //checks if user is viewing himself
@@ -165,15 +170,33 @@ public class fragment_user extends Fragment {
                     }
                 }
             });
+            //jj - loads user into layout
+            Pic = view.findViewById(R.id.userPic);
+            String path = null;
+            try {
+                path = getimage(usertoView);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                loaduserintoview(view,usertoView,path);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             //jj-removes the arguements so that i will get the reason why this page is loaded
             this.getArguments().putParcelable("searchuser",null);
+            MainActivity.viewuser = null;
         }
 
         //checks if the user is viewing his own profile
         else {
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
-
+            Log.v(TAG,"currently logged in :"+MainActivity.loggedinuser.getUsername());
             usertoView = MainActivity.loggedinuser;
             //onclick listener to edit profile
             Button editprofile = view.findViewById(R.id.edit);
@@ -237,22 +260,28 @@ public class fragment_user extends Fragment {
                 }
             });
 
+            //jj - loads user into layout
+            Pic = view.findViewById(R.id.userPic);
+            String path = null;
+            try {
+                path = getimage(MainActivity.loggedinuser);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                loaduserintoview(view,MainActivity.loggedinuser,path);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
-
+        this.getArguments().putParcelable("searchuser",null);
         v=view;
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
-        //jj - loads user into layout
-        try {
-            Pic = view.findViewById(R.id.userPic);
-            String path = getimage(usertoView);
-            loaduserintoview(view,usertoView,path);
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
 
         //user favourite books loaded from firebase

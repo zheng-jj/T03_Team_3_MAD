@@ -12,6 +12,7 @@ import android.widget.SearchView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -139,7 +140,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
     //qh - when clicking search item
     @Override
-    public void onSearchClick(int position) {
+    public void onSearchClick(int position) throws InterruptedException {
         SearchClass currentsearchobject = searchClassList.get(position);
 
         //qh -- if object clicked is a book
@@ -176,20 +177,19 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         //qh -- if object clicked is user
         if (currentsearchobject.getSearchClass().equals("User")){
             //qh - gets user
-            AsyncTask<String,Void, User> getbook = new FireStoreAccess.AccessUser().execute(currentsearchobject.getId());
+            AsyncTask<String,Void, User> getbook = new FireStoreAccess.AccessUser2().execute(currentsearchobject.getId());
             User currentuser = null;
             try {
                 currentuser = getbook.get();
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
             }
-
-
+            Thread.sleep(1000);
             fragment_user nextFrag= new fragment_user();
             Bundle bundle = new Bundle();
-            bundle.putParcelable("currentuser", currentuser);
+            bundle.putParcelable("searchuser", currentuser);
             nextFrag.setArguments(bundle);//jj-updated the way we add fragments into the view
-            MainActivity.addFragment(nextFrag,getActivity(),"findUser"+currentsearchobject.getSearchName());
+            MainActivity.addFragment(nextFrag,getActivity(),"UserFragment");
         }
     }
 

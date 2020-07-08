@@ -29,9 +29,12 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
     private static final String TAG = "MainActivity";
     private Integer uid = null;
+    public static User viewuser = null;
     public static User loggedinuser = null;
     public List<String> backstacktags = new ArrayList<>();
     BottomBar bottomBar;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,6 +145,8 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     public static void updateUserLogged(User user){
         loggedinuser = user;
     }
+    public static void updateuserview(User user) {viewuser=user; }
+
 
     private void starthomefragment(){
         Log.v(TAG, "home fragment launched");
