@@ -320,7 +320,7 @@ public class fragment_user extends Fragment {
                                 int uid = Integer.parseInt(dss.getString("uid"));
                                 String name = dss.getString("uname");
                                 Review r1 = new Review(uid, name, review, points, userID);
-                                r1.setReviewisbn(isbn);
+                                r1.setIsbn(isbn);
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);
                                 Log.v("Test", String.valueOf(points));
@@ -397,10 +397,10 @@ public class fragment_user extends Fragment {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
                     for(Review review : reviewsByUser){
-                        Log.v(TAG,"Bookloop="+review.getReviewisbn());
+                        Log.v(TAG,"Bookloop="+review.getIsbn());
                         for(DocumentSnapshot doc : data){
                             Log.v(TAG,"Docloop="+doc.getReference().getId());
-                            if(doc.getReference().getId().equals(review.getReviewisbn())){
+                            if(doc.getReference().getId().equals(review.getIsbn())){
                                 review.setImglink(doc.getString("coverurl"));
                             }
                         }

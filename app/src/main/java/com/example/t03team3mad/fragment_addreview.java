@@ -41,7 +41,8 @@ public class fragment_addreview extends Fragment {
     RatingBar ratings;
     String review;
     String name;
-    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
+
+    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
 
     @Override
@@ -52,6 +53,7 @@ public class fragment_addreview extends Fragment {
         Bundle bundle = this.getArguments();
         final User user = bundle.getParcelable("user");
         final Book book = bundle.getParcelable("book");
+
         //jo - find viewbyids
         enter =  view.findViewById(R.id.enter);
         editreview = view.findViewById(R.id.reviewinput);
@@ -82,7 +84,7 @@ public class fragment_addreview extends Fragment {
     // get the latest id of reviews so it can be used to +1 to add another review since it is a primary key
     public void getidr(){
 
-        mCollectionRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mCollectionRef.document(ISBN).collection("Reviews").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
@@ -121,7 +123,8 @@ public class fragment_addreview extends Fragment {
         data.put("review", review);
         data.put("uname",name);
         data.put("isbn",ISBN);
-        mCollectionRef.document(idr).set(data);
+        data.put("rid",idr);
+        mCollectionRef.document(ISBN).collection("Reviews").document(idr).set(data);
     }
     public void compilerating(){
         mCollectionRefbooks.document(ISBN).update("ratecount", FieldValue.increment(1));

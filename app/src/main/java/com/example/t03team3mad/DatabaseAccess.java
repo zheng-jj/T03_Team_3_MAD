@@ -340,7 +340,7 @@ public class DatabaseAccess {
                 String uname = user.getUsername();
                 String title = searchbookbyisbn(ISBN).getBooktitle();
                 String bookname = searchbookbyisbn(ISBN).getBooktitle();
-                Review reviewobj = new Review(Integer.parseInt(idus), Integer.parseInt(idrs), uname, title, review, ISBN);
+                Review reviewobj = new Review(idus, idrs, uname, title, review, ISBN);
                 reviewobj.setBookName(bookname);
                 mReviewlist.add(reviewobj);
             } while (temp.moveToNext());
@@ -363,7 +363,7 @@ public class DatabaseAccess {
             String review = temp2.getString(2);
             String uname = getElement("Name", "USER", "IDU", idus);
             String title = getElement("Title", "Book", "ISBN", ISBN);
-            Review review1 = new Review(Integer.parseInt(idus),Integer.parseInt(idrs) , uname, title, review, ISBN);
+            Review review1 = new Review(idus,idrs , uname, title, review, ISBN);
             mReviewlist.add(review1);
             Log.d("list",mReviewlist.toString());}
 
