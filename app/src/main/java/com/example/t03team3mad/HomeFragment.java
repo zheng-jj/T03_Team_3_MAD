@@ -1,5 +1,6 @@
 package com.example.t03team3mad;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.graphics.Bitmap;
@@ -25,14 +26,23 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment.OnClickListener {
@@ -82,19 +92,9 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
 
 
 
-        //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
-        AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute("9780980200447");
+        AsyncTask<String, Void, ArrayList<Book>> task = new  APIaccessBookList(getContext()).execute("9780980200447");
         try {
-            Book temp = tasktogetbook.get();
-            if(temp!=null) {
-                Log.v(TAG, "Book created = " + temp.getBooktitle());
-                Log.v(TAG, "Book isbn = " + temp.getIsbn());
-                Log.v(TAG, "Book about = " + temp.getBookabout());
-                Log.v(TAG, "Book date = " + temp.getPdate());
-                Log.v(TAG, "Book genre = " + temp.getBookgenre());
-                Log.v(TAG, "Book author = " + temp.getBookauthor());
-                booklist2.add(temp);
-            };
+            booklist2 = task.get();
         } catch (ExecutionException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {
@@ -102,19 +102,21 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         }
 
 
-        if(booklist2!=null) {
-            //load recommended books recyclerview
-            //do the same for another recycler view recommendedbooks
-            RecyclerView recommended = (RecyclerView) view.findViewById(R.id.recommendbookrecyclerview);
-            LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            //jj-set the recyclerview's manager to the previously created manager
-            recommended.setLayoutManager(llm2);
-            loadBookurlsreco();
-            //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-            bookadapter2 = new AdapterBookMain(booklist2, this.getContext());
-            //jj- set the recyclerview object to its adapter
-            recommended.setAdapter(bookadapter2);
-        }
+
+        //load recommended books recyclerview
+        //do the same for another recycler view recommendedbooks
+        RecyclerView recommended = (RecyclerView) view.findViewById(R.id.recommendbookrecyclerview);
+        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        //jj-set the recyclerview's manager to the previously created manager
+        recommended.setLayoutManager(llm2);
+        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+        loadBookurlsreco();
+        bookadapter2 = new AdapterBookMain(booklist2, this.getContext());
+
+        //jj- set the recyclerview object to its adapter
+        recommended.setAdapter(bookadapter2);
+
+
         return view;
     }
 
@@ -160,33 +162,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     }
 
 
-    //qh - method to save the image to internal storage
-    public void saveimagestointernalstorage(String filename) {
-        try {
-            int id = getActivity().getApplicationContext().getResources().getIdentifier(filename, "drawable", getActivity().getApplicationContext().getPackageName());
-            Drawable drawable = getResources().getDrawable(id);
-            bitmap = ((BitmapDrawable) drawable).getBitmap();
-            ContextWrapper cw = new ContextWrapper(getActivity().getApplicationContext());
-            File directory = cw.getDir("imageDir", Context.MODE_PRIVATE);
-            File file = new File(directory, filename + ".jpg");
-            if (!file.exists()) {
-                Log.d("path", file.toString());
-                FileOutputStream fos = null;
-                try {
-                    fos = new FileOutputStream(file);
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, fos);
-                    fos.flush();
-                    fos.close();
-                } catch (java.io.IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }catch (Exception e){
-        }
-
-    }
-
-
 
     //Chris - if user click on the genre on the recycler view
     @Override
@@ -217,6 +192,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
                             }
                         }
                     }
+                    bookadapter2.mBooklist=booklist2;
                     bookadapter2.notifyDataSetChanged();
                 }
             }

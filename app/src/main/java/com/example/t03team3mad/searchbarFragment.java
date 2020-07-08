@@ -148,6 +148,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         Book currentbook = null;
         if (currentsearchobject.getSearchClass().equals("Book")){
             AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(currentsearchobject.getId());
+            Log.v(TAG,"searched ="+currentsearchobject.getId());
             final ArrayList<Book> booklist2=new ArrayList<>();
             try {
                 currentbook = tasktogetbook.get();
