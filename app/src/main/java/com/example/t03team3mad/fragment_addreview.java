@@ -72,14 +72,8 @@ public class fragment_addreview extends Fragment {
                 ratevalue = ratings.getRating();
                 Log.v("RateValue", String.valueOf(ratevalue));
                 getidr();
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("user", user);
-                bundle.putParcelable("currentbook", book);
-                Log.v(TAG,"book info sending data =  "+ user);
-                HomeFragment home = new HomeFragment();
-                home.setArguments(bundle);
-                //jj-updated the way we add fragments into the view
-                MainActivity.addFragment(home,getActivity(),"homepg");
+
+                getFragmentManager().popBackStack("HomeFragment",0);
             }
         });
 

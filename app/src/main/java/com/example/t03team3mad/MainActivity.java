@@ -271,6 +271,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 ft.attach(manager.findFragmentByTag(tag));
                 ft.show(manager.findFragmentByTag(tag));
             }
+            else if(fragment instanceof bookinfoFragment){
+                ft.detach(manager.findFragmentByTag(tag));
+                ft.attach(manager.findFragmentByTag(tag));
+                ft.show(manager.findFragmentByTag(tag));
+            }
             else {
                 //only shows the fragment chosen
                 ft.show(manager.findFragmentByTag(tag));
