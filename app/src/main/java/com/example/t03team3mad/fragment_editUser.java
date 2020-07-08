@@ -31,6 +31,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,10 +48,10 @@ import java.util.concurrent.ExecutionException;
 public class fragment_editUser extends Fragment {
     private static final String TAG = "userEditFragment";
     List<Book> userBooklist = null;
-
+    private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     private static final int RESULTLOADIMAGE=1;
-
-
+    AdapterBookMain bookadapter;
+    ArrayList<Book> userfav = new ArrayList<>();
     ImageButton Pic;
 
     @Override
@@ -66,7 +71,6 @@ public class fragment_editUser extends Fragment {
         }
         Pic=view.findViewById(R.id.newprofileimg);
 
-        ArrayList<Book> userfav = new ArrayList<>();
         try {
             userfav=loaduserbooks(usertoEdit);
         } catch (ExecutionException e) {
@@ -83,7 +87,9 @@ public class fragment_editUser extends Fragment {
         //jj-set the recyclerview's manager to the previously created manager
         favouritebooks.setLayoutManager(llm);
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        AdapterBookMain bookadapter = new AdapterBookMain(userfav, this.getContext());
+        loadBookurls();
+
+        bookadapter = new AdapterBookMain(userfav, this.getContext());
         if(userfav!=null) {
             //jj- set the recyclerview object to its adapter
             favouritebooks.setAdapter(bookadapter);
@@ -271,6 +277,27 @@ public class fragment_editUser extends Fragment {
         String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         Pic.setImageBitmap(bmImg);
+    }
+
+    public void loadBookurls() {
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(Book book : userfav){
+                        Log.v(TAG,"Bookloop="+book.getIsbn());
+                        for(DocumentSnapshot doc : data){
+                            Log.v(TAG,"Docloop="+doc.getReference().getId());
+                            if(doc.getReference().getId().equals(book.getIsbn())){
+                                book.setimglink(doc.getString("coverurl"));
+                            }
+                        }
+                    }
+                    bookadapter.notifyDataSetChanged();
+                }
+            }
+        });
     }
 
     @Override

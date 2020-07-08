@@ -73,7 +73,7 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
             viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
             //jj-this needs to change to the corrosponding user profile picture
             //jj-set image from url
-            if(mBooklist.get(position).getimglink()== null){
+            if(mBooklist.get(position).getimglink()== null||mBooklist.get(position).getimglink()==""){
                 viewHolder.bookPic.setImageResource(R.drawable.empty);
             }
             else {

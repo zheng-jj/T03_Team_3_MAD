@@ -23,6 +23,8 @@ import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
 
+import org.json.JSONException;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -83,18 +85,40 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             if(searchClassList!=null) {
                 Log.v(TAG, "Added Searches");
             };
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+        
+        List<SearchClass> toremove = new ArrayList<>();
+        //qh- to prevent books from showing up that dont have information at all
+        for (SearchClass i : searchClassList){
+            Book newbook = null;
+            AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(i.getId());
+            try {
+                newbook = tasktogetbook.get();
+                if(newbook!=null) {
+                    Log.v(TAG, "Book created = " + newbook.getBooktitle());
+                    Log.v(TAG, "Book isbn = " + newbook.getIsbn());
+                    Log.v(TAG, "Book about = " + newbook.getBookabout());
+                    Log.v(TAG, "Book date = " + newbook.getPdate());
+                    Log.v(TAG, "Book genre = " + newbook.getBookgenre());
+                    Log.v(TAG, "Book author = " + newbook.getBookauthor());
+                }
+                else{
+                    toremove.add(i);
+                };
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        searchClassList.removeAll(toremove);
 
-        for (Author var : searchauthor)
-        {
-            System.out.println(var.getAuthorname());
-            SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author",String.valueOf(var.getAuthorid()));
-            searchClassList.add(searchClass);
-        }
+        //for (Author var : searchauthor)
+        //{
+           // System.out.println(var.getAuthorname());
+           // SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author",String.valueOf(var.getAuthorid()));
+           // searchClassList.add(searchClass);
+        //}
         for (User var : searchUser)
         {
             System.out.println(var.getUsername());
@@ -145,19 +169,19 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
         }
         // qh -- if object clicked is author
-        if (currentsearchobject.getSearchClass().equals("Author")){
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            databaseAccess.open();
-            Author currentauthor = databaseAccess.searchauthorbyida(currentsearchobject.getId());
-            databaseAccess.close();
+        //if (currentsearchobject.getSearchClass().equals("Author")){
+           // DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
+           // databaseAccess.open();
+           // Author currentauthor = databaseAccess.searchauthorbyida(currentsearchobject.getId());
+           // databaseAccess.close();
 
-            authorprofileFragment nextFrag= new authorprofileFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable("currentauthor", currentauthor);  // Key, value
-            nextFrag.setArguments(bundle);
+           // authorprofileFragment nextFrag= new authorprofileFragment();
+           // Bundle bundle = new Bundle();
+           // bundle.putParcelable("currentauthor", currentauthor);  // Key, value
+           // nextFrag.setArguments(bundle);
             //jj-updated the way we add fragments into the view
-            MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
-        }
+           // MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
+        //}
         //qh -- if object clicked is user
             if (currentsearchobject.getSearchClass().equals("User")){
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());

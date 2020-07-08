@@ -70,8 +70,7 @@ public class AdapterReviewForUSer extends RecyclerView.Adapter<AdapterReviewForU
         String filename = "book" + mReviewlist.get(position).getReviewisbn() +".jpg";
         Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
         viewHolder.uPic.setImageBitmap(bmImg);
-
-        if(mReviewlist.get(position).getimglink()== null) {
+        if(mReviewlist.get(position).getimglink()== null||mReviewlist.get(position).getimglink()=="") {
             viewHolder.uPic.setImageResource(R.drawable.empty);
         }
         else{
