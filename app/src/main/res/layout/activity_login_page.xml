@@ -88,6 +88,14 @@
             android:textSize="20dp"
             />
 
+        <TextView
+            android:id="@+id/forgotPassword"
+            android:layout_width="213dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="80dp"
+            android:textSize="15dp"
+            android:text="Forgot Password?" />
+
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"

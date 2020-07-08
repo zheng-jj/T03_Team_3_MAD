@@ -31,6 +31,7 @@ public class LoginPage extends AppCompatActivity {
     EditText EnterEmail,EnterPassword;
     Button LoginButton;
     TextView RegisterButton;
+    TextView ResetPassword;
     FirebaseAuth Auth;
     SharedPreferences Auto_login;
     FirebaseUser user;
@@ -76,6 +77,7 @@ public class LoginPage extends AppCompatActivity {
         LoginButton=findViewById(R.id.LoginButton);
         Auth=FirebaseAuth.getInstance();
         RegisterButton=findViewById(R.id.Register);
+        ResetPassword=findViewById(R.id.forgotPassword);
         progressBar =  findViewById(R.id.progressBar);
         user=Auth.getCurrentUser();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
@@ -183,6 +185,14 @@ public class LoginPage extends AppCompatActivity {
                 Log.v(TAG,"Going to Register Page");
                 Intent Register=new Intent(LoginPage.this, RegisterPage.class);
                 startActivity(Register);
+            }
+        });
+        ResetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.v(TAG,"Going to Reset Password Page");
+                Intent Reset=new Intent(LoginPage.this, ResetPasswordPage.class);
+                startActivity(Reset);
             }
         });
     }
