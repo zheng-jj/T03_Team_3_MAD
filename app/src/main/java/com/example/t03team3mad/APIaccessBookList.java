@@ -125,7 +125,8 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
                         Log.v(TAG, "Book created =" + x.getIsbn() + "====" + x.getBookgenre() + "====" + x.getBooktitle() + "====" + x.getBookabout());
                         Log.v(TAG, "added+" + x.getIsbn());
                         listofresults.add(x);
-                    } else {
+                    }
+                    else {
                         Book x = new Book("Book data not available", "Book data not available", "Book data not available", "Book data not available", "Book data not available", "Book data not available");
                         listofresults.add(x);
                     }
