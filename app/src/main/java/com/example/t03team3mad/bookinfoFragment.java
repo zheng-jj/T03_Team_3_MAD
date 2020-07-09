@@ -123,8 +123,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             AdapterGenre mAdapter =
                     new AdapterGenre(data,this);
 
-            LinearLayoutManager mLayoutManager =
-                    new LinearLayoutManager(this.getContext());
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
 
             Genre.setLayoutManager(mLayoutManager);
             Genre.setItemAnimator(new DefaultItemAnimator());
