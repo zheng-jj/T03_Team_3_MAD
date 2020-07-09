@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 
 public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGenre.onclickListener {
     private static final String TAG = "SearchByGenreFragment";
-    List<Book> BookByGenre = new ArrayList<>();
+    ArrayList<Book> BookByGenre = new ArrayList<>();
     Bundle mBundle;
     //layout
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -25,6 +25,7 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
         mBundle = getArguments();
         String genre = mBundle.getString("Genre").trim();
         SearchGenre(genre);
+
         RecyclerView results = (RecyclerView) view.findViewById(R.id.GenreCardRecyclerView);
         LinearLayoutManager layout = new LinearLayoutManager(getActivity());
         results.setLayoutManager(layout);
@@ -42,6 +43,9 @@ public class Book_ByGenre extends Fragment implements AdaptorToViewBookBasedOnGe
 
         try {
             BookByGenre=tasktogetbook.get();
+            if(BookByGenre!=null) {
+                Log.v(TAG, "Added books");
+            }
 
         } catch (ExecutionException e) {
             e.printStackTrace();

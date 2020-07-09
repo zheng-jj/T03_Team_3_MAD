@@ -37,7 +37,7 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
         BufferedReader reader = null;
         String newtitle = title.replace(' ', '+');
         Log.v(TAG,newtitle);
-        URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle&maxResults=15");
+        URL url = new URL(apiurl+"books/v1/volumes?q=" + newtitle + ":intitle");
         //URL url = new URL(apiurl+"search.json?q=" + newtitle);
 
         //jj-opens the connection
@@ -68,7 +68,17 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
             bookjsonobj = new JSONObject(newstring);
             Log.v(TAG, newstring);
             //qh - all the json object stuff
-            JSONArray jsonarray = bookjsonobj.getJSONArray("items");
+            JSONArray jsonarray;
+            //qh - catch error if json not found
+            try{
+                jsonarray = bookjsonobj.getJSONArray("items");
+                // code that may throw exception
+            }catch(org.json.JSONException exception){
+                // how you handle the exception
+                // e.printStackTrace();
+                return booklistBOOK;
+            }
+
             //JSONArray jsonarray = bookjsonobj.getJSONArray("docs");
             for (int i = 0; i < jsonarray.length(); i++) {
                 String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("title");

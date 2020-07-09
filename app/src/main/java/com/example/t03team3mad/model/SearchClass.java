@@ -32,6 +32,13 @@ public class SearchClass {
     public void setId(String newid) {
         this.id = newid;
     }
+    private String imglink;
+    public String getimglink() {
+        return imglink;
+    }
+    public void setimglink(String newName) {
+        this.imglink = newName;
+    }
 
     public SearchClass (String name, String des, String searchclass, String newid){
         searchName = name;

@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 
 import com.example.t03team3mad.model.Book;
+import com.google.firebase.events.Publisher;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,7 +33,7 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
         BufferedReader reader = null;
         String newtitle = genre.replace(' ', '+');
         Log.v(TAG,newtitle);
-        URL url = new URL(apiurl+"books/v1/volumes?q="+genre+"subject&maxResults=10");
+        URL url = new URL(apiurl+"books/v1/volumes?q="+"subject:"+genre+"&maxResults=10");
 
         //        //jj-opens the connection
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -57,18 +58,47 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
             while ((line = reader.readLine()) != null) {
                 buffer.append(line+"\n");
             }
+            String des="";
             String newstring = buffer.toString();
             bookjsonobj = new JSONObject(newstring);
             Log.v(TAG, newstring);
             //qh - all the json object stuff
             JSONArray jsonarray = bookjsonobj.getJSONArray("items");
             //JSONArray jsonarray = bookjsonobj.getJSONArray("docs");
+
             for (int i = 0; i < jsonarray.length(); i++) {
                 String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("title");
                 //String booktitle = bookjsonobj.getJSONArray("docs").getJSONObject(i).getString("title");
+                if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("description")) {
+                    des = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("description");
+                }
+                else{
+                    des = "This book was retrieved from Google Books";
+             }
 
-                //String des = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("description");
-                String des = "This book was retrieved from Google Books";
+                String publisher="";
+                if(bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("authors")){
+                    publisher=bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
+
+
+                }
+                else
+                {
+                    publisher="Author Data not available";
+                }
+                String date="";
+                if(bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("publishedDate")){
+                    date=bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("publishedDate");
+
+                }
+                else
+                {
+                    date="Author Data not available";
+                }
+
+
+                //String author = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("authors");
+                //String Loadauthor=author.substring(2,author.length()-2);
                 String isbn = new String();
                 if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("industryIdentifiers")){
                     isbn = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
@@ -76,17 +106,17 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
                 else {
                     isbn = "";
                 }
+                String subjects;
+                if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("categories")){
+                     subjects = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("categories");
+                    //jj-loops through all the subjects in the list of subjects and adds to a string
 
-                genre=bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("authors");
-                String author = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("authors");
-                String Loadauthor=author.substring(2,author.length()-2);
-                //String isbn = new String();
-                //JSONArray isbnlist = bookjsonobj.getJSONArray("docs").getJSONObject(i).getJSONArray("isbn");
-                //for (int x = 0; i < 1; i++) {
-                //isbn = isbnlist.getString(0);
-                //}
+                }
+                else {
+                    subjects = "Genres not available";
+                }
 
-                Book newsearchobject = new Book(booktitle,Loadauthor,des,genre,"123",isbn,0);
+                Book newsearchobject = new Book(booktitle,publisher,des,"subjects",date,isbn,0);
                 booklistBOOK.add(newsearchobject);
 
             }

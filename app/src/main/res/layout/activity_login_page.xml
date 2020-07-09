@@ -92,9 +92,11 @@
             android:id="@+id/forgotPassword"
             android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="80dp"
+            android:layout_marginLeft="120dp"
             android:textSize="15dp"
-            android:text="Forgot Password?" />
+            android:textColor="@color/colorPrimaryDark"
+            android:text="Forgot Password?"
+            android:textStyle="bold"/>
 
         <ProgressBar
             android:id="@+id/progressBar"

@@ -40,6 +40,8 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     List<SearchClass> searchClassList = new ArrayList<SearchClass>();
     private ProgressBar progressbar;
     private CollectionReference userscollection = FirebaseFirestore.getInstance().collection("User");
+    private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
+
     String isbn;
 
     @Override
@@ -128,12 +130,13 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
            // searchClassList.add(searchClass);
         //}
         Log.d(TAG, "Running User Code Now");
-
+        loadbookssearch();
         //qh - puts all the results into recycler view to display
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
         searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
+        //qh - gets users
         getuser(query);
         searchresults.setAdapter(searchadapter);
     }
@@ -217,6 +220,35 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
         searchadapter.notifyDataSetChanged();
         return;
+    }
+    public void loadbookssearch() {
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(SearchClass searchclass : searchClassList){
+                        if (searchclass.getSearchClass().equals("Book")){
+                            Log.v(TAG,"Bookloop="+searchclass.getId());
+                            for(DocumentSnapshot doc : data){
+                                Log.v(TAG,"Docloop="+doc.getReference().getId());
+                                if(doc.getReference().getId().equals(searchclass.getId())){
+                                    searchclass.setimglink(doc.getString("coverurl"));
+                                }
+                            }
+                        }
+                    }
+                    searchadapter.notifyDataSetChanged();
+                }
+            }
+        });
+    }
+    public static String getimagesearch(SearchClass searchClass) throws ExecutionException, InterruptedException {
+        String filename = "user" + searchClass.getId() +".jpg";
+        //jj gets image from firebase and saves to local storage
+        AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
+        String path = task.get();
+        return path;
     }
 
 
