@@ -130,15 +130,16 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
            // searchClassList.add(searchClass);
         //}
         Log.d(TAG, "Running User Code Now");
-        loadbookssearch();
         //qh - puts all the results into recycler view to display
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
         searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
-        //qh - gets users
+        loadbookssearch();
         getuser(query);
+        //qh - gets users
         searchresults.setAdapter(searchadapter);
+
     }
 
     //qh - when clicking search item
@@ -217,7 +218,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                 }
             }
         });
-
+        searchadapter.searchlist = searchClassList;
         searchadapter.notifyDataSetChanged();
         return;
     }
@@ -238,7 +239,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                             }
                         }
                     }
-                    searchadapter.notifyDataSetChanged();
+
                 }
             }
         });
