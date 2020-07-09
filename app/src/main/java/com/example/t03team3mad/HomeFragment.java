@@ -57,7 +57,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     //jj- these are mainly to load the recyclerviews
     List<Book> booklist=new ArrayList<>();
     List<Book> booklist2=new ArrayList<>();
-    List<User> users=new ArrayList<>();
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     AdapterBookMain bookadapter;
     AdapterBookMain bookadapter2;
@@ -101,6 +100,21 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+
+
+        //load recommended books recyclerview
+        //do the same for another recycler view recommendedbooks
+        RecyclerView recommended = (RecyclerView) view.findViewById(R.id.recommendbookrecyclerview);
+        LinearLayoutManager llm2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        //jj-set the recyclerview's manager to the previously created manager
+        recommended.setLayoutManager(llm2);
+        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+        loadBookurlsreco();
+        bookadapter2 = new AdapterBookMain(booklist2, this.getContext());
+
+        //jj- set the recyclerview object to its adapter
+        recommended.setAdapter(bookadapter2);
 
 
         return view;
@@ -184,7 +198,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             }
         });
     }
-
+    //jj -  loads the url into book objects for favouritebooks
     public void loadBookurlsfav() {
         mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
