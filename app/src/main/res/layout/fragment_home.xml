@@ -22,13 +22,12 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/genrelistrecyclerview"
-            android:layout_below="@id/genrestext"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
+            android:layout_height="85dp"
+            android:layout_below="@id/genrestext"
+            android:layout_centerInParent="true"
             android:padding='5dp'
-            android:layout_centerVertical="true"
-            android:scrollbars="none"/>
+            android:scrollbars="none" />
         <TextView
             android:layout_marginTop="10dp"
             android:layout_below="@id/genrelistrecyclerview"
@@ -73,5 +72,7 @@
             android:padding='5dp'
             android:layout_centerVertical="true"
             android:scrollbars="none" />
+
+
     </RelativeLayout>
 </FrameLayout>
