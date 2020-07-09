@@ -55,11 +55,16 @@ public class reviewpageFragment extends Fragment {
     Fragment f;
     String isbn;
     String Title;
+    int uid;
+    int aid;
+    List<String> uids = new ArrayList<String>();
     Reviews model1;
     private RecyclerView mFirestoreList;
     private FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerAdapter adapter;
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
+
 
 
     @Override
@@ -68,7 +73,9 @@ public class reviewpageFragment extends Fragment {
         f = this;
         Bundle bundle = this.getArguments();
         final Book book = bundle.getParcelable("book");
+        final User user = bundle.getParcelable("user");
         isbn = book.getIsbn();
+        uid = user.getUseridu();
         // jo - display layout
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
 
@@ -122,8 +129,20 @@ public class reviewpageFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         Log.v("Test","Upvote CLicked");
+                        final Map<String, Object> data4 = new HashMap<String,Object>();
 
-                        mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
+                        data4.put("isbn",isbn);
+                        data4.put("uid", uid);
+
+                        mCollectionRefuser.document(String.valueOf(uid)).collection("Upvote").add(data4);
+                        final Map<String, Object> data3 = new HashMap<String,Object>();
+                        data3.put("Activity","Upvote");
+                        data3.put("Rating",0);
+                        data3.put("Review", "");
+                        data3.put("isbn",isbn);
+                        data3.put("rid",model.getRid());
+                        setdata(data3,model);
+
 
                     }
                 });
@@ -160,12 +179,56 @@ public class reviewpageFragment extends Fragment {
 
 
 
+
     };
 
     @Override
     public void onStart() {
         super.onStart();
         adapter.startListening();
+    }
+    public void setdata(final Map<String, Object> data3, final Reviews model){
+
+        mCollectionRefuser.whereArrayContains("following",String.valueOf(uid)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot i:queryDocumentSnapshots){
+                    uids.add(String.valueOf(i.getLong("useridu").intValue()));
+                    Log.v("uid",String.valueOf(i.getLong("useridu").intValue()));
+                }
+                for(String i :uids){
+                    getaid(i,data3,model);
+
+                }
+
+            }
+        });
+    }
+    public void getaid(final String id, final Map<String, Object> data3, final Reviews model){
+        mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
+
+                    aid = data.size()+1;
+                    mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
+                    mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
+
+
+                }
+                else{
+                    aid = 1;
+                    mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
+                    mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
+
+                }
+
+
+
+
+            }
+        });
     }
 }
 
