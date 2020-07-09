@@ -42,6 +42,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
     List<Book> newbooklist=new ArrayList<>();
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
 
+
     //qh -- uses onclicklistener to click
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         CardView cardView;
@@ -92,12 +93,6 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
 
         //SET IMAGE BASED ON CLASS
         //qh -- if object clicked is a book
-        if(searchlist.get(position).getimglink()== null||searchlist.get(position).getimglink()==""){
-            viewHolder.searchpic.setImageResource(R.drawable.empty);
-        }
-        else {
-            Picasso.with(context).load(searchlist.get(position).getimglink()).into(viewHolder.searchpic);
-        }
 
         if (searchlist.get(position).getSearchClass() == "Book"){
             //DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
@@ -109,30 +104,31 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             //String filename = "book" + currentbook.getIsbn()+".jpg";
             //Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
             //iewHolder.searchpic.setImageBitmap(bmImg);
-            AsyncTask<String, Void, ArrayList<Book>> task = new  APIaccessBookList(context).execute(searchlist.get(position).getId());
-            try {
-                newbooklist = task.get();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            if(searchlist.get(position).getimglink() == null){
+                viewHolder.searchpic.setImageResource(R.drawable.empty);
+                Log.v(TAG,searchlist.get(position).getimglink() + "IMG LINK");
             }
+            else {
+                Picasso.with(context).load(searchlist.get(position).getimglink()).into(viewHolder.searchpic);
+            }
+
+
 
 
         }
 
         //qh -- if object clicked is a author
-        if (searchlist.get(position).getSearchClass() == "Author"){
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
-            databaseAccess.open();
-            Author currentauthor = databaseAccess.searchauthorbyida(searchlist.get(position).getId());
-            databaseAccess.close();
+        //if (searchlist.get(position).getSearchClass() == "Author"){
+           // DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
+           // databaseAccess.open();
+           // Author currentauthor = databaseAccess.searchauthorbyida(searchlist.get(position).getId());
+           // databaseAccess.close();
 
             //QH = SETS IMAGE FROM STRING
-            String filename = "author" + currentauthor.getAuthorid()+".jpg";
-            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-            viewHolder.searchpic.setImageBitmap(bmImg);
-        }
+          //  String filename = "author" + currentauthor.getAuthorid()+".jpg";
+          //  Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
+           // viewHolder.searchpic.setImageBitmap(bmImg);
+       // }
 
         //qh -- if object clicked is a user
         if (searchlist.get(position).getSearchClass() == "User"){
@@ -199,6 +195,8 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
 
 
 

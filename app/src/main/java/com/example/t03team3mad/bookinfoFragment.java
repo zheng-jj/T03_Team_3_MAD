@@ -35,7 +35,9 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -46,6 +48,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickListener  {
     private static final String TAG = "bookinfoFragment";
@@ -57,6 +60,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     int ratecount;
     TextView showrating;
     String isbn;
+    ImageView image;
 
     private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
     //AdapterGenre adapter;
@@ -75,14 +79,14 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         TextView releasedate = view.findViewById(R.id.releasedateview);
         Genre = view.findViewById(R.id.genreview_layout);
         TextView author = view.findViewById(R.id.authorview);
-        ImageView image = view.findViewById(R.id.imageView2);
+        image = view.findViewById(R.id.imageView2);
 
         showrating = view.findViewById(R.id.showrate);
         Bundle bundle = this.getArguments();
         if (bundle.getParcelable("currentbook") != null) {
             final Book receivedbook = bundle.getParcelable("currentbook"); // Key
             isbn = receivedbook.getIsbn();
-            getdata();
+            getdata(receivedbook);
             viewcount(receivedbook.getIsbn());
             System.out.println(receivedbook.getBooktitle());
             System.out.println(receivedbook.getBooktitle());
@@ -129,11 +133,59 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             Genre.setItemAnimator(new DefaultItemAnimator());
             Genre.setAdapter(mAdapter);
 
-
+            String path = null;
+            try {
+                path = getimage(receivedbook);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            File check = new File(path);
+            int count = 20;
+            while(count>0){
+                Log.v(TAG,"user image is not saved yet");
+                if(check.exists()) {
+                    image.setImageBitmap(BitmapFactory.decodeFile(path));
+                    image.invalidate();
+                    if(image.getDrawable() != null){
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        image.setImageBitmap(BitmapFactory.decodeFile(path));
+                        break;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                else{
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                count=count-1;
+            }
             //QH = SETS IMAGE FROM STRING
-            String filename = "book" + receivedbook.getIsbn() + ".jpg";
-            Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/" + filename);
-            image.setImageBitmap(bmImg);
+            //String filename = "book" + receivedbook.getIsbn() + ".jpg";
+            //Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/" + filename);
+            //.setImageBitmap(bmImg);
+
+            if(receivedbook.getimglink()== null||receivedbook.getimglink()==""){
+                image.setImageResource(R.drawable.empty);
+            }
+            else {
+                Picasso.with(this.getActivity()).load(coverurl).into(image);
+                Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
+                Log.v(TAG, "THIS IS BOOK URL" + receivedbook.getimglink());
+                Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
+                Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
+            }
+            Log.v(TAG,"loading image from "+receivedbook.getimglink());
 
 
             //jj- Allows users to favourite the book
@@ -399,7 +451,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 
         mCollectionRefbooks.document(isbn).set(data);
     }
-    public void getdata() {
+    public void getdata(final Book receivedbook) {
         mCollectionRefbooks.document(isbn).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -412,6 +464,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     Log.d("FireStore","rating :" + rating);
                     Log.d("FireStore","ratecount :" + ratecount);
                     Log.d("FireStore","url :" + coverurl);
+                    setimage(receivedbook);
 
                     calculateRatings();
                 }
@@ -424,8 +477,26 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         });
 
 
+    }
+    public String getimage(Book book) throws ExecutionException, InterruptedException {
+        String filename = "book" +book.getIsbn() +".jpg";
+        //jj gets image from firebase and saves to local storage
+        AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
+        String path = task.get();
+        return path;
+    }
 
-
+    public void setimage(Book receivedbook) {
+        if(coverurl == null){
+            image.setImageResource(R.drawable.empty);
+        }
+        else {
+            Picasso.with(this.getActivity()).load(coverurl).into(image);
+            Log.v(TAG,"THIS IS BOOK URL"+ coverurl);
+            Log.v(TAG, "THIS IS BOOK URL" +coverurl);
+            Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
+            Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
+        }
     }
 
 

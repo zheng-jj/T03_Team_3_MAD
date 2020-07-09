@@ -36,12 +36,13 @@ import java.util.concurrent.ExecutionException;
 public class searchbarFragment extends Fragment implements AdapterSearch.OnSearchListener {
     AdapterSearch searchadapter;
     private static final String TAG = "searchbarFragment";
+    List<String> urllist = new ArrayList<>();
     ListView listviewitem;
     List<SearchClass> searchClassList = new ArrayList<SearchClass>();
     private ProgressBar progressbar;
     private CollectionReference userscollection = FirebaseFirestore.getInstance().collection("User");
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
-
+    String coverurl;
     String isbn;
 
     @Override
@@ -54,7 +55,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                doMySearch(query, view);
+                getuser(query,view);
                 return false;
             }
 
@@ -84,6 +85,10 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
         try {
             searchClassList = searchapiforbooks.get();
+            for (SearchClass i : searchClassList){
+                geturl(i.getId());
+                urllist.add(coverurl);
+            }
             if(searchClassList!=null) {
                 Log.v(TAG, "Added Searches");
             };
@@ -135,8 +140,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
         searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
-        loadbookssearch();
-        getuser(query);
         //qh - gets users
         searchresults.setAdapter(searchadapter);
 
@@ -201,11 +204,12 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
 
     //qh - get user from firebase
-    public void getuser (final String query){
+    public void getuser (final String query, final View view){
         Log.d(TAG, "getuser method");
         userscollection.whereEqualTo("name",query).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                doMySearch(query, view);
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
                     Log.d(TAG, "getuser232232323 dsds");
                     String id =   i.getId();
@@ -214,36 +218,15 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                     String userabout = i.getString("desc");
                     SearchClass new1 = new SearchClass(username,userabout,"User",id);
                     searchClassList.add(new1);
+                    urllist.add(null);
                     Log.d(TAG, "getuser232232323 method");
                 }
+                searchadapter.notifyDataSetChanged();
             }
         });
-        searchadapter.searchlist = searchClassList;
-        searchadapter.notifyDataSetChanged();
         return;
     }
-    public void loadbookssearch() {
-        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
-                    for(SearchClass searchclass : searchClassList){
-                        if (searchclass.getSearchClass().equals("Book")){
-                            Log.v(TAG,"Bookloop="+searchclass.getId());
-                            for(DocumentSnapshot doc : data){
-                                Log.v(TAG,"Docloop="+doc.getReference().getId());
-                                if(doc.getReference().getId().equals(searchclass.getId())){
-                                    searchclass.setimglink(doc.getString("coverurl"));
-                                }
-                            }
-                        }
-                    }
 
-                }
-            }
-        });
-    }
 
     public static String getimagesearch(SearchClass searchClass) throws ExecutionException, InterruptedException {
         String filename = "user" + searchClass.getId() +".jpg";
@@ -251,6 +234,17 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
         String path = task.get();
         return path;
+    }
+
+    public void geturl (String bookid) {
+        mCollectionBook.whereEqualTo(String.valueOf(getId()),bookid).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot i : queryDocumentSnapshots) {
+                    coverurl = i.getString("coverurl");
+                }
+            }
+        });
     }
 
 
