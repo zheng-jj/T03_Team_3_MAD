@@ -33,6 +33,7 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -44,7 +45,7 @@ public class fragment_user extends Fragment {
     SharedPreferences Auto_login;
     User usertoView = null;
     View v;
-    List<User> currentlyfollow = new ArrayList<>();
+
 
     //list of reviews made by this user
     List<Review> reviewsByUser = new ArrayList<>();
@@ -56,7 +57,7 @@ public class fragment_user extends Fragment {
     //list of books
     ArrayList<Book> userfav = new ArrayList<>();
     AdapterBookMain bookadapter;
-
+    View pageview;
     ImageView Pic;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,18 +65,20 @@ public class fragment_user extends Fragment {
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
         //jj-gets the user currently following list
-        try {
-            DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            DBaccess.open();
-            currentlyfollow = DBaccess.getUserFollowing(Integer.toString(MainActivity.loggedinuser.getUseridu()));
-            DBaccess.close();
-        }catch (Exception e){}
-        if (bundle.getParcelable("searchuser") != null) {
+        reviewsByUser = new ArrayList<>();
+
+
+        if (bundle.getParcelable("searchuser") != null||MainActivity.viewuser != null) {
             Log.v(TAG,"showing search user profile");
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_user,container,false);
-
-            usertoView = bundle.getParcelable("searchuser");
+            this.pageview = view;
+            if(MainActivity.viewuser!=null) {
+                usertoView = MainActivity.viewuser;
+            }
+            else {
+                usertoView = bundle.getParcelable("searchuser");
+            }
             Log.v(TAG,"currently viewing ="+ String.valueOf(usertoView.getUseridu()));
             Log.v(TAG, "currently logged in ="+String.valueOf(MainActivity.loggedinuser.getUseridu()));
             //checks if user is viewing himself
@@ -90,12 +93,16 @@ public class fragment_user extends Fragment {
                 MainActivity.addFragment(fragment,getActivity(),"UserFragment");
             }
 
-
             //gets user object from database
             final Button followthisuser = view.findViewById(R.id.follow1);
+
+
+            final List<String> listofid = new ArrayList<String>(Arrays.asList(MainActivity.loggedinuser.getfollowingstring().split(";")));
+            Log.v(TAG,"list of user following ="+MainActivity.loggedinuser.getfollowingstring());
+            Log.v(TAG,"viewing user ="+usertoView.getUseridu());
             //jj-checks if logged in user follows this user
-            for(User check : currentlyfollow){
-                if(check.getUseridu()==usertoView.getUseridu()){
+            for(String id : listofid){
+                if(id.equals(Integer.toString(usertoView.getUseridu()))){
                     followthisuser.setText("Followed");
                     break;
                 }
@@ -108,35 +115,37 @@ public class fragment_user extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Boolean follow = false;
-                    for(User user : currentlyfollow){
+                    for(String id : listofid){
                         //if user is currently following this user, update the boolean
-                        if(user.getUseridu()==usertoView.getUseridu()){
+                        if(id.equals(Integer.toString(usertoView.getUseridu()))){
                             follow=true;
                             break;
                         }
                     }
                     //if user is currently following this user and wishes to unfollow, update the list
-                    Iterator<User> iter = currentlyfollow.iterator();
+                    Iterator<String> iter = listofid.iterator();
                     if(follow==true){
                         while (iter.hasNext()) {
-                            User user = iter.next();
-                            if (user.getUseridu()==usertoView.getUseridu())
+                            String user = iter.next();
+                            if (user.equals(Integer.toString(usertoView.getUseridu()))) {
                                 iter.remove();
+                            }
                         }
                     }
                     else {
-                        currentlyfollow.add(usertoView);
+                        listofid.add(Integer.toString(usertoView.getUseridu()));
                     }
                     //creates the string to be entered into database
                     String followid = "";
-                    for(User followed : currentlyfollow){
-                        followid=followid+Integer.toString(followed.getUseridu())+";";
-                    }
-                    if(followid.equals("")){
-                    }
-                    else {
-                        //removes the final ";"
-                        followid = followid.substring(0, followid.length() - 1);
+                    if(listofid!=null) {
+                        for (String followed : listofid) {
+                            followid = followid + followed + ";";
+                        }
+                        if (followid.equals("")) {
+                        } else {
+                            //removes the final ";"
+                            followid = followid.substring(0, followid.length() - 1);
+                        }
                     }
                     Log.v(TAG,"Following list "+followid);
                     DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
@@ -153,7 +162,7 @@ public class fragment_user extends Fragment {
                         e.printStackTrace();
                     }
                     //updates text on button
-                    if(currentlyfollow.contains(usertoView)){
+                    if(listofid.contains(Integer.toString(usertoView.getUseridu()))){
                         followthisuser.setText("Followed");
                     }
                     else{
@@ -161,15 +170,33 @@ public class fragment_user extends Fragment {
                     }
                 }
             });
+            //jj - loads user into layout
+            Pic = view.findViewById(R.id.userPic);
+            String path = null;
+            try {
+                path = getimage(usertoView);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                loaduserintoview(view,usertoView,path);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             //jj-removes the arguements so that i will get the reason why this page is loaded
             this.getArguments().putParcelable("searchuser",null);
+            MainActivity.viewuser = null;
         }
 
         //checks if the user is viewing his own profile
         else {
             //jj- inflates the fragment into the container for the fragment
             view = inflater.inflate(R.layout.fragment_loggeduser,container,false);
-
+            Log.v(TAG,"currently logged in :"+MainActivity.loggedinuser.getUsername());
             usertoView = MainActivity.loggedinuser;
             //onclick listener to edit profile
             Button editprofile = view.findViewById(R.id.edit);
@@ -233,22 +260,28 @@ public class fragment_user extends Fragment {
                 }
             });
 
+            //jj - loads user into layout
+            Pic = view.findViewById(R.id.userPic);
+            String path = null;
+            try {
+                path = getimage(MainActivity.loggedinuser);
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            try {
+                loaduserintoview(view,MainActivity.loggedinuser,path);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
         }
-
+        this.getArguments().putParcelable("searchuser",null);
         v=view;
         Log.v(TAG, "user view: username: "+ usertoView.getUsername());
         int userid = usertoView.getUseridu();
-        //jj - loads user into layout
-        try {
-            Pic = view.findViewById(R.id.userPic);
-            String path = getimage(usertoView);
-            loaduserintoview(view,usertoView,path);
-
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
 
         //user favourite books loaded from firebase
@@ -261,19 +294,17 @@ public class fragment_user extends Fragment {
             e.printStackTrace();
         }
 
-        if(userfav!= null) {
-            //jj - load favourite user books recyclerview
-            RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
-            //jj-layout manager linear layout manager manages the position of the recyclerview items
-            LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-            //jj-set the recyclerview's manager to the previously created manager
-            favouritebooks.setLayoutManager(llm);
-            //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-            loadBookurlsbooks();
-            bookadapter = new AdapterBookMain(userfav, this.getContext());
-            //jj- set the recyclerview object to its adapter
-            favouritebooks.setAdapter(bookadapter);
-        }
+        //jj - load favourite user books recyclerview
+        RecyclerView favouritebooks = (RecyclerView) view.findViewById(R.id.favbookslist);
+        //jj-layout manager linear layout manager manages the position of the recyclerview items
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        //jj-set the recyclerview's manager to the previously created manager
+        favouritebooks.setLayoutManager(llm);
+        //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
+        loadBookurlsbooks();
+        bookadapter = new AdapterBookMain(userfav, this.getContext());
+        //jj- set the recyclerview object to its adapter
+        favouritebooks.setAdapter(bookadapter);
 
         //jj - load user reviews recyclerview
         RecyclerView pastReviews = (RecyclerView) view.findViewById(R.id.userreviewprofile);
@@ -317,11 +348,9 @@ public class fragment_user extends Fragment {
                                 String review = dss.getString("review");
                                 String isbn = dss.getString("isbn");
                                 String title = dss.getString("title");
-
                                 int uid = Integer.parseInt(dss.getString("uid"));
+                                Review r1 = new Review(uid, review,title,isbn);
 
-                                Review r1 = new Review(uid,review,title,isbn);
-                                r1.setReviewisbn(isbn);
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);
 
@@ -396,9 +425,7 @@ public class fragment_user extends Fragment {
                 if (!queryDocumentSnapshots.isEmpty()) {
                     List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
                     for(Review review : reviewsByUser){
-                        Log.v(TAG,"Bookloop="+review.getReviewisbn());
                         for(DocumentSnapshot doc : data){
-                            Log.v(TAG,"Docloop="+doc.getReference().getId());
                             if(doc.getReference().getId().equals(review.getReviewisbn())){
                                 review.setImglink(doc.getString("coverurl"));
                             }
@@ -409,6 +436,8 @@ public class fragment_user extends Fragment {
             }
         });
     }
+
+    //jj loads the url into book objc
     public void loadBookurlsbooks() {
         mCollectionBook2.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -429,4 +458,5 @@ public class fragment_user extends Fragment {
             }
         });
     }
+
 }

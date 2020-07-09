@@ -25,9 +25,11 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
     ProgressDialog dialog;
     private Context mContext;
 
-    public APIaccessBookList (Context context){
+    public APIaccessBookList (Context context ){
         mContext = context;
     }
+
+
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
@@ -41,7 +43,7 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
 
 
     //jj- api url
-    private String apiurl = "https://openlibrary.org/";
+    private String apiurl = "https://www.googleapis.com/";
     private static final String TAG = "APIaccessBookList";
     //jj-empty contructor
     public APIaccessBookList(){}
@@ -52,9 +54,13 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
         if(isbn!=null) {
             String[] isbns = isbn.split(";");
             for (String isbntosearch : isbns) {
+                if(isbntosearch==null||isbntosearch=="") {
+                    continue;
+                }
                 Log.v(TAG, "Searching api isbn =" + isbntosearch);
                 //jj-sets the url to GET data as json
-                URL url = new URL(apiurl + "api/books?bibkeys=ISBN:" + isbntosearch + "&jscmd=details&format=json");
+                URL url = new URL(apiurl + "books/v1/volumes?q=isbn:" + isbntosearch);
+                Log.v(TAG, "url searching =" + url.toString());
                 //jj-opens the connection
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
@@ -74,29 +80,26 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
                         buffer.append(line + "\n");
                     }
                     String newstring = buffer.toString();
-                    Log.v(TAG, newstring);
                     bookjsonobj = new JSONObject(newstring);
                     //jj - use this get data from json object to parse into object
                     if (bookjsonobj != null) {
-                        Log.v(TAG, "object is not null");
-                        String booktitle = bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").getString("title");
-                        Log.v(TAG, "creating book" + booktitle);
+                        String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
                         Log.v(TAG, "Creation");
                         Log.v(TAG, booktitle);
+
                         //qh - added this block of code because some books dont have value
                         String bookauthor;
-                        if (bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").has("authors")) {
-                            bookauthor = bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").getJSONArray("authors").getJSONObject(0).getString("name");
+                        if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("authors")) {
+                            bookauthor = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
                         } else {
                             bookauthor = "Author Data not Available";
                         }
-
                         Log.v(TAG, bookauthor);
                         //qh - added this block of code because some books dont have value
                         String genrelist = "";
                         String bookgenre;
-                        if (bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").has("subjects")) {
-                            JSONArray subjects = bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").getJSONArray("subjects");
+                        if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("categories")) {
+                            JSONArray subjects = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("categories");
                             //jj-loops through all the subjects in the list of subjects and adds to a string
                             for (int i = 0; i < subjects.length(); i++) {
                                 genrelist = genrelist + subjects.getString(i) + ";";
@@ -109,17 +112,17 @@ public class APIaccessBookList  extends AsyncTask<String,Void, ArrayList<Book>> 
 
                         //qh - added this block of code because some books dont have value
                         String bookdes;
-                        if (bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").has("description")) {
-                            bookdes = bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").getString("description");
+                        if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("description")) {
+                            bookdes = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("description");
                         } else {
                             bookdes = "No Description";
                         }
-                        String bookpdate = bookjsonobj.getJSONObject("ISBN:" + isbntosearch).getJSONObject("details").getString("publish_date");
-
-
+                        String bookpdate = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
 
                         //jj-creates the book object with json data
+
                         Book x = new Book(booktitle, bookauthor, bookdes, bookgenre, bookpdate, isbntosearch);
+                        Log.v(TAG, "Book created =" + x.getIsbn() + "====" + x.getBookgenre() + "====" + x.getBooktitle() + "====" + x.getBookabout());
                         Log.v(TAG, "added+" + x.getIsbn());
                         listofresults.add(x);
                     } else {

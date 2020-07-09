@@ -20,19 +20,19 @@ import java.util.List;
 import java.util.Scanner;
 
 //qh - followed jj to create search genre
-public class APIaccessSearchGenre extends AsyncTask<String, Void, Book> {
-    private String apiurl = "https://openlibrary.org/";
+public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book>> {
+    private String apiurl = "https://www.googleapis.com/";
 
     private static final String TAG = "APIaccess2";
 
     public APIaccessSearchGenre(){}
     //Chris - search book by genre using API
-    public Book searchbookbyGenre(String genre) throws IOException, JSONException {
+    public ArrayList<Book> searchbookbyGenre(String genre) throws IOException, JSONException {
         //jj-sets the url to GET data as json
         BufferedReader reader = null;
         String newtitle = genre.replace(' ', '+');
         Log.v(TAG,newtitle);
-        URL url = new URL(apiurl+"api/books?bibkeys=subjects:"+genre+"&jscmd=details&format=json&maxResults=15");
+        URL url = new URL(apiurl+"books/v1/volumes?q="+genre+"subject&maxResults=10");
 
         //        //jj-opens the connection
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
@@ -44,76 +44,61 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, Book> {
         else
         {
             Scanner sc = new Scanner(url.openStream());
+            List<JSONObject> booklist = new ArrayList<JSONObject>(){};
+            ArrayList<Book> booklistBOOK = new ArrayList<Book>(){};
             JSONObject bookjsonobj = null;
-            while(sc.hasNext())
-            {
-                String temps = sc.nextLine();
-                //jj-converts string into json object to use
-                bookjsonobj = new JSONObject(temps);
-                Log.v(TAG,"json created here "+bookjsonobj);
-                //jj- i only need 1 record, hence break after 1 loop
-                break;
+            //qh - to read the url
+            InputStream stream = conn.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(stream));
+
+            StringBuffer buffer = new StringBuffer();
+            String line = "";
+            //qh - jjs method didnt work for me so i used my own method
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line+"\n");
             }
-            sc.close();
-            //jj - use this get data from json object to parse into object
-            if(bookjsonobj != null) {
-                String booktitle = bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").getString("title");
-                Log.v(TAG,"Creation");
-                Log.v(TAG,booktitle);
-                String bookisbn = bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").getString("isbn_10");
-                Log.v(TAG,"Creation");
-                Log.v(TAG,booktitle);
+            String newstring = buffer.toString();
+            bookjsonobj = new JSONObject(newstring);
+            Log.v(TAG, newstring);
+            //qh - all the json object stuff
+            JSONArray jsonarray = bookjsonobj.getJSONArray("items");
+            //JSONArray jsonarray = bookjsonobj.getJSONArray("docs");
+            for (int i = 0; i < jsonarray.length(); i++) {
+                String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("title");
+                //String booktitle = bookjsonobj.getJSONArray("docs").getJSONObject(i).getString("title");
 
-                //qh - added this block of code because some books dont have value
-                String bookauthor;
-                if (bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").has("authors")){
-                    bookauthor = bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").getJSONArray("authors").getJSONObject(0).getString("name");
-                }
-                else{
-                    bookauthor = "Author Data not Available";
-                }
-
-                Log.v(TAG,bookauthor);
-                //qh - added this block of code because some books dont have value
-                String genrelist = "";
-                String bookgenre;
-                if (bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").has("subjects")){
-                    JSONArray subjects = bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").getJSONArray("subjects");
-                    //jj-loops through all the subjects in the list of subjects and adds to a string
-                    for (int i = 0; i < subjects.length(); i++) {
-                        genrelist = genrelist + subjects.getString(i) +";";
-                    }
-                    //jj-removes the last ";" at the end of list of genres
-                    bookgenre = genrelist.substring(0, genrelist.length() - 1);
+                //String des = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("description");
+                String des = "This book was retrieved from Google Books";
+                String isbn = new String();
+                if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("industryIdentifiers")){
+                    isbn = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("industryIdentifiers").getJSONObject(0).getString("identifier");
                 }
                 else {
-                    bookgenre = "Genres not available";
+                    isbn = "";
                 }
 
-                //qh - added this block of code because some books dont have value
-                String bookdes;
-                if (bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").has("description")){
-                    bookdes = bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").getString("description");
-                }
-                else{
-                    bookdes = "No Description";
-                }
-                String bookpdate = bookjsonobj.getJSONObject("subjects:"+genre).getJSONObject("details").getString("publish_date");
-                //jj-creates the book object with json data
-                Book x = new Book(booktitle,bookauthor,bookdes,bookgenre,bookpdate,bookisbn);
-                return x;
+                genre=bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("authors");
+                String author = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("authors");
+                String Loadauthor=author.substring(2,author.length()-2);
+                //String isbn = new String();
+                //JSONArray isbnlist = bookjsonobj.getJSONArray("docs").getJSONObject(i).getJSONArray("isbn");
+                //for (int x = 0; i < 1; i++) {
+                //isbn = isbnlist.getString(0);
+                //}
+
+                Book newsearchobject = new Book(booktitle,Loadauthor,des,genre,"123",isbn,0);
+                booklistBOOK.add(newsearchobject);
+
             }
-            else{
-                Book x = new Book("Book data not available","Book data not available","Book data not available","Book data not available","Book data not available","Book data not available");
-                return x;
-            }
+
+            return booklistBOOK;
         }
     }
     private Exception exception;
 
     //jj-method that calls the searchbook method and runs it in background
     @Override
-    protected Book doInBackground(String... urls) {
+    protected ArrayList<Book> doInBackground(String... urls) {
         try {
             Log.v(TAG, urls[0]);
             Log.v(TAG, "I WANT TO SEE  WHAT URLS IS");

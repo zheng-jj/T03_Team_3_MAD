@@ -47,11 +47,15 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
 
         @Override
         public void onClick(View v) {
-            onSearchListener.onSearchClick(getAdapterPosition());
+            try {
+                onSearchListener.onSearchClick(getAdapterPosition());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
     public interface OnSearchListener {
-        void onSearchClick(int position);
+        void onSearchClick(int position) throws InterruptedException;
     }
 
     public AdapterSearch(List<SearchClass> searchList, OnSearchListener onSearchListener, Context context) {

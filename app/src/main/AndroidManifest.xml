@@ -11,16 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".ViewGetDetails"></activity>
+        <activity android:name=".ViewDemoBook" />
+        <activity android:name=".ResetPasswordPage"></activity>
         <activity android:name=".LoginPage">
             <intent-filter>
-                <category android:name="android.intent.category.DEFAULT"></category>
+                <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".RegisterPage" />
-        <activity android:name=".MainActivity" android:windowSoftInputMode="adjustPan">
-        </activity>
-
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan" />
     </application>
 </manifest>

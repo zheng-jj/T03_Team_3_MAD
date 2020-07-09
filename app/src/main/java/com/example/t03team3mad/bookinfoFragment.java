@@ -1,6 +1,7 @@
 package com.example.t03team3mad;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -95,20 +96,29 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             String authorid = receivedbook.getBookauthor();
             DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             databaseAccess.open();
-            try{
+            try {
                 Author authorbook = databaseAccess.searchauthorbyida(authorid);
                 author.setText(authorbook.getAuthorname());
-            }catch (Exception e){
+            } catch (Exception e) {
                 author.setText(receivedbook.getBookauthor());
             }
             databaseAccess.close();
 
 
             //Chris - list the genre
+            if(receivedbook.getBookgenre().contains(",")) {
             String[] splitgenre = receivedbook.getBookgenre().split(",");
             int i = 0;
             for (i = 0; i < splitgenre.length; i++) {
                 data.add(splitgenre[i]);
+                }
+            }
+            if(receivedbook.getBookgenre().contains(";")) {
+                String[] genre = receivedbook.getBookgenre().split(";");
+                int x = 0;
+                for (x = 0; x < genre.length; x++) {
+                    data.add(genre[x]);
+                }
             }
             AdapterGenre mAdapter =
                     new AdapterGenre(data,this);
@@ -288,6 +298,19 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                         }
                         Log.v(TAG, "-==========-");
                     }
+                }
+            });
+            Button getBook = view.findViewById(R.id.getBook);
+            getBook.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Bundle passdata = new Bundle();
+                    passdata.putString("User_UID",String.valueOf(MainActivity.loggedinuser.getUseridu()));
+                    passdata.putParcelable("book",receivedbook);
+                    Intent ViewGetDetails= new Intent(getContext(),ViewGetDetails.class);
+                    ViewGetDetails.putExtra("Bundle", passdata);
+                    Log.v(TAG,"sending this book to view where to get "+receivedbook.getBooktitle());
+                    startActivity(ViewGetDetails);
                 }
             });
 

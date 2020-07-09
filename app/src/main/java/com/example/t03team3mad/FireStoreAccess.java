@@ -63,6 +63,58 @@ public class FireStoreAccess {
         protected void onPostExecute(User user) {
         }
     }
+    //jj-this is the one used for search bar
+    public static class AccessUser2 extends AsyncTask<String,Void, User>{
+        private static final String TAG = "AccessUser2";
+        final User[] found = {null};
+
+        public AccessUser2(){}
+
+        public User searchuser(final String UID){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            final DocumentReference docRef = db.collection("User").document(UID);
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            found[0]=new User(Integer.valueOf(UID),document.get("name").toString(),document.get("isbn").toString(),document.get("desc").toString());
+                            found[0].setfollowingstring(document.getString("following"));
+                            Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                            MainActivity.updateuserview(found[0]);
+                        } else {
+                            Log.d(TAG, "No such document");
+                        }
+                    } else {
+                        Log.d(TAG, "get failed with ", task.getException());
+                    }
+                }
+            });
+            if(found[0] == null){
+                return null;
+            }
+            else {
+                Log.v(TAG,"returning correct user");
+                return found[0];
+            }
+        }
+
+        @Override
+        protected User doInBackground(final String... strings) {
+            try {
+                return searchuser(strings[0]);
+            }catch (Exception e){
+                return null;}
+
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+        }
+    }
+
+
     //jj-for list of users(this takes time)
     public static class AccessUserList extends AsyncTask<String,Void, ArrayList<User>> {
         private static final String TAG = "AccessUser";
