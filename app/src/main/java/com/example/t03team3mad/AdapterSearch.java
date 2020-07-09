@@ -159,7 +159,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             //jj gets image from firebase and saves to local storage
             //sets the profile image
             File check = new File(path);
-            int count = 20;
+            int count = 2;
             while(count>0){
                 Log.v(TAG,"user image is not saved yet");
                 if(check.exists()) {

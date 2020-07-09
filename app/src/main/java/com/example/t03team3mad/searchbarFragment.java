@@ -136,6 +136,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
         searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
+        //qh - gets users
         getuser(query);
         searchresults.setAdapter(searchadapter);
     }
