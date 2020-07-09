@@ -104,11 +104,12 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             //String filename = "book" + currentbook.getIsbn()+".jpg";
             //Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
             //iewHolder.searchpic.setImageBitmap(bmImg);
-            if(searchlist.get(position).getimglink() == null){
+            if(searchlist.get(position).getimglink() == null || searchlist.get(position).getimglink() == ""){
                 viewHolder.searchpic.setImageResource(R.drawable.empty);
                 Log.v(TAG,searchlist.get(position).getimglink() + "IMG LINK");
             }
             else {
+                Log.v(TAG,searchlist.get(position).getimglink() + "IMG LINK");
                 Picasso.with(context).load(searchlist.get(position).getimglink()).into(viewHolder.searchpic);
             }
 

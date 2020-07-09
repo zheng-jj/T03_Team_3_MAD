@@ -55,7 +55,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                getuser(query,view);
+                getdata(query,view);
                 return false;
             }
 
@@ -85,10 +85,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
         try {
             searchClassList = searchapiforbooks.get();
-            for (SearchClass i : searchClassList){
-                geturl(i.getId());
-                urllist.add(coverurl);
-            }
             if(searchClassList!=null) {
                 Log.v(TAG, "Added Searches");
             };
@@ -203,13 +199,14 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
 
 
-    //qh - get user from firebase
-    public void getuser (final String query, final View view){
+    //qh - get user from firebase (also runs doMySearch)
+    public void getdata (final String query, final View view){
         Log.d(TAG, "getuser method");
         userscollection.whereEqualTo("name",query).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 doMySearch(query, view);
+                geturl();
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
                     Log.d(TAG, "getuser232232323 dsds");
                     String id =   i.getId();
@@ -236,13 +233,22 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         return path;
     }
 
-    public void geturl (String bookid) {
-        mCollectionBook.whereEqualTo(String.valueOf(getId()),bookid).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+    //qh - get url (sets the url link to the search class object)
+    public void geturl () {
+        //qh - get all isbn from firestore
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
                 for (QueryDocumentSnapshot i : queryDocumentSnapshots) {
-                    coverurl = i.getString("coverurl");
+                    for (SearchClass x : searchClassList) {
+                        if (i.getId().equals(x.getId())){
+                            x.setimglink(i.getString("coverurl"));
+                        }
+                    }
                 }
+                searchadapter.notifyDataSetChanged();
+
             }
         });
     }

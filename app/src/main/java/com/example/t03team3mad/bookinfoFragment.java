@@ -487,7 +487,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     }
 
     public void setimage(Book receivedbook) {
-        if(coverurl == null){
+        if(coverurl == null || coverurl == ""){
             image.setImageResource(R.drawable.empty);
         }
         else {
