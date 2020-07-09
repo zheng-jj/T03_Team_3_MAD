@@ -129,12 +129,13 @@
             app:layout_constraintTop_toBottomOf="@+id/genreview_layout" />
 
         <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/liked"
             android:id="@+id/favourite"
             android:layout_width="160dp"
             android:layout_height="42dp"
             android:layout_marginStart="28dp"
             android:layout_marginTop="312dp"
-            android:text="Add To Favourites"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></Button>
 

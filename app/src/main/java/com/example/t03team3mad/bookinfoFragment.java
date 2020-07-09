@@ -162,7 +162,8 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 while (itr.hasNext()) {
                     Book book = itr.next();
                     if (book.getIsbn().equals(receivedbook.getIsbn())) {
-                        favourite.setText("Added to list");
+                        favourite.setBackgroundResource(R.drawable.unliked);
+                        break;
                     }
                 }
             }
@@ -261,7 +262,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                         }
                         //removes the ";" at the end of isbn string
                         isbn.substring(0, isbn.length() - 1);
-                        favourite.setText("Added to list");
+                        favourite.setBackgroundResource(R.drawable.unliked);
 
                         //removes duplicates
                         List<String> isbns = new ArrayList<>(Arrays.asList(isbn.split(";")));

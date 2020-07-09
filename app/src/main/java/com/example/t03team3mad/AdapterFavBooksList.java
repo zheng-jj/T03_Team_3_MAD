@@ -61,7 +61,7 @@ public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksLis
         try {
             viewHolder.bookName.setText(mBooklist.get(position).getBooktitle());
             viewHolder.bookDec.setText(mBooklist.get(position).getBookabout());
-            viewHolder.like.setText("Unlike");
+            viewHolder.like.setBackgroundResource(R.drawable.unliked);
 
             //jj-this needs to change to the corrosponding user profile picture
             if (mBooklist.get(position).getimglink() == null || mBooklist.get(position).getimglink() == "") {
@@ -73,16 +73,18 @@ public class AdapterFavBooksList extends RecyclerView.Adapter<AdapterFavBooksLis
             viewHolder.like.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     try {
                         Book chosen = mBooklist.get(viewHolder.getAdapterPosition());
                         Log.v(TAG, "clicked on " + chosen.getBooktitle());
                         Log.v(TAG, viewHolder.like.getText().toString());
                         Book[] mBooklistAfterChange;
-                        if (viewHolder.like.getText().toString() == "Unlike") {
-                            viewHolder.like.setText("Like");
+                        if (viewHolder.like.getBackground().getConstantState() == viewHolder.bookPic.getResources().getDrawable(R.drawable.unliked).getConstantState()) {
+                            viewHolder.like.setBackgroundResource(R.drawable.liked);
                             mBooklistToBeRemoved.add(chosen);
-                        } else if (viewHolder.like.getText().toString() == "Like") {
-                            viewHolder.like.setText("Unlike");
+                        }
+                        else if (viewHolder.like.getBackground().getConstantState() == viewHolder.bookPic.getResources().getDrawable(R.drawable.liked).getConstantState()) {
+                            viewHolder.like.setBackgroundResource(R.drawable.unliked);
                             mBooklistToBeRemoved.remove(chosen);
                         }
                         String temp = "";

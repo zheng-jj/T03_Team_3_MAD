@@ -7,47 +7,55 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:id="@+id/favbook">
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <ImageView
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="0dp"
+            android:layout_marginStart="0dp"
             android:layout_width="90dp"
             android:layout_height="match_parent"
             android:id="@+id/img"/>
-        <LinearLayout
+
+        <RelativeLayout
+            android:id="@+id/box"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.3"
-                android:orientation="horizontal">
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="0.8"
-                    android:layout_height="match_parent"
-                    android:id="@+id/title"></TextView>
+            android:layout_toLeftOf="@id/like"
+            android:layout_toRightOf="@id/img">
 
-                <Button
-                    android:id="@+id/like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.2"
-                    android:padding="0dp"
-                    android:text="Unlike"
-                    android:textSize="12sp"></Button>
-
-            </LinearLayout>
             <TextView
+                android:id="@+id/title"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.7"
-                android:id="@+id/bookdes">
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:height="16dp"
+                android:textSize="14dp"
+                android:textStyle="bold"></TextView>
 
-            </TextView>
-        </LinearLayout>
-    </LinearLayout>
+            <TextView
+                android:id="@+id/bookdes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/title"
+                android:layout_alignParentBottom="true"></TextView>
+        </RelativeLayout>
+        <Button
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/unliked"
+            android:id="@+id/like"
+            android:layout_marginTop="25dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:padding="0dp"
+            android:textSize="12sp"></Button>
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>

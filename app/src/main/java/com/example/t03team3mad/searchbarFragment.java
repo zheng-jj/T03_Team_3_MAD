@@ -243,6 +243,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             }
         });
     }
+
     public static String getimagesearch(SearchClass searchClass) throws ExecutionException, InterruptedException {
         String filename = "user" + searchClass.getId() +".jpg";
         //jj gets image from firebase and saves to local storage
