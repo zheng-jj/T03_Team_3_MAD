@@ -12,9 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:paddingBottom="2dp">
+        android:paddingBottom="2dp"
+        android:layout_marginLeft="8px"
+        android:layout_marginRight="8px">
 
         <ImageView
+            android:scaleType="fitXY"
             android:id="@+id/bookimage"
             android:layout_width="match_parent"
             android:layout_height="160dp"
