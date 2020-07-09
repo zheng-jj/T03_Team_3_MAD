@@ -122,14 +122,14 @@ public class ViewGetDetails extends AppCompatActivity {
                         Retailcurrency = null;
                     }
                     Log.v(TAG,Retailcurrency);
-                    String epubLink;
-                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("epub").has("acsTokenLink")){
-                        epubLink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("epub").getString("acsTokenLink");
+                    String previewLink;
+                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("previewLink")){
+                        previewLink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("previewLink");
                     }
                     else{
-                        epubLink = null;
+                        previewLink = null;
                     }
-                    Log.v(TAG,epubLink);
+                    Log.v(TAG,previewLink);
                     String pdflink;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("pdf").has("acsTokenLink")){
                         pdflink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("pdf").getString("acsTokenLink");
@@ -137,9 +137,6 @@ public class ViewGetDetails extends AppCompatActivity {
                     else{
                         pdflink = null;
                     }
-                    Log.v(TAG,pdflink);
-
-
 
 
                     values.put("EPUB","test");
