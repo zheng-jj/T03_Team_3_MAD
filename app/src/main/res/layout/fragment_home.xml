@@ -10,15 +10,18 @@
 
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
-            android:textStyle="bold"
-            android:layout_marginTop="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/genrestext"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"
+            android:background="@color/blue"
             android:padding='5dp'
-            android:text="Genres"/>
+            android:text="Genres"
+            android:textColor="#000000"
+            android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/genrelistrecyclerview"
@@ -37,6 +40,8 @@
             android:id="@+id/recommendedtext"
             android:textStyle="bold"
             android:padding='5dp'
+            android:background="@color/blue"
+            android:textColor="#000000"
             android:text="Recommended books just for you!">
         </TextView>
         <androidx.recyclerview.widget.RecyclerView
@@ -50,16 +55,19 @@
             android:padding='5dp'
             android:layout_centerVertical="true"
             android:scrollbars="none"/>
-        <TextView
-            android:layout_marginTop="10dp"
 
-            android:layout_below="@id/recommendbookrecyclerview"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <TextView
             android:id="@+id/popularbookstext"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recommendbookrecyclerview"
+            android:layout_marginTop="10dp"
+            android:background="@color/blue"
             android:padding='5dp'
-            android:textStyle="bold"
-            android:text="Popular books">
+            android:text="Popular books"
+            android:textColor="#000000"
+            android:textStyle="bold">
 
         </TextView>
         <androidx.recyclerview.widget.RecyclerView
