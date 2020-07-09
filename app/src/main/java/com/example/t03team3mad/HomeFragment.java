@@ -198,7 +198,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             }
         });
     }
-    //jj -  loads the url into book objects for favouritebooks
+
     public void loadBookurlsfav() {
         mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

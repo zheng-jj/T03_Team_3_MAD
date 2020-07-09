@@ -2,14 +2,19 @@ package com.example.t03team3mad;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,15 +23,24 @@ import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder>
 {
     List<String> search = new ArrayList<String>(){};
+    private static final String TAG = "AdapterSearch";
     List<String> des = new ArrayList<String>(){};
     List<SearchClass> searchlist = new ArrayList<SearchClass>(){};
     private OnSearchListener mOnSearchListener;
     //QH- THIS IS IMPORTANT TO SET IMAGE FROM STRING
     private Context context;
+    List<Book> newbooklist=new ArrayList<>();
+    private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
 
     //qh -- uses onclicklistener to click
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -78,7 +92,14 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
 
         //SET IMAGE BASED ON CLASS
         //qh -- if object clicked is a book
-        //if (searchlist.get(position).getSearchClass() == "Book"){
+        if(searchlist.get(position).getimglink()== null||searchlist.get(position).getimglink()==""){
+            viewHolder.searchpic.setImageResource(R.drawable.empty);
+        }
+        else {
+            Picasso.with(context).load(searchlist.get(position).getimglink()).into(viewHolder.searchpic);
+        }
+
+        if (searchlist.get(position).getSearchClass() == "Book"){
             //DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
             //databaseAccess.open();
             //Book currentbook = databaseAccess.searchbookbyisbn(searchlist.get(position).getId());
@@ -88,9 +109,17 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
             //String filename = "book" + currentbook.getIsbn()+".jpg";
             //Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
             //iewHolder.searchpic.setImageBitmap(bmImg);
+            AsyncTask<String, Void, ArrayList<Book>> task = new  APIaccessBookList(context).execute(searchlist.get(position).getId());
+            try {
+                newbooklist = task.get();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
 
-        //}
+        }
 
         //qh -- if object clicked is a author
         if (searchlist.get(position).getSearchClass() == "Author"){
@@ -106,7 +135,7 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         }
 
         //qh -- if object clicked is a user
-        //if (searchlist.get(position).getSearchClass() == "User"){
+        if (searchlist.get(position).getSearchClass() == "User"){
           //  DatabaseAccess databaseAccess = DatabaseAccess.getInstance(this.context);
             //databaseAccess.open();
           //  User currentuser = databaseAccess.searchuserbyid(searchlist.get(position).getId());
@@ -116,7 +145,50 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
            // String filename = "user" + currentuser.getUseridu()+".jpg";
            // Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
            // viewHolder.searchpic.setImageBitmap(bmImg);
-        //}
+            String path = null;
+            try {
+                path = searchbarFragment.getimagesearch(searchlist.get(position));
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            Log.v(TAG,"image id being used = user+"+ searchlist.get(position).getId());
+            //String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
+            //jj gets image from firebase and saves to local storage
+            //sets the profile image
+            File check = new File(path);
+            int count = 20;
+            while(count>0){
+                Log.v(TAG,"user image is not saved yet");
+                if(check.exists()) {
+                    viewHolder.searchpic.setImageBitmap(BitmapFactory.decodeFile(path));
+                    viewHolder.searchpic.invalidate();
+                    if(viewHolder.searchpic.getDrawable() != null){
+                        try {
+                            TimeUnit.MILLISECONDS.sleep(100);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        viewHolder.searchpic.setImageBitmap(BitmapFactory.decodeFile(path));
+                        break;
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                else{
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+                count=count-1;
+            }
+
+        }
 
     }
     @Override
@@ -127,5 +199,10 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
     }
+
+
+
+
+
 
 }
