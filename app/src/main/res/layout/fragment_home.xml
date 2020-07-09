@@ -40,6 +40,8 @@
             android:text="Recommended books just for you!">
         </TextView>
         <androidx.recyclerview.widget.RecyclerView
+            android:background="@drawable/border"
+
             android:id="@+id/recommendbookrecyclerview"
             android:layout_below="@id/recommendedtext"
             android:layout_width="match_parent"
@@ -50,6 +52,7 @@
             android:scrollbars="none"/>
         <TextView
             android:layout_marginTop="10dp"
+
             android:layout_below="@id/recommendbookrecyclerview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -61,6 +64,8 @@
         </TextView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/popularbookrecyclerview"
+            android:background="@drawable/border"
+
             android:layout_below="@id/popularbookstext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

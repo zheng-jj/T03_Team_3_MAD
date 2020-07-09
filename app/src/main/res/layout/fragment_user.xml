@@ -105,6 +105,7 @@
             android:layout_below="@id/pastreviews"
             android:layout_marginTop="0dp">
             <androidx.recyclerview.widget.RecyclerView
+                android:background="@drawable/border"
                 android:id="@+id/userreviewprofile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -124,6 +125,7 @@
             android:text="Favourite Books" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:background="@drawable/border"
             android:layout_below="@id/favouritebooks"
             android:id="@+id/favbookslist"
             android:layout_width="match_parent"

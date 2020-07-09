@@ -83,6 +83,7 @@
             android:textSize="14dp" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:background="@drawable/border"
             android:id="@+id/favBooksRecycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
