@@ -173,9 +173,15 @@ public class fragment_addreview extends Fragment {
         data3.put("Review", review);
         data3.put("isbn",ISBN);
         data3.put("rid",idr);
+        final Map<String, Object> data4 = new HashMap<String,Object>();
+        data4.put("review", review);
+        data4.put("isbn",ISBN);
+        data4.put("uid", idu);
+        data4.put("title",title);
         mCollectionRefbooks.document(ISBN).collection("Reviews").document(idr).set(data);
         mCollectionRef.add(data2);
-        mCollectionRefuser.whereArrayContains("followingstring",String.valueOf(idu)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mCollectionRefuser.document(idu).collection("Reviews").add(data4);
+        mCollectionRefuser.whereArrayContains("following",String.valueOf(idu)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot i:queryDocumentSnapshots){
