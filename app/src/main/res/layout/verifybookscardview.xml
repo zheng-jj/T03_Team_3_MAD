@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="175dp"
+    android:orientation="vertical"
+    android:id="@+id/verifybookscardview"
+    android:weightSum="100">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/verifyisbn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:background="@color/blue"
+            android:textStyle="bold"
+            android:text="PLACEHOLDER TEXT (ISBN)" />
+
+        <TextView
+            android:id="@+id/verifytitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/verifyisbn"
+            android:padding="5dp"
+            android:textSize="15dp"
+            android:textColor="#000000"
+            android:text="PLACEHOLDER TEXT (Title)" />
+        <TextView
+            android:id="@+id/verifyauthor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/verifytitle"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:text="PLACEHOLDER TEXT (Author)"
+            android:textSize="15dp" />
+        <TextView
+            android:id="@+id/verifydate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/verifyauthor"
+            android:padding="5dp"
+            android:textColor="#000000"
+            android:text="PLACEHOLDER TEXT (Pdate)"
+            android:textSize="15dp" />
+
+        <TextView
+            android:id="@+id/verifyabout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/verifydate"
+            android:padding="5dp"
+            android:text="PLACEHOLDER TEXT (Description)"
+            android:textColor="#000000"
+            android:textSize="15dp" />
+
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

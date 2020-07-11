@@ -76,11 +76,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             searchClassList.clear();
         }
         System.out.println(query);
-        //qh - opens database to create the object lists
-        DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        databaseAccess.open();
-        List<User> searchUser = databaseAccess.searchUser(query);
-        databaseAccess.close();
         //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
         AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
         try {
@@ -92,44 +87,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             e.printStackTrace();
         }
 
-        //List<SearchClass> toremove = new ArrayList<>();
-        //qh- to prevent books from showing up that dont have information at all
-        //for (SearchClass i : searchClassList){
-            //Book newbook = null;
-            //AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(i.getId());
-            //try {
-               // newbook = tasktogetbook.get();
-                //if(newbook!=null) {
-                   // Log.v(TAG, "Book created = " + newbook.getBooktitle());
-                   // Log.v(TAG, "Book isbn = " + newbook.getIsbn());
-                    //Log.v(TAG, "Book about = " + newbook.getBookabout());
-                   // Log.v(TAG, "Book date = " + newbook.getPdate());
-                   // Log.v(TAG, "Book genre = " + newbook.getBookgenre());
-                   // Log.v(TAG, "Book author = " + newbook.getBookauthor());
-               // }
-               // else{
-                  //  toremove.add(i);
-               // }
-            //} catch (ExecutionException | InterruptedException e) {
-             //   e.printStackTrace();
-            //}
-
-       // }
-       // searchClassList.removeAll(toremove);
-
-
-        //for (Author var : searchauthor)
-        //{
-           // System.out.println(var.getAuthorname());
-           // SearchClass searchClass = new SearchClass(var.getAuthorname(),var.getAuthorabout(),"Author",String.valueOf(var.getAuthorid()));
-           // searchClassList.add(searchClass);
-        //}
-        //for (User var : searchUser)
-        //{
-            //System.out.println(var.getUsername());
-           // SearchClass searchClass = new SearchClass(var.getUsername(),var.getUserabout(),"User",String.valueOf(var.getUseridu()));
-           // searchClassList.add(searchClass);
-        //}
         Log.d(TAG, "Running User Code Now");
         //qh - puts all the results into recycler view to display
         RecyclerView searchresults = (RecyclerView)view.findViewById(R.id.searchrecycler);
@@ -138,7 +95,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
         //qh - gets users
         searchresults.setAdapter(searchadapter);
-
     }
 
     //qh - when clicking search item
@@ -206,6 +162,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 doMySearch(query, view);
                 geturl();
+                getuploadedbooks(query,view);
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
                     Log.d(TAG, "getuser232232323 dsds");
                     String id =   i.getId();
@@ -221,6 +178,24 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             }
         });
         return;
+    }
+    //qh - get uploaded books
+    public void getuploadedbooks (final String query, final View view){
+        Log.d(TAG, "Running Uploaded Book");
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot i : queryDocumentSnapshots){
+                    Log.d(TAG, "Searching Uploaded Book");
+                    if (i.getBoolean("uploaded")){
+                        if (i.getString("booktitle").equals(query)){
+                            SearchClass newsearchclass = new SearchClass(i.getString("booktitle"),i.getString("bookabout"),"Book",i.getId());
+                            searchClassList.add(newsearchclass);
+                        }
+                    }
+                }
+            }
+        });
     }
 
 
@@ -251,6 +226,23 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             }
         });
     }
+
+    //public void getuploadedbooks (final String query, final View view){
+        //Log.d(TAG, "Running Uploaded Book");
+        //mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            //Override
+            //public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                //for(QueryDocumentSnapshot i : queryDocumentSnapshots){
+                    //Log.d(TAG, "Searching Uploaded Book");
+                    //if (i.getBoolean("uploaded")){
+                        //Book newbook = new Book(i.getString("booktitle"),i.getString("bookauthor"),i.getString("bookabout"),i.getString("bookpdate"),i.getString("bookgenre"),i.getId());
+                        //searchClassList.add(newbook);
+                    //}
+                //}
+               // searchadapter.notifyDataSetChanged();
+            //}
+        //});
+    //}
 
 
 

@@ -197,11 +197,4 @@ public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder
         super.onAttachedToRecyclerView(recyclerView);
     }
 
-
-
-
-
-
-
-
 }

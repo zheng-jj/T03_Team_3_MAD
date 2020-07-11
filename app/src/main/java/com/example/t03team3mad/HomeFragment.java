@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     private static final String TAG = "HomeFragment";
     List<Book> newbooklist;
     Button uploadbutton;
+    Button verifybutton;
 
     ArrayList<String> GenreList=new ArrayList<>();
     ArrayList<String> Ran5ToDisplay=new ArrayList<>();
@@ -124,6 +125,15 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             public void onClick(View v) {
                 fragment_uploadbooks nextFragment = new fragment_uploadbooks();  //will go the fragment where it will display all the books of that genre
                 MainActivity.addFragment(nextFragment,getActivity(),"Upload Books");
+            }
+        });
+
+        verifybutton = view.findViewById(R.id.verifybuttonview);
+        verifybutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                verfiybooksfragment nextFragment = new verfiybooksfragment();  //will go the fragment where it will display all the books of that genre
+                MainActivity.addFragment(nextFragment,getActivity(),"Verify Books");
             }
         });
 

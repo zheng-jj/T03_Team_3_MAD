@@ -448,6 +448,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         data.put("TotalRating", Long.valueOf(0));
         data.put("ratecount", Long.valueOf(0));
         data.put("coverurl","");
+        data.put("uploaded",false);
 
         mCollectionRefbooks.document(isbn).set(data);
     }
