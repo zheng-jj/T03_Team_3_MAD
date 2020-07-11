@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.example.t03team3mad.model.Book;
 
@@ -24,15 +25,22 @@ import java.util.concurrent.ExecutionException;
 
 public class ViewGetDetails extends AppCompatActivity {
 
+    TextView pricer;
+    TextView rcurrency;
+    TextView pricel;
+    TextView lcurrency;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_get_details);
-
+        pricer = findViewById(R.id.priceretail);
+        rcurrency = findViewById(R.id.retailcurrency);
+        pricel = findViewById(R.id.pricelist);
+        lcurrency = findViewById(R.id.listcurrency);
         Intent intent = getIntent();
 
         Bundle PassedData = intent.getExtras().getBundle("Bundle");
-        if(PassedData.getParcelable("book")!=null&&PassedData.getParcelable("User_UID")!=null){
+        if(PassedData.getParcelable("book")!=null&&PassedData.getString("User_UID")!=null){
             Book toview = PassedData.getParcelable("book");
             String uid = PassedData.getParcelable("User_UID");
             String isbn = "9781908843708";
@@ -51,7 +59,7 @@ public class ViewGetDetails extends AppCompatActivity {
     public class APIaccessGetDetails extends AsyncTask<String,Void, HashMap> {
         //jj- api url
         private String apiurl = "https://www.googleapis.com/";
-        private static final String TAG = "APIaccess";
+        private static final String TAG = "APIaccessGetDetails";
         //jj-empty contructor
         HashMap<String, String> values = new HashMap<>();
         public APIaccessGetDetails(){}
@@ -76,7 +84,6 @@ public class ViewGetDetails extends AppCompatActivity {
                 JSONObject bookjsonobj = null;
                 InputStream stream = conn.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(stream));
-
                 StringBuffer buffer = new StringBuffer();
                 String line = "";
                 while ((line = reader.readLine()) != null) {
@@ -97,14 +104,16 @@ public class ViewGetDetails extends AppCompatActivity {
                     else{
                         listprice = null;
                     }
+                    pricel.setText(listprice);
                     Log.v(TAG,listprice);
                     String listcurrency;
-                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("currencyCode")){
+                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("listPrice")){
                         listcurrency = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("listPrice").getString("currencyCode");
                     }
                     else{
                         listcurrency = null;
                     }
+                    lcurrency.setText(listcurrency);
                     Log.v(TAG,listcurrency);
                     String retailprice;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("retailPrice")){
@@ -114,6 +123,7 @@ public class ViewGetDetails extends AppCompatActivity {
                         retailprice = null;
                     }
                     Log.v(TAG,retailprice);
+                    pricer.setText(retailprice);
                     String Retailcurrency;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("retailPrice")){
                         Retailcurrency = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("retailPrice").getString("currencyCode");
@@ -121,6 +131,7 @@ public class ViewGetDetails extends AppCompatActivity {
                     else{
                         Retailcurrency = null;
                     }
+                    rcurrency.setText(Retailcurrency);
                     Log.v(TAG,Retailcurrency);
                     String previewLink;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("previewLink")){
@@ -137,11 +148,10 @@ public class ViewGetDetails extends AppCompatActivity {
                     else{
                         pdflink = null;
                     }
-
+                    Log.v(TAG,"Retail price ="+retailprice);
 
                     values.put("EPUB","test");
                     return values;
-
                 }
                 else{
                     values.put("EPUB","test");
