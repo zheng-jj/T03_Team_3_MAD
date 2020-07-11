@@ -81,6 +81,19 @@
             android:layout_centerVertical="true"
             android:scrollbars="none" />
 
+        <Button
+            android:id="@+id/uploadbuttonview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/popularbookrecyclerview"
+            android:layout_marginStart="159dp"
+            android:layout_marginTop="3dp"
+            android:background="@color/blue"
+            android:padding='5dp'
+            android:text="Upload Book" />
+
 
     </RelativeLayout>
+
+
 </FrameLayout>

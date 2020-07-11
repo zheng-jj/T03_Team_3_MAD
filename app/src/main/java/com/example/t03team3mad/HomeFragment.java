@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
@@ -49,6 +50,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     Bitmap bitmap;
     private static final String TAG = "HomeFragment";
     List<Book> newbooklist;
+    Button uploadbutton;
 
     ArrayList<String> GenreList=new ArrayList<>();
     ArrayList<String> Ran5ToDisplay=new ArrayList<>();
@@ -115,6 +117,15 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
 
         //jj- set the recyclerview object to its adapter
         recommended.setAdapter(bookadapter2);
+        //qh - go to upload books
+        uploadbutton = view.findViewById(R.id.uploadbuttonview);
+        uploadbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragment_uploadbooks nextFragment = new fragment_uploadbooks();  //will go the fragment where it will display all the books of that genre
+                MainActivity.addFragment(nextFragment,getActivity(),"Upload Books");
+            }
+        });
 
 
         return view;
