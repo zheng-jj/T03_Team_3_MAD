@@ -217,7 +217,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                     if (i.getBoolean("uploaded")){
                         if (i.getString("booktitle").equals(query)){
                             SearchClass newsearchclass = new SearchClass(i.getString("booktitle"),i.getString("bookabout"),"Book",i.getId());
-                            Log.d(TAG, "Added Uploaded Book");
                             newsearchclass.setUploaded("true");
                             searchClassList.add(newsearchclass);
                         }
