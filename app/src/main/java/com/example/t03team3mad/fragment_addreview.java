@@ -56,7 +56,7 @@ public class fragment_addreview extends Fragment {
 
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
-    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

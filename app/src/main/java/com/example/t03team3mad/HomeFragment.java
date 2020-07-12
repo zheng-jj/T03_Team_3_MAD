@@ -22,10 +22,12 @@ import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
 import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.api.Quota;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -62,6 +64,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     //jj- these are mainly to load the recyclerviews
     List<Book> booklist=new ArrayList<>();
     List<Book> booklist2=new ArrayList<>();
+    List<Book> popularlist=new ArrayList<>();
     List<String> OverallBooklist=new ArrayList<>();
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     AdapterBookMain bookadapter;
@@ -271,5 +274,23 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
                 }
             }
         });
+    }
+    public void getpopularbooks(){
+        mCollectionBook.whereGreaterThan("viewcount",0).orderBy("viewcount", Query.Direction.DESCENDING).limit(10).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                for(QueryDocumentSnapshot i:queryDocumentSnapshots){
+                    String id= i.getId();
+                    String title = i.getString("booktitle");
+                    String url = i.getString("coverurl");
+                    Book newbook = new Book(id,title,url);
+                    popularlist.add(newbook);
+                }
+                bookadapter.notifyDataSetChanged();
+
+            }
+
+        });
+
     }
 }

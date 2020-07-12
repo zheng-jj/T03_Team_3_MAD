@@ -130,6 +130,11 @@ public class Book implements Parcelable {
         booktitle = title;
         isbn = bisbn;
     }
+    public Book(String bisbn, String title,String coverurl) {
+        booktitle = title;
+        isbn = bisbn;
+        imglink=coverurl;
+    }
 
     @Override
     public int describeContents() {

@@ -64,7 +64,7 @@ public class reviewpageFragment extends Fragment {
     private RecyclerView mFirestoreList;
     private FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerAdapter adapter;
-    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Books");
+    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     List<String> followingid = new ArrayList<String>();
 
