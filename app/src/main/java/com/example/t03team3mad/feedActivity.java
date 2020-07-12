@@ -57,7 +57,7 @@ public class feedActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList =findViewById(R.id.feedrecycler);
         Log.d("Test",idu);
-        Query query = firebaseFirestore.collection("User").document(idu).collection("Activity").orderBy(FieldPath.documentId(), Query.Direction.DESCENDING);
+        Query query = firebaseFirestore.collection("User").document(idu).collection("Activity").orderBy("position", Query.Direction.DESCENDING).limit(10);
 
         FirestoreRecyclerOptions<Feed> options = new FirestoreRecyclerOptions.Builder<Feed>().setQuery(query,Feed.class).build();
         adapter = new FirestoreRecyclerAdapter<Feed,FeedViewHolder>(options) {
@@ -114,9 +114,6 @@ public class feedActivity extends AppCompatActivity {
 
         adapter.startListening();
     }
-    public void onStop(){
-        super.onStop();
-        adapter.stopListening();
-    }
+
 
 }

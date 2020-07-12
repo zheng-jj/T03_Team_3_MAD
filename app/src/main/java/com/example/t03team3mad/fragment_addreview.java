@@ -136,6 +136,7 @@ public class fragment_addreview extends Fragment {
                 if(!queryDocumentSnapshots.isEmpty()){
                     List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
                     aid = data.size()+1;
+                    data3.put("position",aid);
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
                     Log.d("Test", "Load into user?x1");
                     Log.d("Test", id);
@@ -145,6 +146,7 @@ public class fragment_addreview extends Fragment {
                 }
                 else{
                     aid = 1;
+                    data3.put("position",aid);
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
                     Log.d("Test", "Load into user?x2");
                     Log.d("Test", id);

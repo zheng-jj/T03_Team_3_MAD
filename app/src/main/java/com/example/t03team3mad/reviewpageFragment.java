@@ -195,6 +195,7 @@ public class reviewpageFragment extends Fragment {
                     List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
 
                     aid = data.size()+1;
+                    data3.put("position",aid);
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
 
 
@@ -202,6 +203,7 @@ public class reviewpageFragment extends Fragment {
                 }
                 else{
                     aid = 1;
+                    data3.put("position",aid);
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
 
 
@@ -225,6 +227,7 @@ public class reviewpageFragment extends Fragment {
                 data3.put("rid",model.getRid());
                 data3.put("title",title);
                 data3.put("uname",name);
+
                 for(QueryDocumentSnapshot i: queryDocumentSnapshots){
                     String temp = i.getString("following");
                     String[] follwings = temp.split(";");
