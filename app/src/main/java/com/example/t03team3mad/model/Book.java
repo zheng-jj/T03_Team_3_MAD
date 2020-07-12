@@ -135,6 +135,7 @@ public class Book implements Parcelable {
         isbn = bisbn;
         imglink=coverurl;
     }
+    public Book(){}
 
     @Override
     public int describeContents() {

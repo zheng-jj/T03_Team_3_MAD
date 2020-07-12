@@ -95,7 +95,7 @@ public class reviewpageFragment extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList = view.findViewById(R.id.rRecyclerView);
 
-        Query query = firebaseFirestore.collection("Books").document(isbn).collection("Reviews").orderBy("vote", Query.Direction.DESCENDING);
+        Query query = firebaseFirestore.collection("Book").document(isbn).collection("Reviews").orderBy("vote", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Reviews> options = new FirestoreRecyclerOptions.Builder<Reviews>().setQuery(query,Reviews.class).build();
 

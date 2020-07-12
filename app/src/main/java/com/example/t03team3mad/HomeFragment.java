@@ -59,7 +59,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
 
     ArrayList<String> GenreList=new ArrayList<>();
     ArrayList<String> Ran5ToDisplay=new ArrayList<>();
-
+    ArrayList<String> isbnlist = new ArrayList<>();
 
     //jj- these are mainly to load the recyclerviews
     List<Book> booklist=new ArrayList<>();
@@ -69,11 +69,11 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     AdapterBookMain bookadapter;
     AdapterBookMain bookadapter2;
-
+    Book book ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        book = new Book();
         //Chris - genre recycler view
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         RecyclerView Genre=(RecyclerView)view.findViewById(R.id.genrelistrecyclerview);
@@ -95,9 +95,10 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         popularbooks.setLayoutManager(llm);
         loadBookurlsfav();
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
-        bookadapter  = new AdapterBookMain(booklist,this.getContext());
+        bookadapter  = new AdapterBookMain(popularlist,this.getContext());
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
+        getpopularbooks();
 
         //Chris - get all the isbn from firestore book collection
         mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -280,11 +281,36 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot i:queryDocumentSnapshots){
-                    String id= i.getId();
-                    String title = i.getString("booktitle");
-                    String url = i.getString("coverurl");
-                    Book newbook = new Book(id,title,url);
-                    popularlist.add(newbook);
+                    if(!i.getBoolean("uploaded")){
+                        String id= i.getId();
+                        AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(id);
+                        try {
+                            book = tasktogetbook.get();
+
+
+
+                            if(book!=null) {
+                                book.setimglink(i.getString("coverurl"));
+                                Log.v(TAG, "Book created = " + book.getBooktitle());
+                                Log.v(TAG, "Book isbn = " + book.getIsbn());
+                                Log.v(TAG, "Book about = " + book.getBookabout());
+                                Log.v(TAG, "Book date = " + book.getPdate());
+                                Log.v(TAG, "Book genre = " + book.getBookgenre());
+                                Log.v(TAG, "Book author = " + book.getBookauthor());
+                                Log.v(TAG, "Book img = " + book.getimglink());
+                                popularlist.add(book);
+                            };
+                        } catch (ExecutionException e) {
+                            e.printStackTrace();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    else{
+                        Book temp = new Book(i.getString("booktitle"), i.getString("bookauthor"), i.getString("bookabout"), i.getString("bookgenre"), i.getString("bookpdate"), i.getId());
+                        popularlist.add(temp);
+                    }
+
                 }
                 bookadapter.notifyDataSetChanged();
 
