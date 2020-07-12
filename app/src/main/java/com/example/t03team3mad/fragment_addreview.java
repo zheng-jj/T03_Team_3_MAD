@@ -56,7 +56,7 @@ public class fragment_addreview extends Fragment {
 
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
-    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Books");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,10 +64,10 @@ public class fragment_addreview extends Fragment {
         View view = inflater.inflate(R.layout.subfragment_writereview, container, false);
         // jo - get bundle from another fragment
         Bundle bundle = this.getArguments();
-        final User user = bundle.getParcelable("user");
         final Book book = bundle.getParcelable("book");
 
-        idu = Integer.toString(user.getUseridu());
+        idu = String.valueOf(MainActivity.loggedinuser.getUseridu());
+        name = MainActivity.loggedinuser.getUsername();
         title=  book.getBooktitle();
         //jo - find viewbyids
         enter =  view.findViewById(R.id.enter);
@@ -85,7 +85,6 @@ public class fragment_addreview extends Fragment {
                 Log.v("Click","Button clicked");
 
                 review = editreview.getText().toString();
-                name = user.getUsername();
                 ratevalue = ratings.getRating();
                 Log.v("RateValue", String.valueOf(ratevalue));
                 getidr();

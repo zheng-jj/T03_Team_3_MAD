@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -63,7 +64,7 @@ public class reviewpageFragment extends Fragment {
     private RecyclerView mFirestoreList;
     private FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerAdapter adapter;
-    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Books");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     List<String> followingid = new ArrayList<String>();
 
@@ -75,11 +76,11 @@ public class reviewpageFragment extends Fragment {
         f = this;
         Bundle bundle = this.getArguments();
         final Book book = bundle.getParcelable("book");
-        final User user = bundle.getParcelable("user");
+
         isbn = book.getIsbn();
-        uid = user.getUseridu();
+        uid = MainActivity.loggedinuser.getUseridu();
         title= book.getBooktitle();
-        name = user.getUsername();
+        name = MainActivity.loggedinuser.getUsername();
         // jo - display layout
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
 
@@ -94,7 +95,7 @@ public class reviewpageFragment extends Fragment {
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList = view.findViewById(R.id.rRecyclerView);
 
-        Query query = firebaseFirestore.collection("Book").document(isbn).collection("Reviews").orderBy("vote", Query.Direction.DESCENDING);
+        Query query = firebaseFirestore.collection("Books").document(isbn).collection("Reviews").orderBy("vote", Query.Direction.DESCENDING);
 
         FirestoreRecyclerOptions<Reviews> options = new FirestoreRecyclerOptions.Builder<Reviews>().setQuery(query,Reviews.class).build();
 
@@ -129,22 +130,9 @@ public class reviewpageFragment extends Fragment {
                         MainActivity.addFragment(upage,f.getActivity(),"userpage");
                     }
                 });
-                holder.upvote.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Log.v("Test","Upvote CLicked");
-                        final Map<String, Object> data4 = new HashMap<String,Object>();
-
-                        data4.put("isbn",isbn);
-                        data4.put("uid", uid);
-
-                        mCollectionRefuser.document(String.valueOf(uid)).collection("Upvote").add(data4);
-
-                        getfollowing(model);
+                upvote(model,holder.upvote);
 
 
-                    }
-                });
 
             }
         };
@@ -247,6 +235,42 @@ public class reviewpageFragment extends Fragment {
                 mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
 
 
+            }
+        });
+
+    }
+    public void upvote(final Reviews model, final Button button){
+        mCollectionRefuser.document(String.valueOf(uid)).collection("Upvote").whereEqualTo("rid", model.getRid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Log.v("Test","Upvote CLicked");
+                            final Map<String, Object> data4 = new HashMap<String,Object>();
+
+                            data4.put("isbn",isbn);
+                            data4.put("uid", uid);
+                            data4.put("rid",model.getRid());
+                            mCollectionRefuser.document(String.valueOf(uid)).collection("Upvote").add(data4);
+
+                            getfollowing(model);
+
+
+                        }
+                    });
+                }
+                else{
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getActivity().getApplicationContext(),"You have already upvoted this comment ",Toast.LENGTH_LONG).show();
+
+
+                        }
+                    });
+                }
             }
         });
 
