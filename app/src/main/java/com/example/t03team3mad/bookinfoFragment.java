@@ -71,7 +71,6 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     //qh - assigns the views and transfers the info to them
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
         final View view = inflater.inflate(R.layout.fragment_bookinfo, container, false);
         final User user;
         TextView title = view.findViewById(R.id.titleview);
@@ -80,34 +79,22 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         Genre = view.findViewById(R.id.genreview_layout);
         TextView author = view.findViewById(R.id.authorview);
         image = view.findViewById(R.id.imageView2);
-
+        Log.d(TAG, "UPLOADED BOOK TEST1222131232" );
         showrating = view.findViewById(R.id.showrate);
         Bundle bundle = this.getArguments();
         if (bundle.getParcelable("currentbook") != null) {
             final Book receivedbook = bundle.getParcelable("currentbook"); // Key
+            Log.d(TAG, "UPLOADED BOOK RECEIVEDdsdsdsdss" );
             isbn = receivedbook.getIsbn();
             getdata(receivedbook);
             viewcount(receivedbook.getIsbn());
             System.out.println(receivedbook.getBooktitle());
             System.out.println(receivedbook.getBooktitle());
             System.out.println(receivedbook.getBooktitle());
-
+            Log.d(TAG, "UPLOADED BOOK RECEIVED" + receivedbook.getBooktitle());
             title.setText(receivedbook.getBooktitle());
             synopsis.setText(receivedbook.getBookabout());
             releasedate.setText(receivedbook.getPdate());
-
-            //qh - search author of book by id
-            String authorid = receivedbook.getBookauthor();
-            DatabaseAccess databaseAccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            databaseAccess.open();
-            try {
-                Author authorbook = databaseAccess.searchauthorbyida(authorid);
-                author.setText(authorbook.getAuthorname());
-            } catch (Exception e) {
-                author.setText(receivedbook.getBookauthor());
-            }
-            databaseAccess.close();
-
 
             //Chris - list the genre
             if(receivedbook.getBookgenre().contains(",")) {

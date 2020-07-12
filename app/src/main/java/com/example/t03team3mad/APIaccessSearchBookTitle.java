@@ -100,6 +100,7 @@ public class APIaccessSearchBookTitle extends AsyncTask<String,Void,List<SearchC
                 //}
 
                 SearchClass newsearchobject = new SearchClass(booktitle,des,"Book",isbn);
+                newsearchobject.setUploaded("false");
                 booklistBOOK.add(newsearchobject);
 
             }

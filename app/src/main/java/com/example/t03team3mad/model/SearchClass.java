@@ -40,6 +40,16 @@ public class SearchClass {
         this.imglink = newName;
     }
 
+    private String uploaded;
+    public String getUploaded() {
+        return uploaded;
+    }
+    public void setUploaded(String uploaded) {
+        this.uploaded = uploaded;
+    }
+
+
+
     public SearchClass (String name, String des, String searchclass, String newid){
         searchName = name;
         searchDes = des;

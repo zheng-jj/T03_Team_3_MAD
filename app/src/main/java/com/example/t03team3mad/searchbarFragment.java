@@ -44,6 +44,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     String coverurl;
     String isbn;
+    Boolean check = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,12 +101,43 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     //qh - when clicking search item
     @Override
     public void onSearchClick(int position) throws InterruptedException {
-        SearchClass currentsearchobject = searchClassList.get(position);
+        final SearchClass currentsearchobject = searchClassList.get(position);
 
         //qh -- if object clicked is a book
         //qh - added jjs code to transfer info
         Book currentbook = null;
-        if (currentsearchobject.getSearchClass().equals("Book")){
+        if (currentsearchobject.getUploaded().equals("true")){
+            check = true;
+            mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    for(QueryDocumentSnapshot i : queryDocumentSnapshots){
+                        if (i.getId().equals(currentsearchobject.getId())){
+                            Book currentbook = new Book(i.getString("booktitle"),i.getString("bookauthor"),i.getString("bookabout"),i.getString("bookgenre"),i.getString("bookpdate"),i.getId());
+                            Log.d(TAG, "Uploaded Book: " + currentbook.getBooktitle());
+                            Log.d(TAG, "Uploaded Book: " + currentbook.getBookauthor());
+                            Log.d(TAG, "Uploaded Book: " + currentbook.getBookgenre());
+                            Log.d(TAG, "Uploaded Book: " + currentbook.getBookabout());
+                            Log.d(TAG, "Uploaded Book: " + currentbook.getIsbn());
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                            bookinfoFragment nextFrag= new bookinfoFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("currentbook", currentbook);
+                            nextFrag.setArguments(bundle);
+                            MainActivity.addFragment(nextFrag,getActivity(),"findThisFragment"+currentsearchobject.getSearchName());
+                        }
+                    }
+                }
+            });
+
+        }
+        if (currentsearchobject.getSearchClass().equals("Book") && !check){
+            Log.d(TAG, "SEE IF UPLOADED" + currentsearchobject.getUploaded());
+            Log.d(TAG, "Why is this code running?");
             AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(currentsearchobject.getId());
             Log.v(TAG,"searched ="+currentsearchobject.getId());
             try {
@@ -186,10 +218,10 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
-                    Log.d(TAG, "Searching Uploaded Book");
                     if (i.getBoolean("uploaded")){
                         if (i.getString("booktitle").equals(query)){
                             SearchClass newsearchclass = new SearchClass(i.getString("booktitle"),i.getString("bookabout"),"Book",i.getId());
+                            newsearchclass.setUploaded("true");
                             searchClassList.add(newsearchclass);
                         }
                     }
