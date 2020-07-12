@@ -12,8 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="138dp"
-        android:layout_marginTop="218dp"
+        android:layout_marginStart="147dp"
+        android:layout_marginTop="261dp"
         android:text="TextView" />
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginStart="217dp"
-        android:layout_marginTop="222dp"
+        android:layout_marginStart="223dp"
+        android:layout_marginTop="261dp"
         android:text="TextView" />
 </RelativeLayout>

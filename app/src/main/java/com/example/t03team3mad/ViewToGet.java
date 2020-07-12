@@ -1,16 +1,15 @@
 package com.example.t03team3mad;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.t03team3mad.model.Book;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +22,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 
-public class ViewGetDetails extends AppCompatActivity {
+public class ViewToGet extends AppCompatActivity {
 
     TextView pricer;
     TextView rcurrency;
@@ -44,7 +43,7 @@ public class ViewGetDetails extends AppCompatActivity {
             Book toview = PassedData.getParcelable("book");
             String uid = PassedData.getParcelable("User_UID");
             String isbn = "9781908843708";
-            AsyncTask<String,Void,HashMap> getDetails = new APIaccessGetDetails().execute(isbn);
+            AsyncTask<String,Void, HashMap> getDetails = new ViewToGet.APIaccessGetDetails().execute(isbn);
             HashMap<String, String> values=new HashMap<>();
             try {
                 values = getDetails.get();

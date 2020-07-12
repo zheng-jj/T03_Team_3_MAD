@@ -232,32 +232,8 @@ public class fragment_editUser extends Fragment {
     }
 
     public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        //DBaccess.open();
+
         ArrayList<Book> userbooklist = new ArrayList<>();
-//        try {
-//            //foreach book in user's local db favourited books, get it from the api
-//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
-//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
-//                try {
-//                    Book temp = tasktogetbook.get();
-//                    if (temp != null) {
-//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
-//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
-//                        Log.v(TAG, "Book about = " + temp.getBookabout());
-//                        Log.v(TAG, "Book date = " + temp.getPdate());
-//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
-//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
-//                        userbooklist.add(temp);
-//                    }
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }catch (Exception e){}
-//        DBaccess.close();
 
         AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
 

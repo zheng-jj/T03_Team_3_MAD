@@ -346,7 +346,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     Bundle passdata = new Bundle();
                     passdata.putString("User_UID",String.valueOf(MainActivity.loggedinuser.getUseridu()));
                     passdata.putParcelable("book",receivedbook);
-                    Intent ViewGetDetails= new Intent(getContext(),ViewGetDetails.class);
+                    Intent ViewGetDetails= new Intent(getContext(),ViewToGet.class);
                     ViewGetDetails.putExtra("Bundle", passdata);
                     Log.v(TAG,"sending this book to view where to get "+receivedbook.getBooktitle());
                     startActivity(ViewGetDetails);

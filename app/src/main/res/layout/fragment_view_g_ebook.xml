@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ViewGEbook">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/priceretail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="147dp"
+            android:layout_marginTop="261dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/listcurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="221dp"
+            android:layout_marginTop="328dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/pricelist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="142dp"
+            android:layout_marginTop="329dp"
+            android:text="TextView" />
+
+        <TextView
+            android:id="@+id/retailcurrency"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="223dp"
+            android:layout_marginTop="261dp"
+            android:text="TextView" />
+    </RelativeLayout>
+</FrameLayout>

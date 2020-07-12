@@ -11,6 +11,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,7 @@ public class updateFireStoreUser {
                         data.put("name", user.getUsername());
                         data.put("isbn", user.getUserisbn());
                         data.put("following", user.getfollowingstring());
-                        docRef.set(data);
+                        docRef.set(data, SetOptions.merge());
                     } else {
                         Log.d(TAG, "get failed with ", task.getException());
                     }
