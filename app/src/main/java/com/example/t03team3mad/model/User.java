@@ -57,6 +57,14 @@ public class User implements Parcelable {
         this.imgurl = imgurl;
     }
 
+    private String admin;
+    public String getAdmin() {
+        return admin;
+    }
+    public void setAdmin(String admin) {
+        this.admin = admin;
+    }
+
     private String desc;
     public String getUserabout() {
         return desc;

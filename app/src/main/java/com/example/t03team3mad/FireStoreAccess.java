@@ -32,6 +32,7 @@ public class FireStoreAccess {
                         if (document.exists()) {
                             found[0]=new User(Integer.valueOf(UID),document.get("name").toString(),document.get("isbn").toString(),document.get("desc").toString());
                             found[0].setfollowingstring(document.getString("following"));
+                            found[0].setAdmin(document.getString("role"));
                             Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                             MainActivity.updateUserLogged(found[0]);
                         } else {

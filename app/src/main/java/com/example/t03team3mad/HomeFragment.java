@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
@@ -132,8 +133,13 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         verifybutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verfiybooksfragment nextFragment = new verfiybooksfragment();  //will go the fragment where it will display all the books of that genre
-                MainActivity.addFragment(nextFragment,getActivity(),"Verify Books");
+                if (MainActivity.loggedinuser.getAdmin() == "Admin"){
+                    //qh - make sure users are admins
+                    verfiybooksfragment nextFragment = new verfiybooksfragment();  //will go the fragment where it will display all the books of that genre
+                    MainActivity.addFragment(nextFragment,getActivity(),"Verify Books");
+                }
+                Log.v(TAG,MainActivity.loggedinuser.getAdmin());
+                Toast.makeText(getContext(), "Only admins can verify books!", Toast.LENGTH_SHORT).show();
             }
         });
 
