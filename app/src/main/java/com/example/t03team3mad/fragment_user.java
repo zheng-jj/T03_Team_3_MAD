@@ -336,6 +336,7 @@ public class fragment_user extends Fragment {
     }
     //jj- get user reviews made
     public void loaduserreviews(final User user){
+        reviewsByUser = new ArrayList<>();
         mCollectionRefreview.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
