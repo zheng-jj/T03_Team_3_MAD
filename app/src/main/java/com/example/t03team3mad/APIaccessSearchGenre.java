@@ -35,7 +35,7 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
         Log.v(TAG,newtitle);
         URL url = new URL(apiurl+"books/v1/volumes?q="+"subject:"+genre+"&maxResults=10");
 
-        //        //jj-opens the connection
+        //jj-opens the connection
         HttpURLConnection conn = (HttpURLConnection)url.openConnection();
         conn.setRequestMethod("GET");
         int responsecode = conn.getResponseCode();
@@ -64,18 +64,19 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
             Log.v(TAG, newstring);
             //qh - all the json object stuff
             JSONArray jsonarray = bookjsonobj.getJSONArray("items");
-            //JSONArray jsonarray = bookjsonobj.getJSONArray("docs");
 
             for (int i = 0; i < jsonarray.length(); i++) {
                 String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("title");
-                //String booktitle = bookjsonobj.getJSONArray("docs").getJSONObject(i).getString("title");
+                //Chris - String booktitle
+                //chris- get description
                 if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("description")) {
                     des = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("description");
                 }
+                //Chris - if there is no description
                 else{
                     des = "This book was retrieved from Google Books";
              }
-
+                //Chris - get author name
                 String publisher="";
                 if(bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("authors")){
                     publisher=bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
@@ -86,6 +87,7 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
                 {
                     publisher="Author Data not available";
                 }
+                //Chris - get date
                 String date="";
                 if(bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("publishedDate")){
                     date=bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("publishedDate");
@@ -109,7 +111,7 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
                 String subjects;
                 if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("categories")){
                      subjects = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("categories");
-                    //jj-loops through all the subjects in the list of subjects and adds to a string
+
 
                 }
                 else {

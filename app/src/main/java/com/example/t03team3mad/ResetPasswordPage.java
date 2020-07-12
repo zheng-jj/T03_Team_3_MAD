@@ -44,7 +44,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                                 startActivity(new Intent(ResetPasswordPage.this ,LoginPage.class));
                             }
                             else {
-                                Toast.makeText(ResetPasswordPage.this,"Error", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ResetPasswordPage.this,"Do you enter valid email?", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });

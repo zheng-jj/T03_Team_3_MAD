@@ -30,8 +30,7 @@ public class ViewGEbook extends Fragment {
     TextView pricel;
     TextView lcurrency;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_view_g_ebook,container,false);
 
@@ -40,7 +39,7 @@ public class ViewGEbook extends Fragment {
         pricel = view.findViewById(R.id.pricelist);
         lcurrency = view.findViewById(R.id.listcurrency);
         Bundle bundle = this.getArguments();
-        String isbn = bundle.getString("isbn");
+        String isbn = ViewToGet.book.getIsbn();
         AsyncTask<String,Void, HashMap> getDetails = new ViewGEbook.APIaccessGetDetails().execute(isbn);
         HashMap<String, String> values=new HashMap<>();
         try {
@@ -96,64 +95,63 @@ public class ViewGEbook extends Fragment {
                     String listprice;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("listPrice")){
                         listprice = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("listPrice").getString("amount");
+                        pricel.setText(listprice);
+                        Log.v(TAG,listprice);
                     }
                     else{
                         listprice = null;
+                        pricel.setText("Not Available");
                     }
-                    pricel.setText(listprice);
-                    Log.v(TAG,listprice);
+
                     String listcurrency;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("listPrice")){
                         listcurrency = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("listPrice").getString("currencyCode");
+                        lcurrency.setText(listcurrency);
+                        Log.v(TAG,listcurrency);
                     }
                     else{
                         listcurrency = null;
+                        lcurrency.setText("Not Available");
                     }
-                    lcurrency.setText(listcurrency);
-                    Log.v(TAG,listcurrency);
+
                     String retailprice;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("retailPrice")){
                         retailprice = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("retailPrice").getString("amount");
+                        Log.v(TAG,retailprice);
+                        pricer.setText(retailprice);
                     }
+
                     else{
                         retailprice = null;
+                        pricer.setText("Not Available");
                     }
-                    Log.v(TAG,retailprice);
-                    pricer.setText(retailprice);
+
                     String Retailcurrency;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("retailPrice")){
                         Retailcurrency = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("retailPrice").getString("currencyCode");
+                        rcurrency.setText(Retailcurrency);
+                        Log.v(TAG,Retailcurrency);
                     }
+
                     else{
                         Retailcurrency = null;
+                        rcurrency.setText("Not Available");
                     }
-                    rcurrency.setText(Retailcurrency);
-                    Log.v(TAG,Retailcurrency);
+
+
                     String previewLink;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("previewLink")){
                         previewLink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("previewLink");
+                        Log.v(TAG,previewLink);
                     }
                     else{
                         previewLink = null;
                     }
-                    Log.v(TAG,previewLink);
-                    String pdflink;
-                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("pdf").has("acsTokenLink")){
-                        pdflink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("pdf").getString("acsTokenLink");
-                    }
-                    else{
-                        pdflink = null;
-                    }
-                    Log.v(TAG,"Retail price ="+retailprice);
 
-                    values.put("EPUB","test");
-                    return values;
-                }
-                else{
-                    values.put("EPUB","test");
                     return values;
                 }
             }
+            return null;
         }
 
         //jj-method that calls the searchbook method and runs it in background
