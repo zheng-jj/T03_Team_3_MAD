@@ -10,21 +10,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.util.Log;
 
-import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
 import com.roughike.bottombar.*;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
     private static final String TAG = "MainActivity";
@@ -33,7 +27,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     public static User loggedinuser = null;
     public List<String> backstacktags = new ArrayList<>();
     BottomBar bottomBar;
-
+    Fragment f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +113,26 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 getSupportFragmentManager().popBackStack("SearchFragment",0);
             }
             if (tabId == R.id.tab_feed) {
+                bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
+                    @Override
+                    public void onTabReSelected(int tabId) {
+                        Intent feedActivity = new Intent(MainActivity.this, feedActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("user", loggedinuser);
+                        feedActivity.putExtras(bundle);
+
+                        startActivity(feedActivity);
+                    }
+                });
+                Intent feedActivity = new Intent(MainActivity.this, feedActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("user", loggedinuser);
+                feedActivity.putExtras(bundle);
+
+                startActivity(feedActivity);
+
+
+
             }
 
             if (tabId == R.id.tab_profile) {

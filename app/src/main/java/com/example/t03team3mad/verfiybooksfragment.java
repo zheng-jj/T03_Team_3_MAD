@@ -77,9 +77,9 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
         //qh - alert to confirm whether to verify the book
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Verify");
-        builder.setMessage("Are you sure you want to verify this book?");
+        builder.setMessage("Delete or Authorize book?");
         builder.setCancelable(false);
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener(){
+        builder.setPositiveButton("Verify", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
                 Book clickedbook = tobeVerified.get(position);
                 Map<String, Object> book = new HashMap<>();
@@ -114,9 +114,22 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                 });
             }
         });
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Delete", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
-		        return;
+                mCollectionBooksNotVerified.document(tobeVerified.get(position).getIsbn()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        tobeVerified.remove(position);
+                        verifyadapter.notifyDataSetChanged();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w(TAG, "Error deleting document", e);
+                    }
+                });
+                return;
             }
         });
         AlertDialog alert = builder.create();
