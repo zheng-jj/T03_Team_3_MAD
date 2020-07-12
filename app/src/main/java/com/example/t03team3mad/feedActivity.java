@@ -28,10 +28,15 @@ import com.example.t03team3mad.model.Reviews;
 import com.example.t03team3mad.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -57,7 +62,8 @@ public class feedActivity extends AppCompatActivity {
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList =findViewById(R.id.feedrecycler);
         Log.d("Test",idu);
-        Query query = firebaseFirestore.collection("User").document(idu).collection("Activity").orderBy("position", Query.Direction.DESCENDING).limit(10);
+        Query query = firebaseFirestore.collection("User").document(idu).collection("Activity").orderBy("position", Query.Direction.DESCENDING);
+
 
         FirestoreRecyclerOptions<Feed> options = new FirestoreRecyclerOptions.Builder<Feed>().setQuery(query,Feed.class).build();
         adapter = new FirestoreRecyclerAdapter<Feed,FeedViewHolder>(options) {
@@ -89,6 +95,7 @@ public class feedActivity extends AppCompatActivity {
 
 
 
+
     }
     private class FeedViewHolder extends RecyclerView.ViewHolder{
         TextView content;
@@ -109,10 +116,16 @@ public class feedActivity extends AppCompatActivity {
 
     };
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
 
         adapter.startListening();
+    }
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        adapter.stopListening();
     }
 
 

@@ -191,8 +191,10 @@ public class fragment_addreview extends Fragment {
         data3.put("title",title);
         data3.put("uname",name);
         Log.d("Test",idr);
+
         mCollectionRefbooks.document(ISBN).collection("Reviews").document(idr).set(data);
         mCollectionRef.add(data2);
+        mCollectionRefuser.document(idu).collection("Reviews").add(data2);
         mCollectionRefuser.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

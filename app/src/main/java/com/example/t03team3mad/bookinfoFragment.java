@@ -63,6 +63,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     ImageView image;
 
     private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     //AdapterGenre adapter;
 
 
@@ -487,6 +488,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
         }
     }
+
 
 
 
