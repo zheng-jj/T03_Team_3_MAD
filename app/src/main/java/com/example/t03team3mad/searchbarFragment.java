@@ -197,6 +197,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                     String username = i.getString("name");
                     String userabout = i.getString("desc");
                     SearchClass new1 = new SearchClass(username,userabout,"User",id);
+                    new1.setUploaded("false");
                     searchClassList.add(new1);
                     urllist.add(null);
                     Log.d(TAG, "getuser232232323 method");
