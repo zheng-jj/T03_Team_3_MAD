@@ -12,10 +12,6 @@ import android.widget.TextView;
 
 public class ViewNLB extends Fragment {
 
-    TextView pricer;
-    TextView rcurrency;
-    TextView pricel;
-    TextView lcurrency;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
