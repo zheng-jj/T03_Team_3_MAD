@@ -133,13 +133,16 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         verifybutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (MainActivity.loggedinuser.getAdmin() == "Admin"){
+                String role = MainActivity.loggedinuser.getAdmin();
+                if (role.equals("Admin")){
                     //qh - make sure users are admins
                     verfiybooksfragment nextFragment = new verfiybooksfragment();  //will go the fragment where it will display all the books of that genre
                     MainActivity.addFragment(nextFragment,getActivity(),"Verify Books");
                 }
-                Log.v(TAG,MainActivity.loggedinuser.getAdmin());
-                Toast.makeText(getContext(), "Only admins can verify books!", Toast.LENGTH_SHORT).show();
+                Log.v(TAG,role);
+                if (role.equals("User")){
+                    Toast.makeText(getContext(), "Only admins can verify books!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
