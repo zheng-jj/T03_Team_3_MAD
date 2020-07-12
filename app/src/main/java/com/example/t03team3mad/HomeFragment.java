@@ -26,6 +26,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import org.json.JSONArray;
@@ -61,6 +62,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     //jj- these are mainly to load the recyclerviews
     List<Book> booklist=new ArrayList<>();
     List<Book> booklist2=new ArrayList<>();
+    List<String> OverallBooklist=new ArrayList<>();
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     AdapterBookMain bookadapter;
     AdapterBookMain bookadapter2;
@@ -94,16 +96,37 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         //jj- set the recyclerview object to its adapter
         popularbooks.setAdapter(bookadapter);
 
+        //Chris - get all the isbn from firestore book collection
+        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                    for(QueryDocumentSnapshot i : queryDocumentSnapshots){
+                        OverallBooklist.add(i.getId());
+
+                    }
+                }
+                //Chris- Randomised the recommendation
+                for(int j=0;j<6;j++) {
+                    String hi=OverallBooklist.get(new Random().nextInt(OverallBooklist.size()));
+                    AsyncTask<String, Void, Book> task = new APIaccess().execute(hi);
+                    Log.v(TAG,hi);
+                    try {
+                        if (task.get() != null) {
+                            if(!booklist2.contains(task.get()))
+                            booklist2.add(task.get());
+                        }
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
 
-        AsyncTask<String, Void, ArrayList<Book>> task = new  APIaccessBookList(getContext()).execute("9780980200447");
-        try {
-            booklist2 = task.get();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        });
 
 
 
