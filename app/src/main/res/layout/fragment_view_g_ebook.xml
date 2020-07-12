@@ -2,50 +2,180 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ViewGEbook">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <TextView
-            android:id="@+id/priceretail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="147dp"
-            android:layout_marginTop="261dp"
-            android:text="TextView" />
 
         <TextView
-            android:id="@+id/listcurrency"
-            android:layout_width="wrap_content"
+            android:id="@+id/booktitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="221dp"
-            android:layout_marginTop="328dp"
-            android:text="TextView" />
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textSize="24dp"
+
+            android:textStyle="bold"></TextView>
 
         <TextView
-            android:id="@+id/pricelist"
-            android:layout_width="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="142dp"
-            android:layout_marginTop="329dp"
-            android:text="TextView" />
+            android:layout_below="@id/booktitle"
+            android:text="The information below is taken from GoogleBooks API"
+            android:id="@+id/firsttitle"
+            android:textSize="13dp"></TextView>
 
         <TextView
-            android:id="@+id/retailcurrency"
+            android:id="@+id/secondtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firsttitle"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Formats this EBook is Available in"
+            android:textSize="20dp"
+            android:textStyle="bold"></TextView>
+        <TextView
+            android:layout_marginTop="15dp"
+            android:gravity="end"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondtitle"
+            android:text="EPUB Availability: "
+            android:id="@+id/epublable"
+            android:textSize="16dp">
+        </TextView>
+        <TextView
+            android:layout_marginTop="15dp"
+            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/secondtitle"
+            android:layout_toRightOf="@id/epublable"
+            android:text="Formats this EBook is Available in"
+            android:id="@+id/epubtext"
+            android:textSize="16dp">
+        </TextView>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:gravity="end"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/epublable"
+            android:text="PDF Availability: "
+            android:id="@+id/pdflable"
+            android:textSize="16dp">
+        </TextView>
+        <TextView
+            android:layout_marginTop="10dp"
+            android:gravity="left"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/epublable"
+            android:layout_toRightOf="@id/epublable"
+            android:text="Formats this EBook is Available in"
+            android:id="@+id/pdftext"
+            android:textSize="16dp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/thirdtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pdftext"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="EBook Prices"
+            android:textSize="20dp"
+            android:textStyle="bold"></TextView>
+
+        <RelativeLayout
+            android:id="@+id/pricingcontainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="223dp"
-            android:layout_marginTop="261dp"
-            android:text="TextView" />
+            android:layout_below="@id/thirdtitle"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/retaillabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:gravity="end"
+                android:text="Retail Price: "
+                android:textSize="16dp"></TextView>
+
+            <TextView
+                android:id="@+id/priceretail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/retaillabel"
+                android:text="TextView"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/retailcurrency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/priceretail"
+                android:text="TextView"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/listlabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/retaillabel"
+                android:layout_marginTop="15dp"
+                android:gravity="end"
+                android:text="List Price: "
+                android:textSize="16dp"></TextView>
+
+            <TextView
+                android:id="@+id/pricelist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/retaillabel"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/retaillabel"
+                android:text="TextView"
+                android:textSize="16dp" />
+
+            <TextView
+                android:id="@+id/listcurrency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/retaillabel"
+                android:layout_marginLeft="3dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/priceretail"
+                android:text="TextView"
+                android:textSize="16dp" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/preview"
+            style="?android:attr/borderlessButtonStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_below="@id/pricingcontainer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/roundedbuttons"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Preview Available (Click here to open in browser)"
+            android:textAllCaps="false"
+            android:textSize="14dp"></Button>
+
+
     </RelativeLayout>
 </FrameLayout>

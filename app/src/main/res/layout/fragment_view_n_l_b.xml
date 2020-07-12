@@ -5,10 +5,46 @@
     android:layout_height="match_parent"
     tools:context=".ViewNLB">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
 
+        <TextView
+            android:id="@+id/booktitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:textSize="24dp"
+
+            android:textStyle="bold"></TextView>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/booktitle"
+            android:text="The information below is not real, it is obtained from a staging API from the National Library Board of Singapore, and the data is dummy data"
+            android:id="@+id/firsttitle"
+            android:textSize="11dp"></TextView>
+
+        <TextView
+            android:id="@+id/secondtitle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/firsttitle"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="Libraries you can find this book in"
+            android:textSize="20dp"
+            android:textStyle="bold"></TextView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/nlbList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/secondtitle"
+            android:layout_marginTop="15dp"></androidx.recyclerview.widget.RecyclerView>
+    </RelativeLayout>
 </FrameLayout>

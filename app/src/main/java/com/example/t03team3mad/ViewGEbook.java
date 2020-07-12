@@ -1,5 +1,7 @@
 package com.example.t03team3mad;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -9,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -29,6 +32,9 @@ public class ViewGEbook extends Fragment {
     TextView rcurrency;
     TextView pricel;
     TextView lcurrency;
+    TextView pdfavailtextv;
+    TextView epubavailtextv;
+    Button preview;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -38,9 +44,16 @@ public class ViewGEbook extends Fragment {
         rcurrency = view.findViewById(R.id.retailcurrency);
         pricel = view.findViewById(R.id.pricelist);
         lcurrency = view.findViewById(R.id.listcurrency);
+        pdfavailtextv = view.findViewById(R.id.pdftext);
+        epubavailtextv = view.findViewById(R.id.epubtext);
+        preview = view.findViewById(R.id.preview);
+        TextView title = view.findViewById(R.id.booktitle);
+
         Bundle bundle = this.getArguments();
         String isbn = ViewToGet.book.getIsbn();
         AsyncTask<String,Void, HashMap> getDetails = new ViewGEbook.APIaccessGetDetails().execute(isbn);
+        title.setText(ViewToGet.book.getBooktitle());
+
         HashMap<String, String> values=new HashMap<>();
         try {
             values = getDetails.get();
@@ -65,7 +78,8 @@ public class ViewGEbook extends Fragment {
                 return null;
             }
             //jj-sets the url to GET data as json
-            URL url = new URL(apiurl+"books/v1/volumes?q=isbn:"+isbn+"&maxResults=1");
+            final URL url = new URL(apiurl+"books/v1/volumes?q=isbn:"+isbn+"&maxResults=1");
+            Log.v(TAG,"Url searching ="+url);
             //jj-opens the connection
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
             conn.setRequestMethod("GET");
@@ -139,13 +153,53 @@ public class ViewGEbook extends Fragment {
                     }
 
 
-                    String previewLink;
+
+
+                    Boolean epubavail;
+                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").has("epub")){
+                        epubavail = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("epub").getBoolean("isAvailable");
+                        Log.v(TAG,epubavail.toString());
+                        if(epubavail){
+                            epubavailtextv.setText("Available in EPUB format");
+                        }
+                        else {
+                            epubavailtextv.setText("Unavailable in EPUB format");
+                        }
+                    }
+                    else {
+                        epubavailtextv.setText("Unavailable in EPUB format");
+                    }
+                    Boolean pdfavail;
+                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").has("pdf")){
+                        pdfavail = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("pdf").getBoolean("isAvailable");
+                        Log.v(TAG,pdfavail.toString());
+                        if(pdfavail){
+                            pdfavailtextv.setText("Available in PDF format");
+                        }
+                        else {
+                            pdfavailtextv.setText("Unavailable in PDF format");
+                        }
+                    }
+                    else {
+                        pdfavailtextv.setText("Unavailable in PDF format");
+                    }
+
+                    final String previewLink;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("previewLink")){
                         previewLink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("previewLink");
+                        preview.setText("Preview Available (Click here to open in browser)");
+                        preview.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(Intent.ACTION_VIEW);
+                                i.setData(Uri.parse(previewLink));
+                                startActivity(i);
+                            }
+                        });
                         Log.v(TAG,previewLink);
                     }
                     else{
-                        previewLink = null;
+                        preview.setText("Preview For this Book is Not Available");
                     }
 
                     return values;
