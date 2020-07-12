@@ -54,7 +54,6 @@ public class feedActivity extends AppCompatActivity {
         user =receivingEnd.getParcelableExtra("user");
 
         idu = String.valueOf(user.getUseridu());
-
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList =findViewById(R.id.feedrecycler);
         Log.d("Test",idu);
@@ -86,7 +85,9 @@ public class feedActivity extends AppCompatActivity {
         mFirestoreList.setHasFixedSize(true);
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
         mFirestoreList.setAdapter(adapter);
-        adapter.startListening();
+
+
+
 
     }
     private class FeedViewHolder extends RecyclerView.ViewHolder{
@@ -110,11 +111,12 @@ public class feedActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+
         adapter.startListening();
     }
     public void onStop(){
         super.onStop();
-        adapter.stopListening();    
+        adapter.stopListening();
     }
 
 }
