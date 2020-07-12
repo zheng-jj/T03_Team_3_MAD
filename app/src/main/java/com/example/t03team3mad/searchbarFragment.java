@@ -184,11 +184,11 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     //qh - get user from firebase (also runs doMySearch)
     public void getdata (final String query, final View view){
         Log.d(TAG, "getuser method");
-        getuploadedbooks(query,view);
         userscollection.whereEqualTo("name",query).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 doMySearch(query, view);
+                getuploadedbooks(query,view);
                 geturl();
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
                     Log.d(TAG, "getuser232232323 dsds");
@@ -217,6 +217,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                     if (i.getBoolean("uploaded")){
                         if (i.getString("booktitle").equals(query)){
                             SearchClass newsearchclass = new SearchClass(i.getString("booktitle"),i.getString("bookabout"),"Book",i.getId());
+                            Log.d(TAG, "Added Uploaded Book");
                             newsearchclass.setUploaded("true");
                             searchClassList.add(newsearchclass);
                         }
