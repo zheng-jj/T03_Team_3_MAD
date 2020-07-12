@@ -23,6 +23,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -50,6 +51,7 @@ public class fragment_addreview extends Fragment {
     String title;
     int aid;
     List<String> uids = new ArrayList<String>();
+    List<String> followingid = new ArrayList<String>();
 
 
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reviews");
@@ -64,6 +66,7 @@ public class fragment_addreview extends Fragment {
         Bundle bundle = this.getArguments();
         final User user = bundle.getParcelable("user");
         final Book book = bundle.getParcelable("book");
+
         idu = Integer.toString(user.getUseridu());
         title=  book.getBooktitle();
         //jo - find viewbyids
@@ -72,7 +75,7 @@ public class fragment_addreview extends Fragment {
         rtitle2 = view.findViewById(R.id.rtitle2);
         rtitle2.setText(book.getBooktitle());
         ISBN = book.getIsbn();
-
+        Log.d("Test",ISBN);
         ratings = view.findViewById(R.id.ratingBar);
 
 
@@ -96,7 +99,7 @@ public class fragment_addreview extends Fragment {
     // get the latest id of reviews so it can be used to +1 to add another review since it is a primary key
     public void getidr(){
 
-        mCollectionRef.document(ISBN).collection("Reviews").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mCollectionRefbooks.document(ISBN).collection("Reviews").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
@@ -104,13 +107,14 @@ public class fragment_addreview extends Fragment {
 
                     idr = data.size()+1;
                     Log.v("idr", String.valueOf(idr));
-                    addreview(String.valueOf(idr),idu,review,ISBN,name);
+                    getfollowing(String.valueOf(idr),idu,review,ISBN,name);
                     compilerating();
 
                 }
                 else{
                     idr = 1;
-                    addreview(String.valueOf(idr),idu,review,ISBN,name);
+                    Log.v("idr", String.valueOf(idr));
+                    getfollowing(String.valueOf(idr),idu,review,ISBN,name);
                     compilerating();
                 }
 
@@ -124,15 +128,17 @@ public class fragment_addreview extends Fragment {
 
 
     }
-    public void getaid(final String id, final Map<String, Object> data3){
+    public void getaid(final Map<String, Object> data3, final String id){
         mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
                 if(!queryDocumentSnapshots.isEmpty()){
                     List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
-
                     aid = data.size()+1;
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
+                    Log.d("Test", "Load into user?x1");
+                    Log.d("Test", id);
 
 
 
@@ -140,7 +146,8 @@ public class fragment_addreview extends Fragment {
                 else{
                     aid = 1;
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
-
+                    Log.d("Test", "Load into user?x2");
+                    Log.d("Test", id);
 
                 }
 
@@ -149,10 +156,16 @@ public class fragment_addreview extends Fragment {
 
             }
         });
+
     }
 
 
-    public void addreview(String idr,String idu,String review,String ISBN,String name){
+
+    public void compilerating(){
+        mCollectionRefbooks.document(ISBN).update("ratecount", FieldValue.increment(1));
+        mCollectionRefbooks.document(ISBN).update("TotalRating", FieldValue.increment(ratevalue));
+    }
+    public void getfollowing(final String idr, final String idu, final String review, final String ISBN, final String name){
         // Add document data  with id staffid using a hashmap
         Map<String, Object> data = new HashMap<String,Object>();
 
@@ -173,37 +186,32 @@ public class fragment_addreview extends Fragment {
         data3.put("Review", review);
         data3.put("isbn",ISBN);
         data3.put("rid",idr);
-        final Map<String, Object> data4 = new HashMap<String,Object>();
-        data4.put("review", review);
-        data4.put("isbn",ISBN);
-        data4.put("uid", idu);
-        data4.put("title",title);
+        data3.put("title",title);
+        data3.put("uname",name);
+        Log.d("Test",idr);
         mCollectionRefbooks.document(ISBN).collection("Reviews").document(idr).set(data);
         mCollectionRef.add(data2);
-        mCollectionRefuser.document(idu).collection("Reviews").add(data4);
-        mCollectionRefuser.whereArrayContains("following",String.valueOf(idu)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        mCollectionRefuser.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot i:queryDocumentSnapshots){
-                    uids.add(String.valueOf(i.getLong("useridu").intValue()));
-                    Log.v("uid",String.valueOf(i.getLong("useridu").intValue()));
+                Log.d("Test","123");
+                for(QueryDocumentSnapshot i: queryDocumentSnapshots){
+                    String temp = i.getString("following");
+                    String[] follwings = temp.split(";");
+                    for(String z : follwings){
+                        if(z.equals(idu)){
+                            getaid(data3,i.getId());
+                        }
+                        else{
+                            continue;
+                        }
+                    }
                 }
-                for(String i :uids){
-                    getaid(i,data3);
 
-                }
 
             }
         });
 
-
-
-
-
-    }
-    public void compilerating(){
-        mCollectionRefbooks.document(ISBN).update("ratecount", FieldValue.increment(1));
-        mCollectionRefbooks.document(ISBN).update("TotalRating", FieldValue.increment(ratevalue));
     }
 }
 

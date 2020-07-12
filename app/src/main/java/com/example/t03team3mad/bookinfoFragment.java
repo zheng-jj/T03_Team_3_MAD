@@ -214,6 +214,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 public void onClick(View v) {
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("book", receivedbook);
+                    bundle.putParcelable("user", user);
                     Log.v(TAG,"book info sending data =  "+ receivedbook);
                     reviewpageFragment rpage = new reviewpageFragment();
                     rpage.setArguments(bundle);

@@ -27,5 +27,8 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".feedActivity"
+             />
     </application>
 </manifest>

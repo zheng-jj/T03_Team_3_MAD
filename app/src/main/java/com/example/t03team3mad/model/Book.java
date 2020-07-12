@@ -31,6 +31,8 @@ public class Book implements Parcelable {
         }
     };
 
+
+
     public String getBooktitle() {
         return booktitle;
     }
@@ -123,6 +125,10 @@ public class Book implements Parcelable {
         pdate = publish;
         isbn = bisbn;
 
+    }
+    public Book(String bisbn, String title) {
+        booktitle = title;
+        isbn = bisbn;
     }
 
     @Override

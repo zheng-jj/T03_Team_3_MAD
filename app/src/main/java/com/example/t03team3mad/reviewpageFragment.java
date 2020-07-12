@@ -59,11 +59,13 @@ public class reviewpageFragment extends Fragment {
     int aid;
     List<String> uids = new ArrayList<String>();
     Reviews model1;
+    String title;
     private RecyclerView mFirestoreList;
     private FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerAdapter adapter;
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
+    List<String> followingid = new ArrayList<String>();
 
 
 
@@ -76,6 +78,8 @@ public class reviewpageFragment extends Fragment {
         final User user = bundle.getParcelable("user");
         isbn = book.getIsbn();
         uid = user.getUseridu();
+        title= book.getBooktitle();
+        name = user.getUsername();
         // jo - display layout
         View view = inflater.inflate(R.layout.fragment_reviewpage,container,false);
 
@@ -135,13 +139,8 @@ public class reviewpageFragment extends Fragment {
                         data4.put("uid", uid);
 
                         mCollectionRefuser.document(String.valueOf(uid)).collection("Upvote").add(data4);
-                        final Map<String, Object> data3 = new HashMap<String,Object>();
-                        data3.put("Activity","Upvote");
-                        data3.put("Rating",0);
-                        data3.put("Review", "");
-                        data3.put("isbn",isbn);
-                        data3.put("rid",model.getRid());
-                        setdata(data3,model);
+
+                        getfollowing(model);
 
 
                     }
@@ -187,24 +186,8 @@ public class reviewpageFragment extends Fragment {
         super.onStart();
         adapter.startListening();
     }
-    public void setdata(final Map<String, Object> data3, final Reviews model){
 
-        mCollectionRefuser.whereArrayContains("following",String.valueOf(uid)).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot i:queryDocumentSnapshots){
-                    uids.add(String.valueOf(i.getLong("useridu").intValue()));
-                    Log.v("uid",String.valueOf(i.getLong("useridu").intValue()));
-                }
-                for(String i :uids){
-                    getaid(i,data3,model);
-
-                }
-
-            }
-        });
-    }
-    public void getaid(final String id, final Map<String, Object> data3, final Reviews model){
+    public void getaid(final String id, final Map<String, Object> data3){
         mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -213,14 +196,14 @@ public class reviewpageFragment extends Fragment {
 
                     aid = data.size()+1;
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
-                    mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
+
 
 
                 }
                 else{
                     aid = 1;
                     mCollectionRefuser.document(id).collection("Activity").document(String.valueOf(aid)).set(data3);
-                    mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
+
 
                 }
 
@@ -229,6 +212,41 @@ public class reviewpageFragment extends Fragment {
 
             }
         });
+    }
+    public void getfollowing(final Reviews model){
+        mCollectionRefuser.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                final Map<String, Object> data3 = new HashMap<String,Object>();
+                data3.put("Activity","Upvote");
+                data3.put("Rating",0);
+                data3.put("Review", "");
+                data3.put("isbn",isbn);
+                data3.put("rid",model.getRid());
+                data3.put("title",title);
+                data3.put("uname",name);
+                for(QueryDocumentSnapshot i: queryDocumentSnapshots){
+                    String temp = i.getString("following");
+                    String[] follwings = temp.split(";");
+                    for(String z : follwings){
+                        if(z.equals(String.valueOf(uid))){
+                            Log.d("Test",uid +"z:" + z + "pass");
+                            Log.d("Test","Passed");
+                            getaid(i.getId(),data3);
+                        }
+                        else{
+                            Log.d("Test","Fail");
+                            Log.d("Test",uid +"z:" + z);
+                            continue;
+                        }
+                    }
+                }
+                mCollectionRef.document(isbn).collection("Reviews").document(model.getRid()).update("vote", FieldValue.increment(1));
+
+
+            }
+        });
+
     }
 }
 
