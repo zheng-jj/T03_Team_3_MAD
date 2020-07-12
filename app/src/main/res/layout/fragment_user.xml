@@ -48,15 +48,14 @@
             android:background="@drawable/error"></ImageView>
 
         <Button
-
             android:id="@+id/follow1"
             android:background="@drawable/roundedbuttons"
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="35dp"
-            android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginStart="298dp"
+            android:layout_alignParentEnd="true"
             android:layout_marginTop="44dp"
+            android:layout_marginEnd="20dp"
             style="?android:attr/borderlessButtonStyle"
             android:textSize="14dp"
             android:text="Follow"
