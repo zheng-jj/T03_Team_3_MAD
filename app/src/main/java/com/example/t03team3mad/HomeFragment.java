@@ -308,6 +308,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
                     }
                     else{
                         Book temp = new Book(i.getString("booktitle"), i.getString("bookauthor"), i.getString("bookabout"), i.getString("bookgenre"), i.getString("bookpdate"), i.getId());
+                        temp.setimglink(i.getString("coverurl"));
                         popularlist.add(temp);
                     }
 
