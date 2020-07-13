@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="wrap_content"
+    app:cardElevation="0dp"
+    android:layout_width="match_parent"
+    android:id="@+id/nlbcardview">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <View
+
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_above="@+id/library"
+            android:layout_marginBottom="-1dp"
+            android:background="#D3D3D3" />
+        <TextView
+            android:layout_marginLeft="3dp"
+            android:id="@+id/library"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Book No: "
+            android:padding="5dp"
+            android:textStyle="bold"
+            android:textSize="18dp"/>
+        <TextView
+            android:layout_marginLeft="3dp"
+            android:layout_below="@id/library"
+            android:id="@+id/itemno"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_toLeftOf="@id/available"
+            android:textSize="18dp"
+            android:padding="5dp"
+
+            android:layout_marginRight="3dp"/>
+
+        <TextView
+            android:layout_below="@id/library"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/available"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:text="Available: Yes"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:textSize="18dp"></TextView>
+        <TextView
+            android:layout_marginLeft="3dp"
+            android:layout_below="@id/itemno"
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Status: "
+            android:padding="5dp"
+            android:textSize="18dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/status"
+            android:layout_marginBottom="-1dp"
+            android:background="#2a4d69" />
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>

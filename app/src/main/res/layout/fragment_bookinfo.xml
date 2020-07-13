@@ -12,16 +12,18 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:id="@+id/titleview"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentStart="true"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_toLeftOf="@id/getBook"
+                android:layout_toLeftOf="@id/favourite"
                 android:text="Data not available"
                 android:textSize="25dp"
                 android:layout_marginStart="20dp"
+
                 android:textStyle="bold"
                 android:textColor="#000000" />
 
@@ -35,6 +37,7 @@
                 android:layout_height="216dp" />
 
             <TextView
+                android:textColor="#000000"
                 android:id="@+id/writtenby"
                 android:layout_below="@id/titleview"
                 android:layout_toRightOf="@id/imageView2"
@@ -45,6 +48,7 @@
                 android:gravity="center"
                 android:layout_height = "30dp"></TextView>
             <TextView
+                android:textColor="#000000"
                 android:id="@+id/authorview"
                 android:layout_height="30dp"
                 android:layout_width="wrap_content"
@@ -52,10 +56,7 @@
                 android:layout_below="@id/titleview"
                 android:gravity="center"
                 android:layout_marginTop="30dp"
-                android:text="Author Data not available"
-                android:textColor="#0000FF"
-                android:textSize="18dp"
-                android:textStyle="bold"></TextView>
+                android:text="Author Data not available"></TextView>
 
 
             <TextView
@@ -66,7 +67,6 @@
                 android:layout_marginTop="20dp"
                 android:text="Rating Data not available"
                 android:textColor="#000000"
-                android:textSize="18dp"
                 android:layout_height="wrap_content"
                 android:layout_width="wrap_content"/>
 
@@ -78,7 +78,6 @@
                 android:layout_marginTop="20dp"
                 android:text="Date Data not available"
                 android:textColor="#000000"
-                android:textSize="18dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
@@ -151,6 +150,7 @@
                 android:layout_below="@id/imageView2"
                 android:layout_toRightOf="@id/genrelabel"
                 android:layout_marginTop="10dp"
+                android:scrollbars="horizontal"
                 android:layout_marginEnd="30dp"
                 />
 
@@ -159,9 +159,12 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="36dp"
-                android:text="get this book"
-                android:layout_toLeftOf="@id/favourite"
-                android:layout_marginTop="7dp"/>
+                android:layout_marginTop="7dp"
+                android:layout_below="@id/addreview"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="25dp"
+                android:text="Get This Book"
+                android:textAllCaps="false" />
 
         </RelativeLayout>
     </ScrollView>

@@ -12,10 +12,17 @@
         android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/header"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:textSize="20dp"
+            android:text="eLib: The Book Manager"></TextView>
+        <TextView
+            android:layout_below="@id/header"
             android:id="@+id/genrestext"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_marginTop="10dp"
             android:background="@color/blue"
             android:padding='5dp'
