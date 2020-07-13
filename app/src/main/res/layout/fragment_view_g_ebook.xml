@@ -115,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/retaillabel"
-                android:text="TextView"
+                android:text="TextViewlala"
                 android:textSize="16dp" />
 
             <TextView
@@ -125,14 +125,19 @@
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="15dp"
                 android:layout_toRightOf="@id/priceretail"
-                android:text="TextView"
+                android:text="TextViewlala"
                 android:textSize="16dp" />
-
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/pricingcontainer2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/pricingcontainer"
+            android:layout_centerHorizontal="true">
             <TextView
                 android:id="@+id/listlabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/retaillabel"
                 android:layout_marginTop="15dp"
                 android:gravity="end"
                 android:text="List Price: "
@@ -142,21 +147,20 @@
                 android:id="@+id/pricelist"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/retaillabel"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/retaillabel"
-                android:text="TextView"
+                android:layout_toRightOf="@id/listlabel"
+                android:text="TextViewlala"
                 android:textSize="16dp" />
 
             <TextView
                 android:id="@+id/listcurrency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/retaillabel"
+
                 android:layout_marginLeft="3dp"
                 android:layout_marginTop="15dp"
-                android:layout_toRightOf="@id/priceretail"
-                android:text="TextView"
+                android:layout_toRightOf="@id/pricelist"
+                android:text="TextViewlala"
                 android:textSize="16dp" />
         </RelativeLayout>
 
@@ -165,7 +169,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
-            android:layout_below="@id/pricingcontainer"
+            android:layout_below="@id/pricingcontainer2"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:background="@drawable/roundedbuttons"

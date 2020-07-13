@@ -125,7 +125,7 @@ public class ViewGEbook extends Fragment {
                     }
                     else{
                         listcurrency = null;
-                        lcurrency.setText("Not Available");
+                        lcurrency.setText("");
                     }
 
                     String retailprice;
@@ -149,7 +149,7 @@ public class ViewGEbook extends Fragment {
 
                     else{
                         Retailcurrency = null;
-                        rcurrency.setText("Not Available");
+                        rcurrency.setText("");
                     }
 
 

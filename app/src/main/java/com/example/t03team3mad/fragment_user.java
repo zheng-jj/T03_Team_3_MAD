@@ -34,8 +34,10 @@ import com.jakewharton.processphoenix.ProcessPhoenix;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -48,12 +50,12 @@ public class fragment_user extends Fragment {
 
 
     //list of reviews made by this user
-    List<Review> reviewsByUser = new ArrayList<>();
+
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionBook2 = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefreview = FirebaseFirestore.getInstance().collection("Reviews");
     AdapterReviewForUSer reviewadapter;
-
+    List<Review> reviewsByUser = new ArrayList<>();
     //list of books
     ArrayList<Book> userfav = new ArrayList<>();
     AdapterBookMain bookadapter;
@@ -65,7 +67,6 @@ public class fragment_user extends Fragment {
         //jj - obtains which user to displayBundle bundle = this.getArguments();
         Bundle bundle = this.getArguments();
         //jj-gets the user currently following list
-        reviewsByUser = new ArrayList<>();
 
 
         if (bundle.getParcelable("searchuser") != null||MainActivity.viewuser != null) {
@@ -336,7 +337,7 @@ public class fragment_user extends Fragment {
     }
     //jj- get user reviews made
     public void loaduserreviews(final User user){
-        reviewsByUser = new ArrayList<>();
+        reviewsByUser.clear();
         mCollectionRefreview.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -351,7 +352,6 @@ public class fragment_user extends Fragment {
                                 String title = dss.getString("title");
                                 int uid = Integer.parseInt(dss.getString("uid"));
                                 Review r1 = new Review(uid, review,title,isbn);
-
                                 reviewsByUser.add(r1);
                                 Log.v("Test", review);
 
@@ -360,12 +360,19 @@ public class fragment_user extends Fragment {
                             }
                         }
                     }
+                    checkforreviewduplicates();
                     loadBookurlsreviews();
-                    reviewadapter.notifyDataSetChanged();
                 }
             }
         });
     }
+    public void checkforreviewduplicates(){
+        Set<Review> s= new HashSet<Review>();
+        s.addAll(reviewsByUser);
+        reviewsByUser = new ArrayList<Review>();
+        reviewsByUser.addAll(s);
+    }
+
     //jj - Loads the user information into the layout
     public void loaduserintoview(View view, User user, String path) throws InterruptedException, ExecutionException {
         TextView Name = view.findViewById(R.id.userName);

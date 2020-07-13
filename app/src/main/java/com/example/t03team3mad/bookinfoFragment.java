@@ -132,7 +132,6 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             File check = new File(path);
             int count = 20;
             while(count>0){
-                Log.v(TAG,"user image is not saved yet");
                 if(check.exists()) {
                     image.setImageBitmap(BitmapFactory.decodeFile(path));
                     image.invalidate();
@@ -168,46 +167,27 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             }
             else {
                 Picasso.with(this.getActivity()).load(coverurl).into(image);
-                Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
-                Log.v(TAG, "THIS IS BOOK URL" + receivedbook.getimglink());
-                Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
-                Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
             }
             Log.v(TAG,"loading image from "+receivedbook.getimglink());
 
 
             //jj- Allows users to favourite the book
             final Button favourite = view.findViewById(R.id.favourite);
-            final DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-            DBaccess.open();
 
-            //user favourite books loaded from firebase
-            ArrayList<Book> userbooklist = new ArrayList<>();
-            try {
-                userbooklist = loaduserbooks(MainActivity.loggedinuser);
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+            //searches to see if userbooklist containst this book
+            if(MainActivity.loggedinuser.getUserisbn().indexOf(receivedbook.getIsbn())!=-1)
+            {
+                favourite.setBackgroundResource(R.drawable.unliked);
             }
 
-            DBaccess.close();
 
+            Log.v(TAG,MainActivity.loggedinuser.getUserisbn());
             final DatabaseAccess DBaccess2 = DatabaseAccess.getInstance(getActivity().getApplicationContext());
             DBaccess2.open();
-            if(userbooklist!=null) {
-                //searches to see if userbooklist containst this book
-                Iterator<Book> itr = userbooklist.iterator();
-                while (itr.hasNext()) {
-                    Book book = itr.next();
-                    if (book.getIsbn().equals(receivedbook.getIsbn())) {
-                        favourite.setBackgroundResource(R.drawable.unliked);
-                        break;
-                    }
-                }
-            }
+
             //jo - get user id
-            user = DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu()));
+            user = DBaccess2.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu()));
             Button review = view.findViewById(R.id.reviewpage);
             //jo - button to review page + send bundles
             review.setOnClickListener(new View.OnClickListener() {
@@ -238,14 +218,9 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     MainActivity.addFragment(addrpage,getActivity(),"addreviewPage");
                 }
             });
-            ArrayList<Book> Userbooklist = new ArrayList<>();
-            if(userbooklist==null){
-                Userbooklist = new ArrayList<>();
-            }
-            else {
-                Userbooklist = userbooklist;
-            }
-            final ArrayList<Book>[] finalUserbooklist = new ArrayList[]{userbooklist};
+
+
+
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 //jj-add book record to local db and firestore
@@ -285,23 +260,16 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 //
 //                        favourite.setText("Add to Favourites");
 //                    }
-                    ArrayList<String> isbnlist = new ArrayList<>();
-                    if(finalUserbooklist[0] !=null) {
-                        for (Book x : finalUserbooklist[0]) {
-                            isbnlist.add(x.getIsbn());
+
+                    if(MainActivity.loggedinuser.getUserisbn().indexOf(receivedbook.getIsbn())==-1)
+                    {
+                        String[] newlist = MainActivity.loggedinuser.getUserisbn().split(";");
+                        for(String x: newlist){
+                            isbn=isbn+x+";";
                         }
-                    }
-                    else{
-                        finalUserbooklist[0] = new ArrayList<>();
-                    }
-                    if(!isbnlist.contains(receivedbook.getIsbn())) {
+                        favourite.setBackgroundResource(R.drawable.unliked);
                         //jj-adds book to list
-                        finalUserbooklist[0].add(receivedbook);
-                        for (Book x : finalUserbooklist[0]) {
-                            isbn = isbn + x.getIsbn() + ';';
-                        }
-                        //removes the ";" at the end of isbn string
-                        isbn.substring(0, isbn.length() - 1);
+                        isbn=isbn+receivedbook.getIsbn()+";";
                         favourite.setBackgroundResource(R.drawable.unliked);
 
                         //removes duplicates
@@ -318,6 +286,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                         } else {
                             isbn.substring(0, isbn.length() - 1);
                         }
+                        Log.v(TAG,"previous isbn ="+MainActivity.loggedinuser.getUserisbn());
                         Log.v(TAG, "new isbn string added to db=" + isbn);
                         //updates user data in database
                         MainActivity.loggedinuser.setUserisbn(isbn);
