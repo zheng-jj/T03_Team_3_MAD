@@ -77,4 +77,6 @@ dependencies {
 
     // Add the SDK for Firebase Cloud Messaging
     implementation 'com.google.firebase:firebase-messaging:20.2.3'
+
+    implementation 'com.github.smart-fun:XmlToJson:1.4.5'
 }
