@@ -103,7 +103,7 @@
             android:text="Upload Book" />
 
         <Button
-            android:id="@+id/verifybuttonview"
+            android:id="@+id/adminbutton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/uploadbuttonview"
@@ -114,7 +114,7 @@
             android:layout_marginEnd="0dp"
             android:background="@color/blue"
             android:padding='5dp'
-            android:text="Verify Books" />
+            android:text="Admin Actions" />
 
 
     </RelativeLayout>

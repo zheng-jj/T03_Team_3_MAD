@@ -55,7 +55,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
     private static final String TAG = "HomeFragment";
     List<Book> newbooklist;
     Button uploadbutton;
-    Button verifybutton;
+    Button adminbutton;
 
     ArrayList<String> GenreList=new ArrayList<>();
     ArrayList<String> Ran5ToDisplay=new ArrayList<>();
@@ -156,19 +156,19 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             }
         });
 
-        verifybutton = view.findViewById(R.id.verifybuttonview);
-        verifybutton.setOnClickListener(new View.OnClickListener() {
+        adminbutton = view.findViewById(R.id.adminbutton);
+        adminbutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String role = MainActivity.loggedinuser.getAdmin();
                 if (role.equals("Admin")){
                     //qh - make sure users are admins
-                    verfiybooksfragment nextFragment = new verfiybooksfragment();  //will go the fragment where it will display all the books of that genre
-                    MainActivity.addFragment(nextFragment,getActivity(),"Verify Books");
+                    adminhomepagefragment nextFragment = new adminhomepagefragment();  //will go the fragment where it will display all the books of that genre
+                    MainActivity.addFragment(nextFragment,getActivity(),"Admin Actions");
                 }
                 Log.v(TAG,role);
                 if (role.equals("User")){
-                    Toast.makeText(getContext(), "Only admins can verify books!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Only admins can access this page!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
