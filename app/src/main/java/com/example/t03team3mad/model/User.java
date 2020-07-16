@@ -80,6 +80,12 @@ public class User implements Parcelable {
         desc = about;
     }
 
+    public User(int Idu, String Name, String about){
+        idu = Idu;
+        name = Name;
+        desc = about;
+    }
+
     @Override
     public int describeContents() {
         return 0;

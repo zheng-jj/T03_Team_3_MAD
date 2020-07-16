@@ -59,6 +59,23 @@ public class adminhomepagefragment extends Fragment {
             }
         });
 
+        ban = view.findViewById(R.id.deleteuser);
+        ban.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String role = MainActivity.loggedinuser.getAdmin();
+                if (role.equals("Admin")){
+                    //qh - make sure users are admins
+                    banusersfragment nextFragment = new banusersfragment();  //will go the fragment where it will display all the books of that genre
+                    MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
+                }
+                Log.v(TAG,role);
+                if (role.equals("User")){
+                    Toast.makeText(getContext(), "Only admins can ban users!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return view;
     }
 
