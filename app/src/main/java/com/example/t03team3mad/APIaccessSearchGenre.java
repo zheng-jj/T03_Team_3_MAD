@@ -111,14 +111,13 @@ public class APIaccessSearchGenre extends AsyncTask<String, Void, ArrayList<Book
                 String subjects;
                 if (bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").has("categories")){
                      subjects = bookjsonobj.getJSONArray("items").getJSONObject(i).getJSONObject("volumeInfo").getString("categories");
-
-
+                     subjects=subjects.substring(2,subjects.length()-2);
                 }
                 else {
-                    subjects = "Genres not available";
+                    subjects = "";
                 }
 
-                Book newsearchobject = new Book(booktitle,publisher,des,"subjects",date,isbn,0);
+                Book newsearchobject = new Book(booktitle,publisher,des,subjects,date,isbn,0);
                 booklistBOOK.add(newsearchobject);
 
             }

@@ -96,7 +96,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             title.setText(receivedbook.getBooktitle());
             synopsis.setText(receivedbook.getBookabout());
             releasedate.setText(receivedbook.getPdate());
-
+            data.add(receivedbook.getBookgenre());
             //Chris - list the genre
             if(receivedbook.getBookgenre().contains(",")) {
             String[] splitgenre = receivedbook.getBookgenre().split(",");
