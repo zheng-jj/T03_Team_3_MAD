@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -133,11 +134,10 @@ public class RegisterPage extends AppCompatActivity {
                                 Log.v(TAG, "The email is invaild");
                             } else {
                                 progressBar.setVisibility(View.INVISIBLE);
-
                                 //Chris - Register is successful,saving user details to firebase database
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
-                                member.setPassword(EnterPassword.getText().toString());
+                                member.setDeviceID("0");
                                 //Chris -  Customised user id,make sure no two users have the same user id
                                 String id = String.valueOf(maxid + 1);
                                 //Chris - Add the user to firebase database

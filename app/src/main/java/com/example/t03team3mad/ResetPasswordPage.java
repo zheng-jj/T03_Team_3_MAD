@@ -14,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Properties;
+
 public class ResetPasswordPage extends AppCompatActivity {
     private EditText resetemail;
     private Button reset;

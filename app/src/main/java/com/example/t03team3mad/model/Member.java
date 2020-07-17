@@ -3,7 +3,7 @@ package com.example.t03team3mad.model;
 public class Member {
     private String Name;
     private String Email;
-    private String Password;
+    private String Androidid;
     private String ID;
     public Member(){}
 
@@ -23,12 +23,12 @@ public class Member {
         Email = email;
     }
 
-    public String getPassword() {
-        return Password;
+    public String getDeviceID() {
+        return Androidid;
     }
 
-    public void setPassword(String password) {
-        Password = password;
+    public void setDeviceID(String androidid) {
+        Androidid = androidid;
     }
 
 }

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -57,20 +58,7 @@ public class LoginPage extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
-        //Auto_login.edit().putBoolean("logged",false).apply();
-        //Chris - User is already logged in
-        if(Auto_login.getBoolean("logged",false)){
-            //Chris - get uid from shared preferences
-            uid=Auto_login.getString("UserID",null);
-            Log.v(TAG, "the user id sent= "+ uid);
-            Bundle bundle = new Bundle();
-            bundle.putString("User_UID", uid);
-            Intent MainActivity= new Intent(LoginPage.this,MainActivity.class);
-            MainActivity.putExtra("User_UID", bundle);
-            Log.v(TAG,"sending this uid to main activity "+uid);
-            startActivity(MainActivity);
-            finish();
-        }
+
         setContentView(R.layout.activity_login_page);
         EnterEmail=findViewById(R.id.EnterEmail);
         EnterPassword=findViewById(R.id.EnterPassword);
@@ -81,7 +69,34 @@ public class LoginPage extends AppCompatActivity {
         progressBar =  findViewById(R.id.progressBar);
         user=Auth.getCurrentUser();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
+        final String androidId = Settings.Secure.getString(getContentResolver(),
+                Settings.Secure.ANDROID_ID);
+//Auto_login.edit().putBoolean("logged",false).apply();
+        //Chris - User is already logged in
+        if(Auto_login.getBoolean("logged",false)){
+            //Chris - get uid from shared preferences
+            Log.v(TAG,androidId);
+            uid = Auto_login.getString("UserID", null);
+            Log.v(TAG, "the user id sent= " + uid);
+            Log.v(TAG, "the device id sent= " + databaseReference.child(uid).child("deviceID"));
+            if(!databaseReference.child(uid).child("deviceID").equals(androidId)) {
 
+                Bundle bundle = new Bundle();
+                bundle.putString("User_UID", uid);
+                Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
+                MainActivity.putExtra("User_UID", bundle);
+                Log.v(TAG, "sending this uid to main activity " + uid);
+                startActivity(MainActivity);
+                finish();
+            }
+            else{
+                Log.v(TAG,"Account has been logged in another device.Please login again");
+                Auto_login.edit().putBoolean("logged", false).apply();
+                Intent MainActivity = new Intent(LoginPage.this, LoginPage.class);
+                startActivity(MainActivity);
+            }
+            finish();
+        }
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,6 +138,7 @@ public class LoginPage extends AppCompatActivity {
                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                         uid = snapshot.getKey();
                                         String name = snapshot.child("name").getValue().toString();
+
 
                                         //Chris - show that it works
                                         Log.v(TAG, "the user id sent= " + uid);
