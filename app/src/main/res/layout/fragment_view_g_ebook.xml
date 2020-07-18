@@ -89,7 +89,7 @@
             android:layout_below="@id/pdftext"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="EBook Prices"
+            android:text="Prices from Google Books"
             android:textSize="20dp"
             android:textStyle="bold"></TextView>
 
