@@ -68,28 +68,30 @@ public class fragment_userfollowing extends Fragment {
     //jj-loads list of users the user is following
 
     public void loaduserfollowing(String UIDs){
-        final List<String> ListoFIDS = Arrays.asList(UIDs.split(";"));
-        mCollectionUsers.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
-                    for (DocumentSnapshot dss : data) {
-                        if (ListoFIDS.contains(dss.getReference().getId())) {
-                            User toadd = new User(Integer.valueOf(dss.getReference().getId()), dss.get("name").toString(), dss.get("isbn").toString(), dss.get("desc").toString());
-                            userFollowing.add(toadd);
-                        } else {
-                            continue;
+        if(!UIDs.equals(null)) {
+            final List<String> ListoFIDS = Arrays.asList(UIDs.split(";"));
+            mCollectionUsers.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
+                        for (DocumentSnapshot dss : data) {
+                            if (ListoFIDS.contains(dss.getReference().getId())) {
+                                User toadd = new User(Integer.valueOf(dss.getReference().getId()), dss.get("name").toString(), dss.get("isbn").toString(), dss.get("desc").toString());
+                                userFollowing.add(toadd);
+                            } else {
+                                continue;
+                            }
                         }
+                        for (User user : userFollowing) {
+                            loaduserURL(user);
+                            Log.v(TAG, "User image urls = " + user.getimgurl());
+                        }
+                        UserAdapter.notifyDataSetChanged();
                     }
-                    for(User user : userFollowing){
-                        loaduserURL(user);
-                        Log.v(TAG,"User image urls = "+user.getimgurl());
-                    }
-                    UserAdapter.notifyDataSetChanged();
                 }
-            }
-        });
+            });
+        }
     }
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();

@@ -48,6 +48,24 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "getInstanceId failed", task.getException());
+                            return;
+                        }
+
+                        // Get new Instance ID token
+                        String token = task.getResult().getToken();
+                        // Log and toast
+                        String msg = token;
+                        Log.d(TAG, msg);
+                        Toast.makeText(MainActivity.this, "token" + msg, Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
 
 
@@ -62,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
 
         if(receivedloggedin!=null) {
-            Log.v(TAG,"logged in user received");
+            Log.v(TAG,"logged in user received"+receivedloggedin.getString("User_UID"));
             String loggedinuserID = receivedloggedin.getString("User_UID");
             //jj- gets data from firestore
             FireStoreAccess.AccessUser accessUser = new FireStoreAccess.AccessUser();
@@ -342,7 +360,11 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
 
         public ArrayList<String> gettopiclist(){
             String following = loggedinuser.getfollowingstring();
-            String[] listofusers = following.split(";");
+            String[] listofusers = new String[0];
+
+            if(following!=null) {
+                listofusers = following.split(";");
+            }
             ArrayList<String> topicslist = new ArrayList<>();
 
             Boolean reviewnoti = topics.getBoolean("reviewnoti",true);
@@ -403,7 +425,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                                 Log.v(TAG, "getInstanceId failed", task.getException());
                                 return;
                             }
-
                             // Get new Instance ID token
                             String token = task.getResult().getToken();
 
