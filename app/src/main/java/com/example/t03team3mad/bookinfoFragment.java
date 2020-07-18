@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -61,7 +62,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     TextView showrating;
     String isbn;
     ImageView image;
-
+    Button addreview;
     private CollectionReference mCollectionRefbooks = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     //AdapterGenre adapter;
@@ -82,10 +83,12 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         image = view.findViewById(R.id.imageView2);
         Log.d(TAG, "UPLOADED BOOK TEST1222131232" );
         showrating = view.findViewById(R.id.showrate);
+        addreview = view.findViewById(R.id.addreview);
         Bundle bundle = this.getArguments();
         if (bundle.getParcelable("currentbook") != null) {
             final Book receivedbook = bundle.getParcelable("currentbook"); // Key
             Log.d(TAG, "UPLOADED BOOK RECEIVEDdsdsdsdss" );
+            Log.d(TAG,"ISBN: " +receivedbook.getIsbn());
             isbn = receivedbook.getIsbn();
             getdata(receivedbook);
             viewcount(receivedbook.getIsbn());
@@ -204,20 +207,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 }
             });
             //jo - button to addreview page + send bundles
-            Button addreview = view.findViewById(R.id.addreview);
-            addreview.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("user", user);
-                    bundle.putParcelable("book", receivedbook);
-                    Log.v(TAG,"book info sending data =  "+ user);
-                    fragment_addreview addrpage = new fragment_addreview();
-                    addrpage.setArguments(bundle);
-                    //jj-updated the way we add fragments into the view
-                    MainActivity.addFragment(addrpage,getActivity(),"addreviewPage");
-                }
-            });
+            addrevew(receivedbook);
 
 
 
@@ -457,6 +447,42 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
         }
     }
+    public void addrevew(final Book receivedbook){
+        mCollectionRefuser.document(String.valueOf(MainActivity.loggedinuser.getUseridu())).collection("Reviews").whereEqualTo("isbn",isbn).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()){
+                    addreview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Bundle bundle = new Bundle();
+
+                            bundle.putParcelable("book", receivedbook);
+
+                            fragment_addreview addrpage = new fragment_addreview();
+                            addrpage.setArguments(bundle);
+                            //jj-updated the way we add fragments into the view
+                            MainActivity.addFragment(addrpage,getActivity(),"addreviewPage");
+                        }
+                    });
+                }
+                else{
+                    addreview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getActivity().getApplicationContext(),"You have already reviewed this book ",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
+
+                }
+
+            }
+        });
+
+
+    }
+
 
 
 

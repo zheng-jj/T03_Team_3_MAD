@@ -1,4 +1,3 @@
-
 package com.example.t03team3mad;
 
 import android.os.Bundle;
@@ -50,6 +49,7 @@ public class fragment_addreview extends Fragment {
     String name;
     String title;
     int aid;
+    int temp = 0;
     List<String> uids = new ArrayList<String>();
     List<String> followingid = new ArrayList<String>();
 
@@ -102,9 +102,14 @@ public class fragment_addreview extends Fragment {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
-                    List<DocumentSnapshot> data =queryDocumentSnapshots.getDocuments();
 
-                    idr = data.size()+1;
+                    for(QueryDocumentSnapshot i:queryDocumentSnapshots){
+                        if(Integer.parseInt(i.getId())>temp){
+                            temp  = Integer.parseInt(i.getId());
+
+                        }
+                    }
+                    idr = temp+ 1;
                     Log.v("idr", String.valueOf(idr));
                     getfollowing(String.valueOf(idr),idu,review,ISBN,name);
                     compilerating();
@@ -181,6 +186,7 @@ public class fragment_addreview extends Fragment {
         data2.put("isbn",ISBN);
         data2.put("uid", idu);
         data2.put("title",title);
+        data2.put("rid",idr);
         final Map<String, Object> data3 = new HashMap<String,Object>();
         data3.put("Activity","Review");
         data3.put("Rating",ratevalue);
@@ -217,5 +223,3 @@ public class fragment_addreview extends Fragment {
 
     }
 }
-
-

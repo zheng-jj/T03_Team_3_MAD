@@ -163,6 +163,7 @@ public class RegisterPage extends AppCompatActivity {
                                             data.put("isbn", user.getUserisbn());
                                             data.put("following", user.getfollowingstring());
                                             data.put("role","User");
+                                            data.put("email",EnterEmail.getText().toString());
                                             docRef.set(data);
                                             //Go to login page after user successfully registered
                                             Intent login = new Intent(RegisterPage.this, LoginPage.class);

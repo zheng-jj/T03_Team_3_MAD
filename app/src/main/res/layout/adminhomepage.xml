@@ -68,6 +68,18 @@
             android:textColor="@color/cardview_light_background"
             android:textSize="20dp" />
 
+        <Button
+            android:id="@+id/unbanusers"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:background="@drawable/rounded_corner"
+            android:text="Unban Users"
+            android:textAllCaps="false"
+            android:textColor="@color/cardview_light_background"
+            android:textSize="20dp" />
+
 
     </LinearLayout>
 

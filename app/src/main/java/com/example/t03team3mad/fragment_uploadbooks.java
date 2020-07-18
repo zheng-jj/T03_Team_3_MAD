@@ -107,6 +107,7 @@ public class fragment_uploadbooks extends Fragment {
         book.put("bookabout", description);
         book.put("bookpdate", pdate);
         book.put("bookgenre", genre);
+        book.put("uid",String.valueOf(MainActivity.loggedinuser.getUseridu()));
         mCollectionBooksNotVerified.document(isbn).set(book);
         Toast.makeText(getContext(), "Book added! Please wait for admin approval.", Toast.LENGTH_SHORT).show();
     }

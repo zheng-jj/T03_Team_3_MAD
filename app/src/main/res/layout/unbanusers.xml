@@ -4,27 +4,27 @@
     android:id="@+id/banusers"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".banusersfragment">
+    tools:context=".unbanusersfragment">
 
     <RelativeLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent">
 
         <TextView
-            android:id="@+id/bantitle"
+            android:id="@+id/unbantitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:gravity="center"
             android:padding="5dp"
-            android:text="Ban Users"
+            android:text="Restore Users"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="40dp"
             android:textStyle="bold" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/banrecycler"
-            android:layout_below="@id/bantitle"
+            android:id="@+id/unbanrecycler"
+            android:layout_below="@id/unbantitle"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
