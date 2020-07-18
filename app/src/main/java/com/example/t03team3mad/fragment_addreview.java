@@ -186,6 +186,7 @@ public class fragment_addreview extends Fragment {
         data2.put("isbn",ISBN);
         data2.put("uid", idu);
         data2.put("title",title);
+        data2.put("rid",idr);
         final Map<String, Object> data3 = new HashMap<String,Object>();
         data3.put("Activity","Review");
         data3.put("Rating",ratevalue);
