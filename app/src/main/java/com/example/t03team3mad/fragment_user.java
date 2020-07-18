@@ -126,6 +126,7 @@ public class fragment_user extends Fragment {
                     }
                     //if user is currently following this user and wishes to unfollow, update the list
                     Iterator<String> iter = listofid.iterator();
+                    final SharedPreferences unsub = getActivity().getSharedPreferences("Unsub", Context.MODE_PRIVATE);
                     if(follow==true){
                         while (iter.hasNext()) {
                             String user = iter.next();
@@ -133,9 +134,17 @@ public class fragment_user extends Fragment {
                                 iter.remove();
                             }
                         }
+                        //jj- unsub notifications when user unfollow
+                        unsub.edit().putBoolean("User"+usertoView.getUseridu()+"review",true).commit();
+                        unsub.edit().putBoolean("User"+usertoView.getUseridu()+"noti",true).commit();
+                        unsub.edit().putBoolean("User"+usertoView.getUseridu()+"fav",true).commit();
                     }
                     else {
+                        //jj- sub notifications when user follow
                         listofid.add(Integer.toString(usertoView.getUseridu()));
+                        unsub.edit().putBoolean("User"+usertoView.getUseridu()+"review",false).commit();
+                        unsub.edit().putBoolean("User"+usertoView.getUseridu()+"noti",false).commit();
+                        unsub.edit().putBoolean("User"+usertoView.getUseridu()+"fav",false).commit();
                     }
                     //creates the string to be entered into database
                     String followid = "";
