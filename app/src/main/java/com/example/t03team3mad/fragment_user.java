@@ -508,7 +508,7 @@ public class fragment_user extends Fragment {
                     dataJson.put("body",MainActivity.loggedinuser.getUsername()+" has followed "+toview.getUsername()+"!");
                     dataJson.put("title","Check it out!");
                     json.put("notification",dataJson);
-                    json.put("to","/topics/User"+MainActivity.loggedinuser.getUseridu()+"noti");
+                    json.put("to","/topics/User"+MainActivity.loggedinuser.getUseridu()+"follow");
                     Log.v(TAG,json.toString());
                     RequestBody body = RequestBody.create(JSON, json.toString());
                     Request request = new Request.Builder()

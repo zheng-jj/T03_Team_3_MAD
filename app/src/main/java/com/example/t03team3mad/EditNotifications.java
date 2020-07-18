@@ -29,7 +29,7 @@ public class EditNotifications extends AppCompatActivity {
         Boolean favnoti = topics.getBoolean("favnoti",true);
 
         notificationsettings.add(new notifications("Notify when users make reviews",reviewnoti,"reviewnoti","review"));
-        notificationsettings.add(new notifications("Notify when users follow another user",follownoti,"follownoti","noti"));
+        notificationsettings.add(new notifications("Notify when users follow another user",follownoti,"follownoti","follow"));
         notificationsettings.add(new notifications("Notify when users favourites a book",favnoti,"favnoti","fav"));
 
         RecyclerView notisettings = findViewById(R.id.notification);
