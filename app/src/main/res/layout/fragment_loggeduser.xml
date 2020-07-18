@@ -72,13 +72,26 @@
         <Button
             android:id="@+id/logout"
             style="?android:attr/borderlessButtonStyle"
-            android:background="@drawable/door"
+            android:background="@drawable/logout"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_marginEnd="20dp"
             android:layout_marginTop="8dp"/>
+
+
+        <Button
+            android:id="@+id/noti"
+            style="?android:attr/borderlessButtonStyle"
+            android:background="@drawable/bell"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="130dp"
+            android:layout_marginTop="11dp"/>
+
 
         <TextView
             android:id="@+id/userName"

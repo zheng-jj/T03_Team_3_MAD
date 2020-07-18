@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,13 +20,19 @@ import android.widget.Toast;
 import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.FirebaseOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.FirebaseMessagingService;
 import com.roughike.bottombar.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
@@ -33,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     private Integer uid = null;
     public static User viewuser = null;
     public static User loggedinuser = null;
+    public static String oldfollowinglist = "";
     public List<String> backstacktags = new ArrayList<>();
     BottomBar bottomBar;
     Fragment f;
@@ -40,24 +48,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "getInstanceId failed", task.getException());
-                            return;
-                        }
 
-                        // Get new Instance ID token
-                        String token = task.getResult().getToken();
-
-                        // Log and toast
-                        String msg = token;
-                        Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, "token" + msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
 
 
         super.onCreate(savedInstanceState);
@@ -183,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
         //attaches listener for whenever backstack changes
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
+
     }
 
     public static void updateUserLogged(User user){
@@ -330,6 +322,106 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 ft.show(manager.findFragmentByTag(tag));
             }
             ft.commit();
+        }
+    }
+
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        //jj- on app stop, unsubscribe and subscribe from the topics
+        Setupsubscriptions setupsubscriptions = new Setupsubscriptions();
+        setupsubscriptions.setup();
+    }
+
+
+    //jj- the following class is written to deal with subscriptions of notifications
+    public class Setupsubscriptions{
+
+        private SharedPreferences topics = getSharedPreferences("topics",Context.MODE_PRIVATE);
+
+        public ArrayList<String> gettopiclist(){
+            String following = loggedinuser.getfollowingstring();
+            String[] listofusers = following.split(";");
+            ArrayList<String> topicslist = new ArrayList<>();
+
+            Boolean reviewnoti = topics.getBoolean("reviewnoti",true);
+            Boolean follownoti = topics.getBoolean("follownoti",true);
+            Boolean favnoti = topics.getBoolean("favnoti",true);
+
+            for(String user : listofusers){
+                if (!user.equals("")) {
+                    if (reviewnoti) {
+                        topicslist.add("User" + user + "review");
+                    }
+                    if (follownoti) {
+                        topicslist.add("User" + user + "follow");
+                    }
+                    if (favnoti) {
+                        topicslist.add("User" + user + "fav");
+                    }
+                }
+            }
+            return topicslist;
+
+        }
+
+        public void subscribetopic(final String topic){
+            FirebaseMessaging.getInstance().subscribeToTopic(topic)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.v(TAG,"subscribed to topic +"+topic);
+                        }
+                    });
+        }
+        public ArrayList<String> unsubscribeall(){
+            ArrayList<String> dontsub = new ArrayList<>();
+            SharedPreferences unsub = getSharedPreferences("Unsub",Context.MODE_PRIVATE);
+            Map<String, Boolean> allEntries = (Map<String, Boolean>) unsub.getAll();
+            for (Map.Entry<String, Boolean> entry : allEntries.entrySet()) {
+                Log.v(TAG,"Entry"+entry.getKey());
+                if(entry.getValue()){
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic(entry.getKey());
+                    Log.v(TAG,"unsubscribed to topic +"+entry.getKey());
+                    dontsub.add(entry.getKey());
+                }
+
+            }
+            //jj-clears all the data from this sharedpreference
+            unsub.edit().clear().commit();
+            return dontsub;
+        }
+
+        public void setup() {
+            //jj-gets instance id
+            FirebaseInstanceId.getInstance().getInstanceId()
+                    .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                            if (!task.isSuccessful()) {
+                                Log.v(TAG, "getInstanceId failed", task.getException());
+                                return;
+                            }
+
+                            // Get new Instance ID token
+                            String token = task.getResult().getToken();
+
+                            // Log and toast
+                            String msg = token;
+                            Log.v(TAG, msg);
+                        }
+                    });
+            //jj-this is a list of the topics that should not be subscribed to(due to unfollow or other reasons)
+            ArrayList removefromtopictosub = unsubscribeall();
+            //jj-this is a list of the topics that should be subscribed to based on user preferences(stored in shared preference)
+            ArrayList<String> topicslist = gettopiclist();
+            //gets the final list of topics to subscribe to and
+            topicslist.removeAll(removefromtopictosub);
+            for(String topic : topicslist){
+                Log.v(TAG,"topic = "+topic);
+                subscribetopic(topic);
+            }
         }
     }
 }

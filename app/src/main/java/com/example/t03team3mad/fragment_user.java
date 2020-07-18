@@ -3,6 +3,7 @@ package com.example.t03team3mad;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
@@ -260,6 +261,14 @@ public class fragment_user extends Fragment {
                     alert.show();
                 }
             });
+            Button editnotifications = view.findViewById(R.id.noti);
+            editnotifications.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent editnoti= new Intent(getContext(),EditNotifications.class);
+                    startActivity(editnoti);
+                }
+            });
 
             //jj - loads user into layout
             Pic = view.findViewById(R.id.userPic);
@@ -278,6 +287,7 @@ public class fragment_user extends Fragment {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
+
         }
         this.getArguments().putParcelable("searchuser",null);
         v=view;

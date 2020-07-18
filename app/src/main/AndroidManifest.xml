@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".EditNotifications"></activity>
         <activity android:name=".ViewToGet" />
         <activity android:name=".ResetPasswordPage" />
         <activity android:name=".LoginPage">

@@ -28,7 +28,6 @@ public class AdapterNLB extends RecyclerView.Adapter<AdapterNLB.ViewHolder> {
 
     private Context context;
 
-    //qh - implemented clicking
     public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView itemno;

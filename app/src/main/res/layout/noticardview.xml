@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/tools"
+    xmlns:toggle="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/noticard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:ignore="NamespaceTypo">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+
+        <TextView
+            android:id="@+id/notiname"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_toLeftOf="@id/toggle"
+            android:gravity="center_vertical"
+            android:text="Test"
+            android:textSize="15dp"></TextView>
+
+        <RelativeLayout
+            android:id="@+id/toggle"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:gravity="center_vertical">
+
+            <com.suke.widget.SwitchButton
+                android:id="@+id/togglebutton"
+                android:layout_width="54dp"
+                android:layout_height="30dp"
+                app:sb_button_color="#2a4d69"
+                app:sb_checked="true"
+                app:sb_checked_color="#adcbe3"
+                app:sb_checkedbutton_color="#e7eff6"
+                app:sb_checkline_color="#adcbe3"
+                app:sb_shadow_color="#adcbe3"
+                app:sb_show_indicator="false"
+                app:sb_uncheckbutton_color="#e7eff6"
+                app:sb_uncheckcircle_color="#e7eff6"></com.suke.widget.SwitchButton>
+        </RelativeLayout>
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
