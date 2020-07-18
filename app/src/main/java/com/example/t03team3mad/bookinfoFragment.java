@@ -207,7 +207,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                 }
             });
             //jo - button to addreview page + send bundles
-
+            addrevew(receivedbook);
 
 
 
@@ -451,7 +451,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         mCollectionRefuser.document(String.valueOf(MainActivity.loggedinuser.getUseridu())).collection("Reviews").whereEqualTo("isbn",isbn).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(!queryDocumentSnapshots.isEmpty()){
+                if(queryDocumentSnapshots.isEmpty()){
                     addreview.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -467,14 +467,20 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
                     });
                 }
                 else{
-                    Toast.makeText(getActivity().getApplicationContext(),"You have already reviewed this book ",Toast.LENGTH_LONG).show();
+                    addreview.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Toast.makeText(getActivity().getApplicationContext(),"You have already reviewed this book ",Toast.LENGTH_LONG).show();
+
+                        }
+                    });
 
                 }
 
             }
         });
 
-        
+
     }
 
 
