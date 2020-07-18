@@ -85,7 +85,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         Genre.setAdapter(adapterGenreInHomeFragment);
 
 
-        booklist=loadAllBooks();
         //load main popularbooks recyclerview
         RecyclerView popularbooks = (RecyclerView)view.findViewById(R.id.popularbookrecyclerview);
 
@@ -93,7 +92,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         LinearLayoutManager llm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         //jj-set the recyclerview's manager to the previously created manager
         popularbooks.setLayoutManager(llm);
-        loadBookurlsfav();
+
         //jj- get the data needed by the adapter to fill the cardview and put it in the adapter's parameters
         bookadapter  = new AdapterBookMain(popularlist,this.getContext());
         //jj- set the recyclerview object to its adapter
@@ -177,15 +176,6 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
         return view;
     }
 
-    //Chris - load all books into a listnewbooklist
-    public List<Book> loadAllBooks()
-    {
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        DBaccess.open();
-        List<Book> booklist = DBaccess.loadallbooklist();
-        DBaccess.close();
-        return booklist;
-    }
 
     //Chris - get all the genre in the database
     public void LoadRandom5Genre()
@@ -255,27 +245,7 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
             }
         });
     }
-    //jj -  loads the url into book objects for favouritebooks
-    public void loadBookurlsfav() {
-        mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    List<DocumentSnapshot> data = queryDocumentSnapshots.getDocuments();
-                    for(Book book : booklist){
-                        Log.v(TAG,"Bookloop="+book.getIsbn());
-                        for(DocumentSnapshot doc : data){
-                            Log.v(TAG,"Docloop="+doc.getReference().getId());
-                            if(doc.getReference().getId().equals(book.getIsbn())){
-                                book.setimglink(doc.getString("coverurl"));
-                            }
-                        }
-                    }
-                    bookadapter.notifyDataSetChanged();
-                }
-            }
-        });
-    }
+
     public void getpopularbooks(){
         mCollectionBook.whereGreaterThan("viewcount",0).orderBy("viewcount", Query.Direction.DESCENDING).limit(10).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

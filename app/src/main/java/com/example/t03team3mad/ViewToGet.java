@@ -48,9 +48,9 @@ public class ViewToGet extends AppCompatActivity {
         }
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
+                .add("Buy Online", ViewPrice.class)
                 .add("EBook", ViewGEbook.class)
                 .add("NLB", ViewNLB.class)
-                .add("Buy Online", ViewPrice.class)
                 .create());
 
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
