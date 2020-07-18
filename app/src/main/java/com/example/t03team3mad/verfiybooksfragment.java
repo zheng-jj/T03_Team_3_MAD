@@ -54,6 +54,9 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
     String Subject;
     String msg;
     Fragment f;
+    String title;
+    String about;
+    String genre;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -102,6 +105,9 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
         builder.setPositiveButton("Verify", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
                 Book clickedbook = tobeVerified.get(position);
+                title = tobeVerified.get(position).getBooktitle();
+                about =tobeVerified.get(position).getBookabout();
+                genre = tobeVerified.get(position).getBookgenre();
                 Map<String, Object> book = new HashMap<>();
                 book.put("booktitle", tobeVerified.get(position).getBooktitle());
                 book.put("bookauthor", tobeVerified.get(position).getBookauthor());
@@ -123,9 +129,11 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
+
                         tobeVerified.remove(position);
                         verifyadapter.notifyDataSetChanged();
                         sendemail(position);
+
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -161,17 +169,17 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
     public void sendemail(int position){
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
-        Subject = "Banned from elib";
+        Subject = "Book verification";
         To = "swah_jian_oon@hotmail.com";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
             "The book you have submitted has been verified and added into the app."+System.lineSeparator()+ System.lineSeparator()+
             "Details of the book are: "+System.lineSeparator()+ System.lineSeparator()+
-                "Book Title: " +tobeVerified.get(position).getBooktitle() +System.lineSeparator()+ System.lineSeparator()+
-                "Book About: " + tobeVerified.get(position).getBookabout()+System.lineSeparator()+ System.lineSeparator()+
-                "Book Genre: " + tobeVerified.get(position).getBookgenre()+System.lineSeparator()+ System.lineSeparator()+
+                "Book Title: " +title +System.lineSeparator()+ System.lineSeparator()+
+                "Book About: " + about+System.lineSeparator()+ System.lineSeparator()+
+                "Book Genre: " + genre+System.lineSeparator()+ System.lineSeparator()+
 
             "If you have any issues regarding this ban, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
-            "Regards,"+System.lineSeparator()+ System.lineSeparator()+
+            "Regards,"+System.lineSeparator()+
             "Admins";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
