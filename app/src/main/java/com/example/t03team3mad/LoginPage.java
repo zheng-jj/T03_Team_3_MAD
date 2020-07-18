@@ -74,28 +74,41 @@ public class LoginPage extends AppCompatActivity {
 //Auto_login.edit().putBoolean("logged",false).apply();
         //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){
-            //Chris - get uid from shared preferences
-            Log.v(TAG,androidId);
-            uid = Auto_login.getString("UserID", null);
-            Log.v(TAG, "the user id sent= " + uid);
-            Log.v(TAG, "the device id sent= " + databaseReference.child(uid).child("deviceID"));
-            if(!databaseReference.child(uid).child("deviceID").equals(androidId)) {
+            databaseReference.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        //Chris - get uid from shared preferences
+                        Log.v(TAG, androidId);
+                        uid = Auto_login.getString("UserID", null);
+                        Log.v(TAG, "the user id sent= " + uid);
+                        Log.v(TAG, "the device id sent= " + snapshot.child("deviceID").getValue().toString());
+                        if (snapshot.child("deviceID").getValue().toString().equals(androidId)) {
 
-                Bundle bundle = new Bundle();
-                bundle.putString("User_UID", uid);
-                Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
-                MainActivity.putExtra("User_UID", bundle);
-                Log.v(TAG, "sending this uid to main activity " + uid);
-                startActivity(MainActivity);
-                finish();
-            }
-            else{
-                Log.v(TAG,"Account has been logged in another device.Please login again");
-                Auto_login.edit().putBoolean("logged", false).apply();
-                Intent MainActivity = new Intent(LoginPage.this, LoginPage.class);
-                startActivity(MainActivity);
-            }
-            finish();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("User_UID", uid);
+                            Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
+                            MainActivity.putExtra("User_UID", bundle);
+                            Log.v(TAG, "sending this uid to main activity " + uid);
+                            startActivity(MainActivity);
+                            finish();
+                        }
+                        else {
+                            Log.v(TAG, "Account has been logged in another device.Please login again");
+                            Toast.makeText(LoginPage.this, "Account has been logged in another device.Please login again", Toast.LENGTH_SHORT).show();
+                            Auto_login.edit().putBoolean("logged", false).apply();
+                            Intent MainActivity = new Intent(LoginPage.this, LoginPage.class);
+                            startActivity(MainActivity);
+                        }
+                        finish();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +173,7 @@ public class LoginPage extends AppCompatActivity {
                                         {
                                             Log.v(TAG, "User Record Is Already Inserted");
                                         }
-
+                                        databaseReference.child(uid).child("deviceID").setValue(androidId);
                                         //Chris - if login is successful
                                         progressBar.setVisibility(View.INVISIBLE);
                                         //Chris - User is Logged in until he log out
