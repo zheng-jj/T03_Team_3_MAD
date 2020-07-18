@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                             Log.w(TAG, "getInstanceId failed", task.getException());
                             return;
                         }
-
                         // Get new Instance ID token
                         String token = task.getResult().getToken();
                         // Log and toast

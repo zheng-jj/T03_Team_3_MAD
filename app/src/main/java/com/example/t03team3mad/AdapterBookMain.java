@@ -97,7 +97,10 @@ public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHo
     }
     @Override
     public int getItemCount() {
-        return mBooklist.size();
+        if(mBooklist!=null) {
+            return mBooklist.size();
+        }
+        return 0;
     }
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);

@@ -1,6 +1,7 @@
 package com.example.t03team3mad;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 import com.example.t03team3mad.model.Author;
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.User;
@@ -36,13 +38,26 @@ import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
+
+
+import com.google.firebase.messaging.RemoteMessage;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -67,7 +82,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     //AdapterGenre adapter;
 
-
+    Book toview = null;
 
     @Override
     //qh - assigns the views and transfers the info to them
@@ -209,50 +224,24 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             //jo - button to addreview page + send bundles
             addrevew(receivedbook);
 
-
+            toview = receivedbook;
 
             favourite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 //jj-add book record to local db and firestore
                 public void onClick(View v) {
                     String isbn="";
-                    //does not work :(
-//                    if(userbooklist.contains(CurrentBook)){
-//                        Log.v(TAG,"Book list before change :");
-//                        for(Book x : userbooklist)
-//                        {
-//                            Log.v(TAG,x.getIsbn());
-//                        }
-//                        //iterator used to remove book from collection
-//                        Iterator<Book> itr = userbooklist.iterator();
-//                        while (itr.hasNext())
-//                        {
-//                            Book book = itr.next();
-//                            if (book.equals(CurrentBook))
-//                            {
-//                                userbooklist.remove(book);
-//                                Log.v(TAG,"Removed: "+book.getIsbn());
-//                            }
-//                        }
-//                        Log.v(TAG,"Book list after change :");
-//                        for(Book x : userbooklist)
-//                        {
-//                            Log.v(TAG,x.getIsbn());
-//                            isbn=isbn+x.getIsbn()+';';
-//                        }
-//                        if(isbn.equals("")){
-//                            isbn=null;
-//                        }
-//                        else {
-//                            //removes the ";" at the end of isbn string
-//                            isbn.substring(0, isbn.length() - 1);
-//                        }
-//
-//                        favourite.setText("Add to Favourites");
-//                    }
-
+                    //jj-check if bookisbn exist in user's list of isbn
                     if(MainActivity.loggedinuser.getUserisbn().indexOf(receivedbook.getIsbn())==-1)
                     {
+
+
+                        //jj- sends notification that user favourite this book to following users
+
+                        sendNotification();
+
+
+
                         String[] newlist = MainActivity.loggedinuser.getUserisbn().split(";");
                         for(String x: newlist){
                             isbn=isbn+x+";";
@@ -331,42 +320,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         nextFragment.setArguments(bundle);
         MainActivity.addFragment(nextFragment,getActivity(),"BookByGenre");
     }
-    //jj - gets the user's favourite books
-    public ArrayList<Book> loaduserbooks(User user) throws ExecutionException, InterruptedException {
-        DatabaseAccess DBaccess = DatabaseAccess.getInstance(getActivity().getApplicationContext());
-        //DBaccess.open();
-        ArrayList<Book> userbooklist = new ArrayList<>();
-//        try {
-//            //foreach book in user's local db favourited books, get it from the api
-//            for(Book book:DBaccess.loaduserbooklist(DBaccess.searchuserbyid(Integer.toString(MainActivity.loggedinuser.getUseridu())))) {
-//                AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(book.getIsbn());
-//                try {
-//                    Book temp = tasktogetbook.get();
-//                    if (temp != null) {
-//                        Log.v(TAG, "Book created = " + temp.getBooktitle());
-//                        Log.v(TAG, "Book isbn = " + temp.getIsbn());
-//                        Log.v(TAG, "Book about = " + temp.getBookabout());
-//                        Log.v(TAG, "Book date = " + temp.getPdate());
-//                        Log.v(TAG, "Book genre = " + temp.getBookgenre());
-//                        Log.v(TAG, "Book author = " + temp.getBookauthor());
-//                        userbooklist.add(temp);
-//                    }
-//                } catch (ExecutionException e) {
-//                    e.printStackTrace();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }catch (Exception e){}
-//        DBaccess.close();
 
-        AsyncTask<String, Void,ArrayList<Book>> task = new APIaccessBookList(getContext()).execute(user.getUserisbn());
-
-        userbooklist=task.get();
-        Log.v(TAG,"fav book list is loaded");
-        return userbooklist;
-
-    }
     public void viewcount(String isbn){
 
 
@@ -484,18 +438,40 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
     }
 
 
+    //jj- the following is used for notifications
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private void sendNotification() {
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    JSONObject json=new JSONObject();
+                    JSONObject dataJson=new JSONObject();
+                    dataJson.put("body",MainActivity.loggedinuser.getUsername()+" has favourited "+toview.getBooktitle()+"!");
+                    dataJson.put("title","Check it out!");
+                    json.put("notification",dataJson);
+                    json.put("to","/topics/User"+MainActivity.loggedinuser.getUseridu()+"fav");
+                    Log.v(TAG,json.toString());
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization","key="+"AAAARRpA2ik:APA91bGMQumkw5FL-Xt_yj_ULIjb91TPQIzfi-ZCM4gEHB47wd-W1jORTJsx3YKiSbv-AMlN1zWJOl6peBAFvWkSZ2QFGRPGcHiHvaYjcQZMwRJfm8wKwUiSpR32-u1ODGte42xYQ9gl")
+                            .url("https://fcm.googleapis.com/fcm/send")
+                            .post(body)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    response.isSuccessful();
+                    Log.v(TAG,"response ="+response.isSuccessful());
+                    String finalResponse = response.body().string();
+                    Log.v(TAG, finalResponse);
+                }catch (Exception e){
+                    //Log.d(TAG,e+"");
+                }
+                return null;
+            }
+        }.execute();
 
-
-
-
-
-
-
-
-
-
-
-
+    }
 
 }
 

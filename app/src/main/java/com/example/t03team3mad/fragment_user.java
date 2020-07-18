@@ -31,6 +31,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.jakewharton.processphoenix.ProcessPhoenix;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -49,7 +56,7 @@ public class fragment_user extends Fragment {
     User usertoView = null;
     View v;
 
-
+    User toview = null;
     //list of reviews made by this user
 
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
@@ -98,6 +105,7 @@ public class fragment_user extends Fragment {
             //gets user object from database
             final Button followthisuser = view.findViewById(R.id.follow1);
 
+            toview = usertoView;
 
             final List<String> listofid = new ArrayList<String>(Arrays.asList(MainActivity.loggedinuser.getfollowingstring().split(";")));
             Log.v(TAG,"list of user following ="+MainActivity.loggedinuser.getfollowingstring());
@@ -141,6 +149,7 @@ public class fragment_user extends Fragment {
                     }
                     else {
                         //jj- sub notifications when user follow
+                        sendNotification();
                         listofid.add(Integer.toString(usertoView.getUseridu()));
                         unsub.edit().putBoolean("User"+usertoView.getUseridu()+"review",false).commit();
                         unsub.edit().putBoolean("User"+usertoView.getUseridu()+"noti",false).commit();
@@ -486,4 +495,38 @@ public class fragment_user extends Fragment {
         });
     }
 
+    //jj- the following is used for notifications
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private void sendNotification() {
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    JSONObject json=new JSONObject();
+                    JSONObject dataJson=new JSONObject();
+                    dataJson.put("body",MainActivity.loggedinuser.getUsername()+" has followed "+toview.getUsername()+"!");
+                    dataJson.put("title","Check it out!");
+                    json.put("notification",dataJson);
+                    json.put("to","/topics/User"+MainActivity.loggedinuser.getUseridu()+"noti");
+                    Log.v(TAG,json.toString());
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization","key="+"AAAARRpA2ik:APA91bGMQumkw5FL-Xt_yj_ULIjb91TPQIzfi-ZCM4gEHB47wd-W1jORTJsx3YKiSbv-AMlN1zWJOl6peBAFvWkSZ2QFGRPGcHiHvaYjcQZMwRJfm8wKwUiSpR32-u1ODGte42xYQ9gl")
+                            .url("https://fcm.googleapis.com/fcm/send")
+                            .post(body)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    response.isSuccessful();
+                    Log.v(TAG,"response ="+response.isSuccessful());
+                    String finalResponse = response.body().string();
+                    Log.v(TAG, finalResponse);
+                }catch (Exception e){
+                    //Log.d(TAG,e+"");
+                }
+                return null;
+            }
+        }.execute();
+
+    }
 }

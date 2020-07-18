@@ -44,20 +44,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendRegistrationToServer(final String token) {
 
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        final DocumentReference docRef = db.collection("NotificationTokens").document(String.valueOf(MainActivity.loggedinuser.getUseridu()));
-        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("token", token);
-                    docRef.set(data, SetOptions.merge());
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
-                }
-            }
-        });
     }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
