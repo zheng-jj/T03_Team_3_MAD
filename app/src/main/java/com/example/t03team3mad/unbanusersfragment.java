@@ -1,10 +1,8 @@
 package com.example.t03team3mad;
 
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,39 +35,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-
-public class banusersfragment extends Fragment implements AdapterBan.OnBanListener {
+public class unbanusersfragment extends Fragment implements AdapterBan.OnBanListener {
     private static final String TAG = "BanUsers";
     private CollectionReference mCollectionUsers = FirebaseFirestore.getInstance().collection("User");
     private CollectionReference mCollectionBanned = FirebaseFirestore.getInstance().collection("BannedUsers");
     private CollectionReference mCollectionReviews = FirebaseFirestore.getInstance().collection("Reviews");
     List<User> userList = new ArrayList<>();
     AdapterBan adapterBan;
-    String email;
-    String password;
-    String To;
-    String Subject;
-    String msg;
-    Fragment f;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        final View view = inflater.inflate(R.layout.banusers,container,false);
-        getusers();
-        f= this;
+        final View view = inflater.inflate(R.layout.unbanusers,container,false);
+        getbannedusers();
 
-        RecyclerView banusers = (RecyclerView)view.findViewById(R.id.banrecycler);
+        RecyclerView banusers = (RecyclerView)view.findViewById(R.id.unbanrecycler);
         LinearLayoutManager banlayout = new LinearLayoutManager(getActivity());
         banusers.setLayoutManager(banlayout);
         adapterBan  = new AdapterBan(userList,this, this.getContext());
@@ -80,9 +61,9 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         return view;
     }
 
-    //qh - get all users
-    public void getusers () {
-        mCollectionUsers
+    //qh - get all banned users
+    public void getbannedusers () {
+        mCollectionBanned
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -108,15 +89,14 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         Log.d(TAG, "BanClick");
         //qh - alert to confirm whether to verify the book
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
-        builder.setTitle("Delete User");
-        builder.setMessage("Delete User? (All reviews made by the user will be deleted)");
+        builder.setTitle("Restore User");
+        builder.setMessage("Restore User?");
         builder.setCancelable(false);
-        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+        builder.setPositiveButton("Restore", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
                 User clickeduser = userList.get(position);
-
                 final String userid = Integer.toString(userList.get(position).getUseridu());
-                addtofirestorebanned(userid, position);
+                addbacktofirestore(userid, position);
 
             }
         });
@@ -136,108 +116,9 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         return path;
     }
 
-    public void deletereviews(final String userid) {
-        mCollectionReviews.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                for(QueryDocumentSnapshot i : queryDocumentSnapshots){
-                    if (i.getString("uid").equals(userid)){
-                        mCollectionReviews.document(i.getId()).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error deleting document", e);
-                            }
-                        });
-                    }
-                }
-            }
-        });
-    }
-    public void sendemail(){
-        email = "bookapp1234@gmail.com";
-        password="bookapppassword";
-        Subject = "Banned from elib";
-        To = "swah_jian_oon@hotmail.com";
-        msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+"You have violated our rules and we have decided to take action and have banned your account."+System.lineSeparator()+ System.lineSeparator()+"If you have any issues regarding this ban, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+ "Regards,"+System.lineSeparator()+ System.lineSeparator()+"Admins";
-        Properties properties = new Properties();
-        properties.put("mail.smtp.auth","true");
-        properties.put("mail.smtp.starttls.enable","true");
-        properties.put("mail.smtp.host","smtp.gmail.com");
-        properties.put("mail.smtp.port","587");
-
-        Session session = Session.getInstance(properties, new Authenticator() {
-            @Override
-            protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(email,password);
-            }
-        });
-
-        try {
-            Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(email));
-            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(To));
-            message.setSubject(Subject);
-            message.setText(msg);
-            new SendMail().execute(message);
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    private class SendMail extends AsyncTask<Message,String,String>{
-        private ProgressDialog progressDialog;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progressDialog = ProgressDialog.show(f.getContext(),"Please Wait","Sending Email...",true,false);
-        }
-
-        @Override
-        protected String doInBackground(Message... messages) {
-            try {
-                Transport.send(messages[0]);
-                return"Success";
-            } catch (MessagingException e) {
-                e.printStackTrace();
-                return "Error";
-            }
-
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            progressDialog.dismiss();
-            if(s.equals("Success")){
-                AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
-                builder.setCancelable(false);
-                builder.setTitle(Html.fromHtml("<font color='#509324'>Success</font>"));
-                builder.setMessage("Mail send successfully.");
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-
-                    }
-                });
-                builder.show();
-
-            }
-
-        }
-    }
-
-    //qh - adds banned user to banned firestore collection so that they can be reinstated
-    public void addtofirestorebanned(final String userid, final int position){
-        DocumentReference docRef = mCollectionUsers.document(userid);
+    //qh - adds back user to User firestore collection
+    public void addbacktofirestore(final String userid, final int position){
+        DocumentReference docRef = mCollectionBanned.document(userid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -251,7 +132,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                         user.put("isbn", document.getString("isbn"));
                         user.put("name", document.getString("name"));
                         user.put("role", "User");
-                        mCollectionBanned.document(document.getId()).set(user);
+                        mCollectionUsers.document(document.getId()).set(user);
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");
@@ -264,15 +145,13 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
 
     }
     public void deleteuser(final String userid, final int position){
-        mCollectionUsers.document(userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+        mCollectionBanned.document(userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
 
                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
-                deletereviews(userid);
                 userList.remove(position);
                 adapterBan.notifyDataSetChanged();
-                sendemail();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

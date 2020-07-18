@@ -36,6 +36,7 @@ public class adminhomepagefragment extends Fragment {
     Button verify;
     Button ban;
     Button reviews;
+    Button unbanbutton;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -76,9 +77,41 @@ public class adminhomepagefragment extends Fragment {
             }
         });
 
+        reviews = view.findViewById(R.id.removereview);
+        reviews.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String role = MainActivity.loggedinuser.getAdmin();
+                if (role.equals("Admin")){
+                    //qh - make sure users are admins
+                    RemoveReviewsBookFragment nextFragment = new RemoveReviewsBookFragment();  //will go the fragment where it will display all the books of that genre
+                    MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
+                }
+                Log.v(TAG,role);
+                if (role.equals("User")){
+                    Toast.makeText(getContext(), "Only admins can remove reviews!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        unbanbutton = view.findViewById(R.id.unbanusers);
+        unbanbutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String role = MainActivity.loggedinuser.getAdmin();
+                if (role.equals("Admin")){
+                    //qh - make sure users are admins
+                    unbanusersfragment nextFragment = new unbanusersfragment();  //will go the fragment where it will display all the books of that genre
+                    MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
+                }
+                Log.v(TAG,role);
+                if (role.equals("User")){
+                    Toast.makeText(getContext(), "Only admins can remove reviews!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
         return view;
     }
-
-
 
 }

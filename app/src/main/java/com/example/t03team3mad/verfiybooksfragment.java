@@ -26,7 +26,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -63,17 +62,17 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
         final View view = inflater.inflate(R.layout.verifybooks,container,false);
         f= this;
         getallnonverifiedbooks();
+        //qh - setting the adapter
         RecyclerView verifybooks = (RecyclerView)view.findViewById(R.id.verifyrecycler);
         LinearLayoutManager verifylayout = new LinearLayoutManager(getActivity());
         verifybooks.setLayoutManager(verifylayout);
         verifyadapter  = new AdapterVerify(tobeVerified,this, this.getContext());
-        //qh - gets users
         verifybooks.setAdapter(verifyadapter);
 
         return view;
     }
 
-
+    //qh - goes to the BooksNotVerified collection and retrieves all the documents there
     public void getallnonverifiedbooks () {
         mCollectionBooksNotVerified
                 .get()
@@ -108,6 +107,8 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                 title = tobeVerified.get(position).getBooktitle();
                 about =tobeVerified.get(position).getBookabout();
                 genre = tobeVerified.get(position).getBookgenre();
+                //qh - uploaded books are different from books retrieved from the api in that
+                //the data is stored directly in firestore. Books retrieved from api dont have any information stored in firestore.
                 Map<String, Object> book = new HashMap<>();
                 book.put("booktitle", tobeVerified.get(position).getBooktitle());
                 book.put("bookauthor", tobeVerified.get(position).getBookauthor());
@@ -129,6 +130,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        //qh - this removes the item from the recycler view
 
                         tobeVerified.remove(position);
                         verifyadapter.notifyDataSetChanged();
@@ -149,6 +151,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                     @Override
                     public void onSuccess(Void aVoid) {
                         Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                        //qh - this removes the item from the recycler view
                         tobeVerified.remove(position);
                         verifyadapter.notifyDataSetChanged();
                     }

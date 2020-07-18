@@ -44,6 +44,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
     String coverurl;
     String isbn;
+    //qh - this check is to check whether the book is uploaded or not
     Boolean check = false;
 
     @Override
@@ -77,7 +78,8 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             searchClassList.clear();
         }
         System.out.println(query);
-        //IMPORTANT: THIS IS HOW TO USE THE API CREATED BOOKS
+
+        //qh - searches the api for books associated with the query
         AsyncTask<String, Void, List<SearchClass>> searchapiforbooks = new APIaccessSearchBookTitle().execute(query);
         try {
             searchClassList = searchapiforbooks.get();
@@ -108,6 +110,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         Book currentbook = null;
         if (currentsearchobject.getUploaded().equals("true")){
             check = true;
+            //qh - gets the book info from firestore and passes it to bookinfo (uploaded books store info in firestore)
             mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -130,9 +133,11 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             });
 
         }
+        //qh - this is for non uploaded books
         if (currentsearchobject.getSearchClass().equals("Book") && !check){
             Log.d(TAG, "SEE IF UPLOADED" + currentsearchobject.getUploaded());
             Log.d(TAG, "Why is this code running?");
+            //qh - it searches the api for the book with the isbn and returns with the info
             AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(currentsearchobject.getId());
             Log.v(TAG,"searched ="+currentsearchobject.getId());
             try {
@@ -162,7 +167,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
         //qh -- if object clicked is user
         if (currentsearchobject.getSearchClass().equals("User")){
-            //qh - gets user
+            //qh - gets user from firestore
             AsyncTask<String,Void, User> getbook = new FireStoreAccess.AccessUser2().execute(currentsearchobject.getId());
             User currentuser = null;
             try {
@@ -181,7 +186,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
 
 
-    //qh - get user from firebase (also runs doMySearch)
+    //qh - get user from firebase (also runs doMySearch) (I put all the methods inside each other because the OnSuccessListener isnt running in order)
     public void getdata (final String query, final View view){
         Log.d(TAG, "getuser method");
         userscollection.whereEqualTo("name",query).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -190,6 +195,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                 doMySearch(query, view);
                 getuploadedbooks(query,view);
                 geturl();
+                //qh - adding the users into searchlist
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
                     Log.d(TAG, "getuser232232323 dsds");
                     String id =   i.getId();
@@ -200,7 +206,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
                     new1.setUploaded("false");
                     searchClassList.add(new1);
                     urllist.add(null);
-                    Log.d(TAG, "getuser232232323 method");
                 }
                 searchadapter.notifyDataSetChanged();
             }
@@ -254,23 +259,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
             }
         });
     }
-
-    //public void getuploadedbooks (final String query, final View view){
-        //Log.d(TAG, "Running Uploaded Book");
-        //mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            //Override
-            //public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                //for(QueryDocumentSnapshot i : queryDocumentSnapshots){
-                    //Log.d(TAG, "Searching Uploaded Book");
-                    //if (i.getBoolean("uploaded")){
-                        //Book newbook = new Book(i.getString("booktitle"),i.getString("bookauthor"),i.getString("bookabout"),i.getString("bookpdate"),i.getString("bookgenre"),i.getId());
-                        //searchClassList.add(newbook);
-                    //}
-                //}
-               // searchadapter.notifyDataSetChanged();
-            //}
-        //});
-    //}
 
 
 
