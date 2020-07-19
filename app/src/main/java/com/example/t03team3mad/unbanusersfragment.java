@@ -132,6 +132,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
                         user.put("isbn", document.getString("isbn"));
                         user.put("name", document.getString("name"));
                         user.put("role", "User");
+                        user.put("email", document.getString("email"));
                         mCollectionUsers.document(document.getId()).set(user);
                         deleteuser(userid, position);
                     } else {

@@ -80,7 +80,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         return view;
     }
 
-    //qh - get all users
+    //qh - get all users (admins excluded)
     public void getusers () {
         mCollectionUsers
                 .get()
@@ -89,9 +89,14 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-                                User newuser = new User(Integer.parseInt(document.getId()),document.getString("name"),document.getString("desc"));
-                                userList.add(newuser);
+
+                                if(document.getString("role") != null){
+                                    if(document.getString("role").equals("User")){
+                                        Log.d(TAG, document.getId() + " => " + document.getData());
+                                        User newuser = new User(Integer.parseInt(document.getId()),document.getString("name"),document.getString("desc"));
+                                        userList.add(newuser);
+                                    }
+                                }
                             }
                             adapterBan.notifyDataSetChanged();
 
@@ -251,6 +256,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                         user.put("isbn", document.getString("isbn"));
                         user.put("name", document.getString("name"));
                         user.put("role", "User");
+                        user.put("email", document.getString("email"));
                         mCollectionBanned.document(document.getId()).set(user);
                         deleteuser(userid, position);
                     } else {

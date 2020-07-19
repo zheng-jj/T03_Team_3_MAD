@@ -58,6 +58,12 @@ public class fragment_uploadbooks extends Fragment {
                     Toast.makeText(getContext(), "ISBN is Empty!", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
+                //qh - isbn has to be 10 or 13 characters long
+                if (bookisbn.getText().toString().length() != 10 || bookisbn.getText().toString().length() != 13){
+                    Toast.makeText(getContext(), "Invalid ISBN!!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (bookname.getText().toString().equals("")){
                     Toast.makeText(getContext(), "Name is Empty!", Toast.LENGTH_SHORT).show();
                     return;

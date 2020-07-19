@@ -15,6 +15,15 @@ public class Review {
 
     }
 
+    public Review(int uid, String review,String title,String isbn, int rid) {
+        reviewidu = uid;
+        reviewtext = review;
+        reviewidr = rid;
+        reviewTitle = title;
+        reviewisbn = isbn;
+
+    }
+
     public Review() {
 
     }
@@ -78,6 +87,14 @@ public class Review {
     }
     public void setImglink(String imglink) {
         this.imglink = imglink;
+    }
+
+    private String specialstring;
+    public String getSpecialstring() {
+        return specialstring;
+    }
+    public void setSpecialstring(String special) {
+        this.specialstring = special;
     }
 
     private int reviewpoints;

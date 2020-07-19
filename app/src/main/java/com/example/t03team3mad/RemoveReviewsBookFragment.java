@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.Review;
+import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -57,8 +58,10 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(QueryDocumentSnapshot i : queryDocumentSnapshots){
-                    Review review = new Review(Integer.parseInt(i.getString("uid")),i.getString("review"),i.getString("title"),i.getString("isbn"));
-                    reviewsList.add(review);
+                    Review review1 = new Review(Integer.parseInt(i.getString("uid")),i.getString("review"),i.getString("title"),i.getString("isbn"),Integer.parseInt(i.getString("rid")));
+                    review1.setSpecialstring(i.getId());
+                    Log.d(TAG, review1.getReviewisbn());
+                    reviewsList.add(review1);
                 }
                 adapterdeletereview.notifyDataSetChanged();
             }
@@ -67,7 +70,65 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
 
 
     @Override
-    public void onReviewClick(int position) throws InterruptedException {
+    public void onReviewClick(final int position) throws InterruptedException {
+        String userid = Integer.toString(reviewsList.get(position).getReviewidu());
+        String reviewid = Integer.toString(reviewsList.get(position).getReviewidu());
+        String isbn = reviewsList.get(position).getReviewisbn();
 
+        AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
+        builder.setTitle("Delete Review");
+        builder.setMessage("Delete Review? (Deleted reviews cannot be restored)");
+        builder.setCancelable(false);
+        builder.setPositiveButton("Delete", new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id){
+                String reviewid = Integer.toString(reviewsList.get(position).getReviewidr());
+                String isbn = reviewsList.get(position).getReviewisbn();
+                Log.d("CHECKING", reviewsList.get(position).getReviewisbn());
+                Log.d("CHECKING", reviewid);
+                String special = reviewsList.get(position).getSpecialstring();
+                deletereview(special);
+                deletereviewsub(isbn, reviewid, position);
+
+
+            }
+        });
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id){
+
+            }
+        });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    public void deletereview(final String specialstring){
+        mCollectionBooksReviews.document(specialstring).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("CHECKING", "Deleted First");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error deleting document", e);
+            }
+        });
+    }
+
+    public void deletereviewsub(final String isbn, final String rid, final int position){
+        mCollectionBooks.document(isbn).collection("Reviews").document(rid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                reviewsList.remove(position);
+                adapterdeletereview.notifyDataSetChanged();
+                Log.d("CHECKING", "Deleted Second");
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w(TAG, "Error deleting document", e);
+            }
+        });
     }
 }
