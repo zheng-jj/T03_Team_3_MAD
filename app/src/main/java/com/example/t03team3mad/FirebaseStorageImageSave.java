@@ -27,20 +27,23 @@ public class FirebaseStorageImageSave extends AsyncTask<imageTaskSaveParameters,
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Log.v(TAG,"Saving image at"+ref.getBucket());
         Log.v(TAG,"image name is ="+parameters.imagename);
-        parameters.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] data = baos.toByteArray();
+        if(parameters.bitmap!=null) {
+            parameters.bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] data = baos.toByteArray();
 
-        UploadTask uploadTask = ref.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-            }
-        });
+            UploadTask uploadTask = ref.putBytes(data);
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception exception) {
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                }
+            });
+        }
         return null;
+
     }
 
     @Override

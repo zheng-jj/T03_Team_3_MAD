@@ -56,7 +56,6 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
         adapterdeletereview  = new AdapterDeleteReview(reviewsList,this, this.getContext());
         //qh - gets users
         removereviews.setAdapter(adapterdeletereview);
-
         return view;
     }
 
@@ -79,7 +78,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
 
     @Override
     public void onReviewClick(final int position) throws InterruptedException {
-        String userid = Integer.toString(reviewsList.get(position).getReviewidu());
+        final String userid = Integer.toString(reviewsList.get(position).getReviewidu());
         String reviewid = Integer.toString(reviewsList.get(position).getReviewidu());
         String isbn = reviewsList.get(position).getReviewisbn();
 
@@ -96,7 +95,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
                 String special = reviewsList.get(position).getSpecialstring();
                 deletereview(special);
                 deletereviewsub(isbn, reviewid, position);
-
+                sendNotification(userid);
 
             }
         });
@@ -139,7 +138,6 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
             }
         });
     }
-
 
     //jj- the following is used for notifications
     //jj- when admin decides to clear user reviews, notification is sent
