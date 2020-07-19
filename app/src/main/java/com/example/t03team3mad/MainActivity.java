@@ -383,6 +383,7 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                     }
                 }
             }
+            topicslist.add("User"+MainActivity.loggedinuser.getUseridu());
             return topicslist;
 
         }

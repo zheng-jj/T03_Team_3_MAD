@@ -1,6 +1,7 @@
 package com.example.t03team3mad;
 
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +26,13 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.okhttp.MediaType;
+import com.squareup.okhttp.OkHttpClient;
+import com.squareup.okhttp.Request;
+import com.squareup.okhttp.RequestBody;
+import com.squareup.okhttp.Response;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,6 +76,43 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
 
     @Override
     public void onReviewClick(int position) throws InterruptedException {
+
+    }
+
+
+    //jj- the following is used for notifications
+    //jj- when admin decides to clear user reviews, notification is sent
+    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+    private void sendNotification(final String clearuid) {
+        new AsyncTask<Void,Void,Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                try {
+                    OkHttpClient client = new OkHttpClient();
+                    JSONObject json=new JSONObject();
+                    JSONObject dataJson=new JSONObject();
+                    dataJson.put("body","All your reviews have been banned by the admins!");
+                    dataJson.put("title","Warning!");
+                    json.put("notification",dataJson);
+                    json.put("to","/topics/User"+clearuid);
+                    Log.v(TAG,json.toString());
+                    RequestBody body = RequestBody.create(JSON, json.toString());
+                    Request request = new Request.Builder()
+                            .header("Authorization","key="+"AAAARRpA2ik:APA91bGMQumkw5FL-Xt_yj_ULIjb91TPQIzfi-ZCM4gEHB47wd-W1jORTJsx3YKiSbv-AMlN1zWJOl6peBAFvWkSZ2QFGRPGcHiHvaYjcQZMwRJfm8wKwUiSpR32-u1ODGte42xYQ9gl")
+                            .url("https://fcm.googleapis.com/fcm/send")
+                            .post(body)
+                            .build();
+                    Response response = client.newCall(request).execute();
+                    response.isSuccessful();
+                    Log.v(TAG,"response ="+response.isSuccessful());
+                    String finalResponse = response.body().string();
+                    Log.v(TAG, finalResponse);
+                }catch (Exception e){
+                    //Log.d(TAG,e+"");
+                }
+                return null;
+            }
+        }.execute();
 
     }
 }
