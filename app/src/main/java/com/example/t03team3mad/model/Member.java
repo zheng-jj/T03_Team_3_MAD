@@ -6,6 +6,9 @@ public class Member {
     private String Androidid;
     private String ID;
     private String password;
+    private String phonenumber;
+    private Boolean banned;
+
     public Member(){}
 
     public String getName() {
@@ -39,6 +42,20 @@ public class Member {
         Androidid = androidid;
     }
 
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String Phonenumber) {
+        phonenumber = Phonenumber;
+    }
+    public String getBanned() {
+        return String.valueOf(banned);
+    }
+
+    public void setBanned(boolean Banned) {
+        banned = Banned;
+    }
 }
 
 

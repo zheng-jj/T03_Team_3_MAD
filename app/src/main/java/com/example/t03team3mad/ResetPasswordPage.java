@@ -23,8 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.Properties;
 import java.util.Random;
 
 public class ResetPasswordPage extends AppCompatActivity {
@@ -80,7 +78,7 @@ public class ResetPasswordPage extends AppCompatActivity {
 
                                 }
                             }
-                            Toast.makeText(ResetPasswordPage.this, "Email does not exist", Toast.LENGTH_SHORT).show();
+
                         }
 
                         @Override
@@ -98,10 +96,11 @@ public class ResetPasswordPage extends AppCompatActivity {
                 String Code = code.getText().toString().trim();
                 if (Code.equals("")) {
                     Toast.makeText(ResetPasswordPage.this, "Enter OTP to proceed", Toast.LENGTH_SHORT).show();
+                    Log.v(TAG,"Enter OTP to proceed");
                 }
                 if (!Code.equals(otp)) {
-                    Toast.makeText(ResetPasswordPage.this, user.getUid(), Toast.LENGTH_SHORT).show();
-
+                    Toast.makeText(ResetPasswordPage.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
+                    Log.v(TAG,"Incorrect OTP");
                 }
                 else {
                     code.setVisibility(View.GONE);

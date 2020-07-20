@@ -1,10 +1,13 @@
 package com.example.t03team3mad;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -151,44 +156,51 @@ public class LoginPage extends AppCompatActivity {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                        uid = snapshot.getKey();
-                                        String name = snapshot.child("name").getValue().toString();
+                                        if(snapshot.child("banned").getValue().toString().equals("false")) {
+                                            uid = snapshot.getKey();
+                                            String name = snapshot.child("name").getValue().toString();
+                                            String number = snapshot.child("phonenumber").getValue().toString();
 
+                                            //Chris - show that it works
+                                            Log.v(TAG, "the user id sent= " + uid);
 
-                                        //Chris - show that it works
-                                        Log.v(TAG, "the user id sent= " + uid);
+                                            //Chris -  save user id as bundle
+                                            Bundle bundle = new Bundle();
+                                            bundle.putString("User_UID", uid);
+                                            Bundle bundle2 = new Bundle();
+                                            bundle2.putString("PhoneNo", number);
+                                            //Chris -  save user id in shared preference
+                                            SharedPreferences.Editor editor = Auto_login.edit();
+                                            editor.putString("UserID", uid).apply();
+                                            //Chris - Check if user record is already recorded in the local database or not
+                                            Boolean CheckIfRecordExisted = CheckRecord(uid);
+                                            if (!CheckIfRecordExisted) {
+                                                insertUser(uid, name, "About", null, null);
+                                                Log.v(TAG, "Inserted Successfully");
+                                            } else {
+                                                Log.v(TAG, "User Record Is Already Inserted");
+                                            }
+                                            databaseReference.child(uid).child("deviceID").setValue(androidId);
+                                            //Chris - if login is successful
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            //Chris - User is Logged in until he log out
+                                            Auto_login.edit().putBoolean("logged", true).apply();
+                                            Log.v(TAG, "Requesting OTP");
+                                            Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
 
-                                        //Chris -  save user id as bundle
-                                        Bundle bundle = new Bundle();
-                                        bundle.putString("User_UID", uid);
+                                            //Chris - Intent to homepage and pass user id to it
+                                            Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
+                                            MainActivity.putExtra("User_UID", bundle);
+                                            MainActivity.putExtra("PhoneNo", bundle2);
 
-                                        //Chris -  save user id in shared preference
-                                        SharedPreferences.Editor editor = Auto_login.edit();
-                                        editor.putString("UserID", uid).apply();
-                                        //Chris - Check if user record is already recorded in the local database or not
-                                        Boolean CheckIfRecordExisted = CheckRecord(uid);
-                                        if (!CheckIfRecordExisted) {
-                                            insertUser(uid, name, "About", null, null);
-                                            Log.v(TAG, "Inserted Successfully");
+                                            Log.v(TAG, "sending this uid to main activity " + uid);
+                                            startActivity(MainActivity);
+                                            finish();
                                         }
-                                        else
-                                        {
-                                            Log.v(TAG, "User Record Is Already Inserted");
+                                        else {
+                                            progressBar.setVisibility(View.INVISIBLE);
+                                            Toast.makeText(LoginPage.this, "User is banned", Toast.LENGTH_LONG).show();
                                         }
-                                        databaseReference.child(uid).child("deviceID").setValue(androidId);
-                                        //Chris - if login is successful
-                                        progressBar.setVisibility(View.INVISIBLE);
-                                        //Chris - User is Logged in until he log out
-                                        Auto_login.edit().putBoolean("logged",true).apply();
-                                        Log.v(TAG,"Successfully Logged In");
-                                        Toast.makeText(LoginPage.this, "Successfully Logged In", Toast.LENGTH_LONG).show();
-
-                                        //Chris - Intent to homepage and pass user id to it
-                                        Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
-                                        MainActivity.putExtra("User_UID", bundle);
-                                        Log.v(TAG,"sending this uid to main activity "+uid);
-                                        startActivity(MainActivity);
-                                        finish();
                                     }
                                 }
                                 @Override

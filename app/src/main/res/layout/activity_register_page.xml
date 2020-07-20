@@ -46,7 +46,30 @@
             android:hint="Email"
             android:inputType="textEmailAddress"
             android:textSize="20dp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
 
+            <com.hbb20.CountryCodePicker
+                android:id="@+id/ccp"
+                android:layout_width="130dp"
+                android:layout_height="42dp"
+                app:ccp_defaultNameCode="SG"
+                tools:layout_editor_absoluteX="1dp"
+                tools:layout_editor_absoluteY="216dp" />
+
+            <EditText
+                android:id="@+id/phoneText"
+                android:layout_width="218dp"
+                android:layout_height="42dp"
+                android:hint="phone"
+                android:inputType="phone"
+                android:singleLine="true"
+                tools:layout_editor_absoluteX="131dp"
+                tools:layout_editor_absoluteY="216dp" />
+
+        </LinearLayout>
         <EditText
             android:id="@+id/EnterPassword"
             android:layout_width="match_parent"

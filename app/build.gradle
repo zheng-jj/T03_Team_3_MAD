@@ -85,7 +85,7 @@ dependencies {
     implementation files('libs/activation.jar')
     implementation files('libs/additionnal.jar')
     implementation files('libs/mail.jar')
-
+    implementation 'com.hbb20:ccp:2.1.9'
     //used to send notifications
     implementation 'com.android.volley:volley:1.1.1'
 
