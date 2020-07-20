@@ -121,7 +121,7 @@ public class LoginPage extends AppCompatActivity {
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email, password;
+                final String email, password;
                 email = EnterEmail.getText().toString().trim();
                 password = EnterPassword.getText().toString().trim();
                 //Chris - Validation
@@ -152,7 +152,7 @@ public class LoginPage extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //Chris - find user id for the login user
-                            databaseReference.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {
+                            databaseReference.orderByChild("email").equalTo(email).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
