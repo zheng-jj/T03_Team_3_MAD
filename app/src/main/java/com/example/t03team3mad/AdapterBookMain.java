@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso;
 //jj- all the same format as adapterusermain
 public class AdapterBookMain extends RecyclerView.Adapter<AdapterBookMain.ViewHolder>
 {
+
     private static final String TAG = "AdapterBookMain";
     List<Book> mBooklist = new ArrayList<Book>(){};
 
