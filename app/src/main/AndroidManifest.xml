@@ -6,13 +6,13 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".EditNotifications"></activity>
+        <activity android:name=".EditNotifications" />
         <activity android:name=".ViewToGet" />
         <activity android:name=".ResetPasswordPage" />
         <activity android:name=".LoginPage">
@@ -34,11 +34,10 @@
             android:value="93495175815235124141252356125" />
         <service
             android:name=".MyFirebaseMessagingService"
-            android:exported="true"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
-
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
         </service>

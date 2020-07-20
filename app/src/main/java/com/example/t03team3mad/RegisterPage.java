@@ -137,6 +137,7 @@ public class RegisterPage extends AppCompatActivity {
                                 //Chris - Register is successful,saving user details to firebase database
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
+                                member.setPassword(EnterPassword.getText().toString());
                                 member.setDeviceID("0");
                                 //Chris -  Customised user id,make sure no two users have the same user id
                                 String id = String.valueOf(maxid + 1);

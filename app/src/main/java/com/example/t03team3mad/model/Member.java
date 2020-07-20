@@ -5,6 +5,7 @@ public class Member {
     private String Email;
     private String Androidid;
     private String ID;
+    private String password;
     public Member(){}
 
     public String getName() {
@@ -21,6 +22,13 @@ public class Member {
 
     public void setEmail(String email) {
         Email = email;
+    }
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String Password) {
+        password = Password;
     }
 
     public String getDeviceID() {
