@@ -158,6 +158,13 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                         startActivity(feedActivity);
                     }
                 });
+                Intent feedActivity = new Intent(MainActivity.this, feedfragment.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("user", loggedinuser);
+                feedActivity.putExtras(bundle);
+
+                startActivity(feedActivity);
+
 
 
 

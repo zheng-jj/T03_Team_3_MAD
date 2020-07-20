@@ -182,6 +182,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         });
     }
     public void sendemail(){
+        // assign string to variable
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
         Subject = "Banned from elib";
@@ -192,7 +193,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
-
+        // log into bookapp1234@gmail.com
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -201,6 +202,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         });
 
         try {
+            // set message,subject ,destination
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
             message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(To));
@@ -213,7 +215,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
 
 
     }
-
+    //jo-display purposes
     private class SendMail extends AsyncTask<Message,String,String>{
         private ProgressDialog progressDialog;
 
@@ -309,6 +311,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
             }
         });
     }
+    // jo-get email from firestore
     public void getEmail(final String userid, final int position){
         Log.d("Test","idu: "+String.valueOf(clickeduser.getUseridu()));
         mCollectionUsers.document(String.valueOf(clickeduser.getUseridu())).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

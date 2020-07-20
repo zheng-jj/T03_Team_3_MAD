@@ -175,7 +175,9 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
 
 
     }
+    //jo -email send
     public void sendemail(int position){
+        // assign the string
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
         Subject = "Book verification";
@@ -189,12 +191,13 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
             "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
             "Regards,"+System.lineSeparator()+
             "Admins";
+        // jo-set properties for email
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
-
+        // jo-login to the bookapp1234@gmail.com
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -215,6 +218,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
 
 
     }
+    //jo- For display purposes
     private class SendMail extends AsyncTask<Message,String,String>{
         private ProgressDialog progressDialog;
 
@@ -258,6 +262,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
 
         }
     }
+    //get email from database
     public void getEmail(final int position){
         Log.d("Test","uid: " +userid);
         mCollectionBookuser.document(userid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

@@ -267,18 +267,21 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
 
         });
     }
+    //jo -email send
     public void sendemail(){
+        // assign the string
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
-        Subject = "Book verification";
+        Subject = "Ban from elib";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+"You have violated our rules and we have decided to take action and have banned your account."+System.lineSeparator()+ System.lineSeparator()+"If you have any issues regarding this ban, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+ "Regards,"+System.lineSeparator()+"Admins";
 
+        // jo-set properties for email
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
-
+        // jo-login to the bookapp1234@gmail.com
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -287,6 +290,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
         });
 
         try {
+            // attach message , destination email and subject
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
             message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(To));
@@ -299,6 +303,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
 
 
     }
+    //jo- For display purposes
     private class SendMail extends AsyncTask<Message,String,String>{
         private ProgressDialog progressDialog;
 
@@ -342,6 +347,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
 
         }
     }
+    //jo- not used anymmore
     public void getEmail(){
 
         mCollectionUsers.document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

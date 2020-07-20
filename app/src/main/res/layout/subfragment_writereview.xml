@@ -86,7 +86,9 @@
                 android:layout_marginBottom="124dp"
                 android:id="@+id/reviewinput"
                 android:hint="Review here"
-                android:textAlignment="textStart"></EditText>
+                android:textAlignment="textStart"
+                android:maxLines="3"
+                android:inputType="text"></EditText>
 
             <Button
                 android:layout_width="150dp"

@@ -54,35 +54,42 @@ public class feedfragment extends AppCompatActivity {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.feedfragment);
+        //intent to get user
         c = this;
         Intent receivingEnd = getIntent();
         user =receivingEnd.getParcelableExtra("user");
-
+        //recyclerview
         idu = String.valueOf(user.getUseridu());
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList =findViewById(R.id.feedrecycler);
         Log.d("Test",idu);
+        //query to get latest 10 feed
         Query query = firebaseFirestore.collection("User").document(idu).collection("Activity").orderBy("position", Query.Direction.DESCENDING).limit(10);
 
-
+        //puts extracted data into feed class automatically
         FirestoreRecyclerOptions<Feed> options = new FirestoreRecyclerOptions.Builder<Feed>().setQuery(query,Feed.class).build();
+        //custom firestore adapter
         adapter = new FirestoreRecyclerAdapter<Feed,FeedViewHolder>(options) {
             @NonNull
             @Override
             public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                //viewholder feedcardview
                 View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.feedcardview,parent,false);
                 return new FeedViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull final FeedViewHolder holder, int position, @NonNull final Feed model) {
+                //bind data to holder
 
                 holder.activity.setText(model.getActivity());
+                //check activity set different text
                 if(model.getActivity().equals("Review")){
+
                     holder.content.setText(model.getUname() +" has made a review with a rating of " +model.getRating()+" for book ~" +model.getTitle());
                 }
                 else if(model.getActivity().equals("Upvote")){
-                    holder.content.setText(model.getUname() + " has upvoted a review for book ~"+model.getTitle());
+                    holder.content.setText(model.getUname() + " has upvoted a review for book "+model.getTitle());
                 }
 
 

@@ -95,6 +95,7 @@ public class fragment_addreview extends Fragment {
         Log.d("Test",ISBN);
         ratings = view.findViewById(R.id.ratingBar);
         bookimage = view.findViewById(R.id.bookimg2);
+        // set image for book using url if no url set default img
         if(book.getimglink() == null || book.getimglink() == ""){
             bookimage.setImageResource(R.drawable.empty);
 
@@ -109,15 +110,19 @@ public class fragment_addreview extends Fragment {
             public void onClick(View v){
                 review = editreview.getText().toString();
                 Log.d("COUNT", String.valueOf(review.length()));
+                //jo-validation no empty input
                 if(review.length()==0){
                     Toast.makeText(getActivity().getApplicationContext(),"No empty input",Toast.LENGTH_SHORT).show();
 
 
                 }
+                //jo-validation max 100 charc
                 else if(review.length() > 100){
                     Toast.makeText(getActivity().getApplicationContext(),"Max word count 100",Toast.LENGTH_SHORT).show();
 
                 }
+
+                //jo-run process
                 else{
                     sendNotification();
 
@@ -171,6 +176,7 @@ public class fragment_addreview extends Fragment {
 
 
     }
+    // get activity id for firestore storing
     public void getaid(final Map<String, Object> data3, final String id){
         mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -204,12 +210,13 @@ public class fragment_addreview extends Fragment {
 
     }
 
-
+    //adding ratings
 
     public void compilerating(){
         mCollectionRefbooks.document(ISBN).update("ratecount", FieldValue.increment(1));
         mCollectionRefbooks.document(ISBN).update("TotalRating", FieldValue.increment(ratevalue));
     }
+    // update activity of everyone who is following the reviewer
     public void getfollowing(final String idr, final String idu, final String review, final String ISBN, final String name){
         // Add document data  with id staffid using a hashmap
         Map<String, Object> data = new HashMap<String,Object>();

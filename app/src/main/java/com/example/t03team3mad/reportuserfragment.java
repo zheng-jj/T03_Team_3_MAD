@@ -69,15 +69,18 @@ public class reportuserfragment extends Fragment {
             @Override
             public void onClick(View v) {
                 reason = String.valueOf(report.getText());
+                //toast validation if empty
                 if(reason.length()==0){
                     Toast.makeText(getActivity().getApplicationContext(),"No empty input",Toast.LENGTH_SHORT).show();
 
 
                 }
+                //toast validation max count
                 else if(reason.length() > 100){
                     Toast.makeText(getActivity().getApplicationContext(),"Max word count 100",Toast.LENGTH_SHORT).show();
 
                 }
+                //store into firestore + email
                 else{
                     final Map<String, Object> data = new HashMap<String,Object>();
                     data.put("uid",String.valueOf(MainActivity.loggedinuser.getUseridu()));
@@ -105,22 +108,24 @@ public class reportuserfragment extends Fragment {
 
         return view;
     }
+    //jo -email send
     public void sendemail(){
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
-        Subject = "Banned from elib";
+        Subject = "Reported user";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
                 "You have reported "+ reportedname+ System.lineSeparator()+ System.lineSeparator()+
                 "Reason: "+ reason+ System.lineSeparator()+ System.lineSeparator()+
                 "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
                 "Regards,"+System.lineSeparator()+
                 "Admins";
+        // jo-set properties for email
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
-
+        // jo-login to the bookapp1234@gmail.com
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -129,6 +134,7 @@ public class reportuserfragment extends Fragment {
         });
 
         try {
+            // jo - attach message , destination email and subject
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
             message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(To));
@@ -141,6 +147,7 @@ public class reportuserfragment extends Fragment {
 
 
     }
+    //jo- For display purposes
     private class SendMail extends AsyncTask<Message,String,String> {
         private ProgressDialog progressDialog;
 
@@ -184,6 +191,7 @@ public class reportuserfragment extends Fragment {
 
         }
     }
+    //jo-get email of user to send
     public void getEmail(){
 
         mCollectionRefusers.document(String.valueOf(MainActivity.loggedinuser.getUseridu())).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

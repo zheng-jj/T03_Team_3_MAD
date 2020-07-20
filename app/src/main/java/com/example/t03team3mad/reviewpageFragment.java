@@ -68,7 +68,7 @@ public class reviewpageFragment extends Fragment {
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     List<String> followingid = new ArrayList<String>();
-
+    //all comments by jo
 
 
     @Override
@@ -93,27 +93,32 @@ public class reviewpageFragment extends Fragment {
 
         }
         else {
+            // set book image using link
             Picasso.with(this.getActivity()).load(book.getimglink()).into(bookimage);
         }
         booktitle.setText(book.getBooktitle());
         // jo - recyclerview
         firebaseFirestore = FirebaseFirestore.getInstance();
         mFirestoreList = view.findViewById(R.id.rRecyclerView);
-
+        // query for reviews for the book
         Query query = firebaseFirestore.collection("Book").document(isbn).collection("Reviews").orderBy("vote", Query.Direction.DESCENDING);
+        //Get result and auto put into class form
 
         FirestoreRecyclerOptions<Reviews> options = new FirestoreRecyclerOptions.Builder<Reviews>().setQuery(query,Reviews.class).build();
+        //Custom firestore adapter that updates realtime
 
         adapter = new FirestoreRecyclerAdapter<Reviews, ReviewViewHolder>(options) {
             @NonNull
             @Override
             public ReviewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                // inflate cardview
                 View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.reviewcardview,parent,false);
                 return new ReviewViewHolder(view);
             }
 
             @Override
             protected void onBindViewHolder(@NonNull ReviewViewHolder holder, int position, @NonNull final Reviews model) {
+                // set text for holders
                 holder.uName.setText(model.getUname());
                 holder.uReview.setText(model.getReview());
                 Log.d("Review",model.getReview());
@@ -122,6 +127,7 @@ public class reviewpageFragment extends Fragment {
                 Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
                 holder.uPic.setImageBitmap(bmImg);
                 holder.points.setText(String.valueOf(model.getVote()));
+                // clicking name directs to user page
                 holder.uName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -149,6 +155,7 @@ public class reviewpageFragment extends Fragment {
 
         return view;
     }
+    // view holder
     private class ReviewViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView uName;
@@ -181,7 +188,7 @@ public class reviewpageFragment extends Fragment {
         super.onStart();
         adapter.startListening();
     }
-
+    //get id of activity used to storing data
     public void getaid(final String id, final Map<String, Object> data3){
         mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -210,6 +217,7 @@ public class reviewpageFragment extends Fragment {
             }
         });
     }
+    // update activity of everyone who is following the reviewer
     public void getfollowing(final Reviews model){
         mCollectionRefuser.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -246,6 +254,7 @@ public class reviewpageFragment extends Fragment {
         });
 
     }
+    // set upvote button
     public void upvote(final Reviews model, final Button button){
         mCollectionRefuser.document(String.valueOf(uid)).collection("Upvote").whereEqualTo("rid", model.getRid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

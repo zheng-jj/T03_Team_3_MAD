@@ -262,22 +262,24 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
 
         });
     }
+    //jo -email send
     public void sendemail(){
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
-        Subject = "Book verification";
+        Subject = "Unbanned from elib";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
                 "Your account has been unbanned."+System.lineSeparator()+ System.lineSeparator()+
 
                 "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
                 "Regards,"+System.lineSeparator()+
                 "Admins";
+        // jo-set properties for email
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
-
+        // jo-login to the bookapp1234@gmail.com
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -298,6 +300,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
 
 
     }
+    //jo- For display purposes
     private class SendMail extends AsyncTask<Message,String,String>{
         private ProgressDialog progressDialog;
 
@@ -341,6 +344,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
 
         }
     }
+    //jo-not used anymore
     public void getEmail(){
         Log.d("Test","UID: " + uid);
         mCollectionBanned.document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {

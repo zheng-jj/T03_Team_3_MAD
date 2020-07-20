@@ -112,8 +112,9 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             System.out.println(receivedbook.getBooktitle());
             Log.d(TAG, "UPLOADED BOOK RECEIVED" + receivedbook.getBooktitle());
             title.setText(receivedbook.getBooktitle());
+            author.setText(receivedbook.getBookauthor());
             synopsis.setText(receivedbook.getBookabout());
-            releasedate.setText(receivedbook.getPdate());
+            releasedate.setText("Released Date: "+receivedbook.getPdate());
             data.add(receivedbook.getBookgenre());
             //Chris - list the genre
             if(receivedbook.getBookgenre().contains(",")) {
@@ -320,12 +321,13 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         nextFragment.setArguments(bundle);
         MainActivity.addFragment(nextFragment,getActivity(),"BookByGenre");
     }
-
+    // increase viewcount per click
     public void viewcount(String isbn){
 
 
         mCollectionRefbooks.document(isbn).update("viewcount", FieldValue.increment(1));
     }
+    // calculate ratings -averaged
     public void calculateRatings(){
         String showratings;
         Log.d("Test","Calulcateratings ratecount: " +ratecount);
@@ -340,9 +342,10 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
         }
 
 
-        showrating.setText(showratings);
+        showrating.setText("Ratings: " +showratings);
 
     }
+    // if first time clicking on book generate a record
     public void generaterecord(){
         Map<String, Object> data = new HashMap<String,Object>();
 
@@ -354,6 +357,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 
         mCollectionRefbooks.document(isbn).set(data);
     }
+    // get data from firestore
     public void getdata(final Book receivedbook) {
         mCollectionRefbooks.document(isbn).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -381,6 +385,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
 
 
     }
+
     public String getimage(Book book) throws ExecutionException, InterruptedException {
         String filename = "book" +book.getIsbn() +".jpg";
         //jj gets image from firebase and saves to local storage
@@ -401,6 +406,7 @@ public class bookinfoFragment extends Fragment implements AdapterGenre.OnClickLi
             Log.v(TAG,"THIS IS BOOK URL" + receivedbook.getimglink());
         }
     }
+    // jo - add review button
     public void addrevew(final Book receivedbook){
         mCollectionRefuser.document(String.valueOf(MainActivity.loggedinuser.getUseridu())).collection("Reviews").whereEqualTo("isbn",isbn).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override

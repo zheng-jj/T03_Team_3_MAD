@@ -112,6 +112,7 @@ public class fragment_user extends Fragment {
                 //jj-updated the way we add fragments into the view
                 MainActivity.addFragment(fragment,getActivity(),"UserFragment");
             }
+            //report user button
             reportuser = view.findViewById(R.id.reportuser);
             reportuser.setOnClickListener(new View.OnClickListener() {
                 @Override

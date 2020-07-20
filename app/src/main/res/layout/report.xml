@@ -48,7 +48,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:id="@+id/nameuser"
-            android:layout_gravity="center"></EditText>
+            android:layout_gravity="center"
+            android:maxLines="1"></EditText>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="80dp"
@@ -70,7 +71,9 @@
             android:layout_marginTop="30dp"
             android:hint="Write the report here"
             android:id="@+id/reportcontent"
-            android:layout_gravity="center"></EditText>
+            android:layout_gravity="center"
+            android:inputType="text"
+            android:maxLines="3"></EditText>
 
         <Button
             android:layout_width="150dp"

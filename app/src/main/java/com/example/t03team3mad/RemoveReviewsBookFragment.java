@@ -203,10 +203,11 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
         }.execute();
 
     }
+    //jo -email send
     public void sendemail(){
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
-        Subject = "Book verification";
+        Subject = "Removed Reviews";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
                 "One of your review has violated our rules and we have made the decision to take it down."+System.lineSeparator()+ System.lineSeparator()+
                 "Details of the reviews are: "+System.lineSeparator()+ System.lineSeparator()+
@@ -215,12 +216,13 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
                 "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
                 "Regards,"+System.lineSeparator()+
                 "Admins";
+        // jo-set properties for email
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
         properties.put("mail.smtp.host","smtp.gmail.com");
         properties.put("mail.smtp.port","587");
-
+        // jo-login to the bookapp1234@gmail.com
         Session session = Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -229,6 +231,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
         });
 
         try {
+            // attach message , destination email and subject
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(email));
             message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(To));
@@ -241,6 +244,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
 
 
     }
+    //jo- For display purposes
     private class SendMail extends AsyncTask<Message,String,String>{
         private ProgressDialog progressDialog;
 
@@ -284,6 +288,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
 
         }
     }
+    //get email of user to send
     public void getEmail(){
 
         mCollectionRefusers.document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
