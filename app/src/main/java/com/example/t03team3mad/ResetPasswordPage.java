@@ -71,13 +71,13 @@ public class ResetPasswordPage extends AppCompatActivity {
                                     int random = new Random().nextInt(10000) + 1000;
                                     otp = String.valueOf(random);
                                     //Chris- send otp to user's email
-                                    MailApi mailApi= new MailApi(ResetPasswordPage.this,useremail,"Reset BookApp Password","Hi\nYour OTP To Reset Password is "+otp);
-                                    mailApi.execute();
+                                    MailApi email= new MailApi(ResetPasswordPage.this,useremail,"Reset BookApp Password","Hi\nYour OTP To Reset Password is "+otp);
+                                    email.execute();
                                     resetemail.setVisibility(View.GONE);
                                     reset.setVisibility(View.GONE);
                                     proceed.setVisibility(View.VISIBLE);
                                     code.setVisibility(View.VISIBLE);
-
+                                    
                                 }
                             }
 
@@ -123,6 +123,18 @@ public class ResetPasswordPage extends AppCompatActivity {
                             if(ConfirmPassword.equals("")){
                                 Toast.makeText(ResetPasswordPage.this, "Must Confirm the password", Toast.LENGTH_SHORT).show();
                             }
+                            if (Password.length() < 6)//Chris - to check password hit the minimal characters of the password requirement
+                            {
+                                Log.v(TAG, "Password is must be at least contain 6 characters");
+                                Toast.makeText(ResetPasswordPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
+
+                            }
+                            if (!ConfirmPassword.equals(Password))//Chris - To Confirm password
+                            {
+                                Log.v(TAG, "Password Do Not Match");
+                                Toast.makeText(ResetPasswordPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
+
+                            }
                             else{
                                 //Chris- login using user's past password
                                 AuthCredential credential = EmailAuthProvider.getCredential(useremail, oldpassword);
@@ -147,6 +159,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                                     confirmation.execute();
                                                                     Intent MainActivity = new Intent(ResetPasswordPage.this, LoginPage.class);
                                                                     startActivity(MainActivity);
+
                                                                 }
                                                             }
                                                         });
