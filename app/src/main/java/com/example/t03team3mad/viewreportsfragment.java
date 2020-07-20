@@ -175,7 +175,6 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
                         user.put("email", document.getString("email"));
                         mCollectionBanned.document(document.getId()).set(user);
                         //qh - removed this because it causes crash
-                        //sendemail();
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");

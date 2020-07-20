@@ -173,7 +173,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
                         user.put("role", "User");
                         user.put("email", document.getString("email"));
                         mCollectionUsers.document(document.getId()).set(user);
-                        //sendemail();
+
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");
@@ -265,10 +265,8 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
         password="bookapppassword";
         Subject = "Book verification";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
-                "One of your review has violated our rules and we have made the decision to take it down."+System.lineSeparator()+ System.lineSeparator()+
-                "Details of the reviews are: "+System.lineSeparator()+ System.lineSeparator()+
-                "Book: "+ title +System.lineSeparator()+ System.lineSeparator()+
-                "Review: "+review+System.lineSeparator()+ System.lineSeparator()+
+                "Your account has been unbanned."+System.lineSeparator()+ System.lineSeparator()+
+
                 "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
                 "Regards,"+System.lineSeparator()+
                 "Admins";

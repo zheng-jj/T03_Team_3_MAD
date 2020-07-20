@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.util.Log;
@@ -41,30 +40,27 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
-public class feedfragment extends Fragment {
+public class feedfragment extends AppCompatActivity {
     private RecyclerView mFirestoreList;
     private FirebaseFirestore firebaseFirestore;
     FirestoreRecyclerAdapter adapter;
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Book");
     private CollectionReference mCollectionRefuser = FirebaseFirestore.getInstance().collection("User");
     String idu;
-    Book book;
     Context c;
-
-    String text;
+    User user;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // jo -display fragment
-        View view = inflater.inflate(R.layout.subfragment_writereview, container, false);
-        c = this.getActivity();
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.feedfragment);
+        c = this;
+        Intent receivingEnd = getIntent();
+        user =receivingEnd.getParcelableExtra("user");
 
-
-
-        idu = String.valueOf(MainActivity.loggedinuser.getUseridu());
+        idu = String.valueOf(user.getUseridu());
         firebaseFirestore = FirebaseFirestore.getInstance();
-        mFirestoreList =view.findViewById(R.id.feedrecycler);
+        mFirestoreList =findViewById(R.id.feedrecycler);
         Log.d("Test",idu);
         Query query = firebaseFirestore.collection("User").document(idu).collection("Activity").orderBy("position", Query.Direction.DESCENDING).limit(10);
 
@@ -83,59 +79,18 @@ public class feedfragment extends Fragment {
 
                 holder.activity.setText(model.getActivity());
                 if(model.getActivity().equals("Review")){
-                    text = model.getUname() +" has made a review for the book "+model.getTitle() + System.lineSeparator() +"Rating: "+model.getRating();
-                    text = String.valueOf(text.charAt(0)).toUpperCase() + text.subSequence(1, text.length());
-                    holder.content.setText(text);
-
+                    holder.content.setText(model.getUname() +" has made a review with a rating of " +model.getRating()+" for book ~" +model.getTitle());
                 }
                 else if(model.getActivity().equals("Upvote")){
-                    text = model.getUname() + " has upvoted a review for book "+model.getTitle();
-                    text = String.valueOf(text.charAt(0)).toUpperCase() + text.subSequence(1, text.length());
-                    holder.content.setText(text);
+                    holder.content.setText(model.getUname() + " has upvoted a review for book ~"+model.getTitle());
                 }
-                holder.content.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String id= model.getIsbn();
-                        AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(id);
-                        try {
-                            book = tasktogetbook.get();
-
-
-
-                            if(book!=null) {
-                                mCollectionRef.document(model.getIsbn()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        book.setimglink(documentSnapshot.getString("coverurl"));
-                                        Bundle bundle = new Bundle();
-                                        bundle.putParcelable("book", book);
-                                        bookinfoFragment bpage = new bookinfoFragment();
-                                        bpage.setArguments(bundle);
-                                        //jj-updated the way we add fragments into the view
-                                        MainActivity.addFragment(bpage,getActivity(),"bookinfopage");
-                                    }
-                                });
-
-
-                            };
-                        } catch (ExecutionException e) {
-                            e.printStackTrace();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                });
-
 
 
             }
         };
         mFirestoreList.setHasFixedSize(true);
-        mFirestoreList.setLayoutManager(new LinearLayoutManager(c));
+        mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
         mFirestoreList.setAdapter(adapter);
-        return view;
 
 
 
@@ -161,18 +116,18 @@ public class feedfragment extends Fragment {
 
     };
     @Override
-    public void onStart() {
+    protected void onStart() {
         super.onStart();
 
         adapter.startListening();
     }
     @Override
-    public void onStop() {
+    protected void onStop() {
         super.onStop();
 
         adapter.stopListening();
     }
 
-    
+
 
 }

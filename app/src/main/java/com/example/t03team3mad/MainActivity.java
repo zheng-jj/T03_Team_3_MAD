@@ -150,15 +150,14 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
                     @Override
                     public void onTabReSelected(int tabId) {
-                        getSupportFragmentManager().popBackStack("FeedFragment",0);
-                        startuserfragment();
-                        try {
-                            getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("FeedFragment")).commit();
-                        }catch (Exception e){}
+                        Intent feedActivity = new Intent(MainActivity.this, feedfragment.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("user", loggedinuser);
+                        feedActivity.putExtras(bundle);
+
+                        startActivity(feedActivity);
                     }
                 });
-                startuserfragment();
-                getSupportFragmentManager().popBackStack("FeedFragment",0);
 
 
 
