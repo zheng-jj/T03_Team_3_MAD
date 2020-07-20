@@ -117,6 +117,9 @@ public class LoginPage extends AppCompatActivity {
                 }
             });
         }
+        //Chris-send sms and get permission
+        ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override

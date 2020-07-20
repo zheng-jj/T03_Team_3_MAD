@@ -172,7 +172,6 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                                 }
                                                             }
                                                         });
-
                                                         break;
                                                     }
                                                 }

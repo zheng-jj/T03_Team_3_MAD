@@ -36,8 +36,6 @@ public class LoginOTP extends AppCompatActivity {
         String loggedinuserID = Number.getString("PhoneNo");
         //Chris- get random number for otp
         random = new Random().nextInt(10000) + 1000;
-        //Chris-send sms and get permission
-        ActivityCompat.requestPermissions(LoginOTP.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(loggedinuserID, null, String.valueOf(random), null, null);
 //chris- check otp
