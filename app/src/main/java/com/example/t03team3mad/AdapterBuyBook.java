@@ -63,11 +63,13 @@ public class AdapterBuyBook extends RecyclerView.Adapter<AdapterBuyBook.ViewHold
     @Override
     public void onBindViewHolder(final AdapterBuyBook.ViewHolder viewHolder, final int position) {
 
+        //jj-loads data into the viewholder from the buy book object
         viewHolder.price.setText("Price: "+mitemlist.get(position).getPrice()+" "+mitemlist.get(position).getCurrency()+" (Excluding shipping)");
         String condition = mitemlist.get(position).getCondition();
         String todisplay = condition.substring(0, 1).toUpperCase() + condition.substring(1);
         viewHolder.condition.setText("Condition: "+todisplay);
         viewHolder.vendor.setText("Vendor: "+mitemlist.get(position).getVendorName());
+        //jj-sets on click listener which redirects users to the site to buy the book from
         viewHolder.url.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

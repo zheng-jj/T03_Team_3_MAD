@@ -36,6 +36,7 @@ public class AdapterNLB extends RecyclerView.Adapter<AdapterNLB.ViewHolder> {
         TextView library;
         Book book;
 
+        //jj-builds the viewholder
         ViewHolder(View itemView) {
             super(itemView);
             cardView = (CardView) itemView.findViewById(R.id.nlbcardview);
@@ -65,6 +66,8 @@ public class AdapterNLB extends RecyclerView.Adapter<AdapterNLB.ViewHolder> {
     @Override
     public void onBindViewHolder(final AdapterNLB.ViewHolder viewHolder, final int position) {
         try {
+            //jj-loads the data from the list of nlb objects
+
             String itemnumber = mitemlist.get(position).getItemNo();
             Boolean availability = mitemlist.get(position).getAvailability();
             String libraryname = mitemlist.get(position).getBranchName();
