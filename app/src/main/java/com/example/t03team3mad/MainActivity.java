@@ -58,7 +58,6 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                         // Log and toast
                         String msg = token;
                         Log.d(TAG, msg);
-                        Toast.makeText(MainActivity.this, "token" + msg, Toast.LENGTH_SHORT).show();
                     }
                 });
 
