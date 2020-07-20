@@ -25,6 +25,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -69,6 +74,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
     String Subject;
     String msg;
     Fragment f;
+    DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -287,6 +293,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                 adapterBan.notifyDataSetChanged();
                 sendemail();
                 sendNotification(userid);
+                setbanned(userid);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -330,6 +337,27 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
             }
         }.execute();
 
+    }
+
+    //qh - sets banned on the realtime database
+    public void setbanned(final String userid){
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Member");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if(snapshot.getKey().equals(userid)) {
+                        databaseReference.child(userid).child("banned").setValue("true");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
     }
 
 }
