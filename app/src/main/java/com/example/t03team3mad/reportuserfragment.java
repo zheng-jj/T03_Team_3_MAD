@@ -22,6 +22,7 @@ import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -51,6 +52,7 @@ public class reportuserfragment extends Fragment {
     String reason;
     Fragment f;
     private CollectionReference mCollectionRef = FirebaseFirestore.getInstance().collection("Reports");
+    private CollectionReference mCollectionRefusers = FirebaseFirestore.getInstance().collection("User");
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.report,container,false);
@@ -86,7 +88,7 @@ public class reportuserfragment extends Fragment {
                     mCollectionRef.add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
-                            sendemail();
+                            getEmail();
                         }
                     });
 
@@ -107,7 +109,6 @@ public class reportuserfragment extends Fragment {
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
         Subject = "Banned from elib";
-        To = "swah_jian_oon@hotmail.com";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
                 "You have reported "+ reportedname+ System.lineSeparator()+ System.lineSeparator()+
                 "Reason: "+ reason+ System.lineSeparator()+ System.lineSeparator()+
@@ -183,4 +184,21 @@ public class reportuserfragment extends Fragment {
 
         }
     }
+    public void getEmail(){
+
+        mCollectionRefusers.document(String.valueOf(MainActivity.loggedinuser.getUseridu())).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    To = documentSnapshot.getString("email");
+                    Log.d("Test","Email: " + To);
+                }
+               sendemail();
+
+            }
+        });
+
+
+    }
+
 }

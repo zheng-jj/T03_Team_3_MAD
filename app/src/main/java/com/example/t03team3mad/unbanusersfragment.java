@@ -86,6 +86,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.unbanusers,container,false);
+        f=this;
         getbannedusers();
         //qh - sets the recycler view
         RecyclerView banusers = (RecyclerView)view.findViewById(R.id.unbanrecycler);
@@ -165,6 +166,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
+                        To = document.getString("email");
                         Map<String, Object> user = new HashMap<>();
                         user.put("desc", document.getString("desc"));
                         user.put("following", document.getString("following"));
@@ -173,7 +175,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
                         user.put("role", "User");
                         user.put("email", document.getString("email"));
                         mCollectionUsers.document(document.getId()).set(user);
-
+                        sendemail();
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");
@@ -340,13 +342,19 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
         }
     }
     public void getEmail(){
-
+        Log.d("Test","UID: " + uid);
         mCollectionBanned.document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                To = documentSnapshot.getString("email");
-                Log.d("Test","Email: " + To);
-                sendemail();
+                if(documentSnapshot.exists()){
+                    To = documentSnapshot.getString("email");
+                    Log.d("Test","Email: " + To);
+                    sendemail();
+                }
+                else{
+                    Log.d("Test","document failed to get");
+                }
+
             }
         });
 
