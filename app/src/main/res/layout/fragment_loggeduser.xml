@@ -8,31 +8,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@+id/favouritebooks"
-            android:layout_marginBottom="-1dp"
-            android:background="#D3D3D3" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@+id/favouritebooks"
-            android:layout_marginTop="-1dp"
-            android:background="#D3D3D3" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_above="@+id/userReviews"
-            android:layout_marginBottom="-1dp"
-            android:background="#D3D3D3" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="35dp"
-            android:layout_marginTop="-1dp"
-            android:layout_above="@+id/userReviews"
-            android:background="#D3D3D3" />
 
         <ImageView
             android:id="@+id/userPic"
@@ -114,7 +89,14 @@
             android:layout_marginStart="155dp"
             android:layout_marginTop="117dp"
             android:text="user name" />
-
+        <TextView
+            android:layout_width="match_parent"
+            android:background="@layout/border"
+            android:layout_height="35dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:padding="0dp"
+            android:layout_marginTop="215dp"/>
         <TextView
             android:id="@+id/pastreviews"
             android:layout_width="match_parent"
@@ -128,6 +110,7 @@
             android:gravity="center_vertical"
             android:textStyle="bold" />
 
+
         <androidx.core.widget.NestedScrollView
             android:id="@+id/userReviews"
             android:layout_width="match_parent"
@@ -137,12 +120,22 @@
             android:layout_below="@id/pastreviews"
             android:layout_marginTop="0dp">
             <androidx.recyclerview.widget.RecyclerView
-                android:background="@drawable/border"
+                android:background="@layout/border"
                 android:id="@+id/userreviewprofile"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scrollbars="vertical"/>
+                android:scrollbars="vertical"
+                android:paddingRight="10dp"
+                android:paddingLeft="10dp"/>
         </androidx.core.widget.NestedScrollView>
+
+        <TextView
+            android:background="@layout/border"
+            android:padding="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_below="@id/userReviews"
+            android:layout_marginTop="10dp"/>
 
         <TextView
             android:padding="0dp"
@@ -150,20 +143,24 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_below="@id/userReviews"
-            android:layout_marginTop="0dp"
+            android:layout_marginTop="10dp"
             android:text="Favourite Books"
             android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"/>
 
+
         <androidx.recyclerview.widget.RecyclerView
-            android:background="@drawable/border"
-            android:layout_below="@id/favouritebooks"
             android:id="@+id/favbookslist"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scrollbars="horizontal"
+            android:layout_below="@id/favouritebooks"
+
             android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"/>
+            android:layout_marginTop="0dp"
+            android:background="@layout/border"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:scrollbars="horizontal" />
     </RelativeLayout>
 </FrameLayout>
