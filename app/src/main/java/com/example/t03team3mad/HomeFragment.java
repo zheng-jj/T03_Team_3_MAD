@@ -117,8 +117,9 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
                     Log.v(TAG,hi);
                     try {
                         if (task.get() != null) {
-                            if(!booklist2.contains(task.get()))
-                            booklist2.add(task.get());
+                            if(!booklist2.contains(task.get())) {
+                                booklist2.add(task.get());
+                            }
                         }
                     } catch (ExecutionException e) {
                         e.printStackTrace();

@@ -67,8 +67,10 @@ public class ResetPasswordPage extends AppCompatActivity {
                                 if(snapshot.child("email").getValue().toString().equals(useremail)) {
                                     uid = snapshot.getKey();
                                     oldpassword=snapshot.child("password").getValue().toString();
+                                    //Chris- get random number as otp
                                     int random = new Random().nextInt(10000) + 1000;
                                     otp = String.valueOf(random);
+                                    //Chris- send otp to user's email
                                     MailApi mailApi= new MailApi(ResetPasswordPage.this,useremail,"Reset BookApp Password","Hi\nYour OTP To Reset Password is "+otp);
                                     mailApi.execute();
                                     resetemail.setVisibility(View.GONE);
@@ -93,6 +95,7 @@ public class ResetPasswordPage extends AppCompatActivity {
         proceed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Chris- check otp input
                 String Code = code.getText().toString().trim();
                 if (Code.equals("")) {
                     Toast.makeText(ResetPasswordPage.this, "Enter OTP to proceed", Toast.LENGTH_SHORT).show();
@@ -113,6 +116,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                         public void onClick(View v) {
                             String Password = password.getText().toString().trim();
                             final String ConfirmPassword = Confirmpassword.getText().toString().trim();
+                            //Chris- check inputs
                             if(Password.equals("")){
                                 Toast.makeText(ResetPasswordPage.this, "Must enter a password", Toast.LENGTH_SHORT).show();
                             }
@@ -120,8 +124,9 @@ public class ResetPasswordPage extends AppCompatActivity {
                                 Toast.makeText(ResetPasswordPage.this, "Must Confirm the password", Toast.LENGTH_SHORT).show();
                             }
                             else{
+                                //Chris- login using user's past password
                                 AuthCredential credential = EmailAuthProvider.getCredential(useremail, oldpassword);
-                                // Prompt the user to re-provide their sign-in credentials
+                                //Chris - Prompt the user to re-provide their sign-in credentials
                                 Auth.signInWithEmailAndPassword(useremail, oldpassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                     @Override
                                     public void onComplete(@NonNull Task<AuthResult> task) {

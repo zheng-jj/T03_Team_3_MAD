@@ -183,8 +183,7 @@ public class LoginPage extends AppCompatActivity {
                                             databaseReference.child(uid).child("deviceID").setValue(androidId);
                                             //Chris - if login is successful
                                             progressBar.setVisibility(View.INVISIBLE);
-                                            //Chris - User is Logged in until he log out
-                                            Auto_login.edit().putBoolean("logged", true).apply();
+
                                             Log.v(TAG, "Requesting OTP");
                                             Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
 
