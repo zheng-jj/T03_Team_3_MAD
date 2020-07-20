@@ -73,6 +73,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.viewreports,container,false);
+        f = this;
 
 
 
@@ -165,6 +166,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
+                        To = document.getString("email");
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
                         Map<String, Object> user = new HashMap<>();
                         user.put("desc", document.getString("desc"));
@@ -175,6 +177,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
                         user.put("email", document.getString("email"));
                         mCollectionBanned.document(document.getId()).set(user);
                         //qh - removed this because it causes crash
+                        sendemail();
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");
