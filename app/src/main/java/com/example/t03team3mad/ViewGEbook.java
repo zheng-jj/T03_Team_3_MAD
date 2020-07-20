@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -29,11 +30,9 @@ import java.util.concurrent.ExecutionException;
 
 public class ViewGEbook extends Fragment {
     TextView pricer;
-    TextView rcurrency;
     TextView pricel;
-    TextView lcurrency;
-    TextView pdfavailtextv;
-    TextView epubavailtextv;
+    ImageView pdfavailtextv;
+    ImageView epubavailtextv;
     Button preview;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,9 +40,9 @@ public class ViewGEbook extends Fragment {
         final View view = inflater.inflate(R.layout.fragment_view_g_ebook,container,false);
 
         pricer = view.findViewById(R.id.priceretail);
-        rcurrency = view.findViewById(R.id.retailcurrency);
+
         pricel = view.findViewById(R.id.pricelist);
-        lcurrency = view.findViewById(R.id.listcurrency);
+
         pdfavailtextv = view.findViewById(R.id.pdftext);
         epubavailtextv = view.findViewById(R.id.epubtext);
         preview = view.findViewById(R.id.preview);
@@ -120,12 +119,11 @@ public class ViewGEbook extends Fragment {
                     String listcurrency;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("listPrice")){
                         listcurrency = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("listPrice").getString("currencyCode");
-                        lcurrency.setText(listcurrency);
+                        pricel.setText(listprice+" "+listcurrency);
                         Log.v(TAG,listcurrency);
                     }
                     else{
                         listcurrency = null;
-                        lcurrency.setText("");
                     }
 
                     String retailprice;
@@ -143,47 +141,33 @@ public class ViewGEbook extends Fragment {
                     String Retailcurrency;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").has("retailPrice")){
                         Retailcurrency = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("saleInfo").getJSONObject("retailPrice").getString("currencyCode");
-                        rcurrency.setText(Retailcurrency);
+                        pricer.setText(retailprice+" "+Retailcurrency);
                         Log.v(TAG,Retailcurrency);
                     }
 
                     else{
                         Retailcurrency = null;
-                        rcurrency.setText("");
                     }
 
 
 
 
                     Boolean epubavail;
-                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").has("epub")){
+                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").has("epub")) {
                         epubavail = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("epub").getBoolean("isAvailable");
-                        Log.v(TAG,epubavail.toString());
-                        if(epubavail){
-                            epubavailtextv.setText("Available in EPUB format");
+                        Log.v(TAG, epubavail.toString());
+                        if (epubavail) {
+                            epubavailtextv.setImageResource(R.drawable.tick2);
                         }
-                        else {
-                            epubavailtextv.setText("Unavailable in EPUB format");
-                        }
-                    }
-                    else {
-                        epubavailtextv.setText("Unavailable in EPUB format");
                     }
                     Boolean pdfavail;
-                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").has("pdf")){
+                    if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").has("pdf")) {
                         pdfavail = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("accessInfo").getJSONObject("pdf").getBoolean("isAvailable");
-                        Log.v(TAG,pdfavail.toString());
-                        if(pdfavail){
-                            pdfavailtextv.setText("Available in PDF format");
-                        }
-                        else {
-                            pdfavailtextv.setText("Unavailable in PDF format");
+                        Log.v(TAG, pdfavail.toString());
+                        if (pdfavail) {
+                            pdfavailtextv.setImageResource(R.drawable.tick2);
                         }
                     }
-                    else {
-                        pdfavailtextv.setText("Unavailable in PDF format");
-                    }
-
                     final String previewLink;
                     if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("previewLink")){
                         previewLink = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("previewLink");

@@ -38,6 +38,7 @@
             android:layout_marginRight="3dp"/>
 
         <Button
+            android:textAllCaps="false"
             android:layout_below="@id/library"
             android:layout_alignParentEnd="true"
             android:id="@+id/available"

@@ -77,10 +77,12 @@ public class ViewNLB extends Fragment {
                             Log.v(TAG,toadd.getAvailability().toString());
                             Log.v(TAG,toadd.getBranchName());
                             Log.v(TAG,toadd.getStatus());
+                            //jj- adds the new item to the list
                             nlbentries.add(toadd);
                         }
                     }
                 }
+                //jj- after items are added, update the adapter
                 adapterNLB.mitemlist = nlbentries;
                 adapterNLB.notifyDataSetChanged();
             }
