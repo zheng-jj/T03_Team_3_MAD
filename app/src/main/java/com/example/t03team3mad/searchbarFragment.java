@@ -234,7 +234,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
 
     //qh - get url (sets the url link to the search class object)
     public void geturl () {
-        //qh - get all isbn from firestore
+        //qh - get all isbn from firestore Book Collection
         mCollectionBook.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
