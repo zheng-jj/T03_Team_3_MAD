@@ -31,6 +31,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+//qh - adapter for banning users
 public class AdapterBan extends RecyclerView.Adapter<AdapterBan.ViewHolder>
 {
     List<User> userlist = new ArrayList<User>(){};

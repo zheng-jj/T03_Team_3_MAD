@@ -40,7 +40,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+//qh - code to verify books
 public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVerifyListener{
     private static final String TAG = "verifybooks";
     private CollectionReference mCollectionBooksNotVerified = FirebaseFirestore.getInstance().collection("BooksNotVerified");

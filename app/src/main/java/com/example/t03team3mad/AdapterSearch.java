@@ -29,7 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
-
+//qh - adapter for search
 public class AdapterSearch extends RecyclerView.Adapter<AdapterSearch.ViewHolder>
 {
     List<String> search = new ArrayList<String>(){};

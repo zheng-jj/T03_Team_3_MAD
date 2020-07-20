@@ -48,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-
+//qh - code to unban users
 public class unbanusersfragment extends Fragment implements AdapterBan.OnBanListener {
     private static final String TAG = "BanUsers";
     private CollectionReference mCollectionUsers = FirebaseFirestore.getInstance().collection("User");
@@ -62,7 +62,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.unbanusers,container,false);
         getbannedusers();
-
+        //qh - sets the recycler view
         RecyclerView banusers = (RecyclerView)view.findViewById(R.id.unbanrecycler);
         LinearLayoutManager banlayout = new LinearLayoutManager(getActivity());
         banusers.setLayoutManager(banlayout);
@@ -215,12 +215,13 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
     //qh - sets unbanned on the realtime database
     public void setunbanned(final String userid){
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Member");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if(snapshot.getKey().equals(userid)) {
-                        databaseReference.child(userid).child("banned").setValue("false");
+                        databaseReference.child(userid).child("banned").setValue(false);
+                        break;
                     }
                 }
             }

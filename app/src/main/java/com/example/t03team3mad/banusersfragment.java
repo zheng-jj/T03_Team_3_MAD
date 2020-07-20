@@ -60,7 +60,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+//qh - code to ban users
 public class banusersfragment extends Fragment implements AdapterBan.OnBanListener {
     private static final String TAG = "BanUsers";
     private CollectionReference mCollectionUsers = FirebaseFirestore.getInstance().collection("User");
@@ -164,6 +164,8 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                             @Override
                             public void onSuccess(Void aVoid) {
                                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                                Log.w(TAG, "Error deleting documen1231231t");
+                                Log.w(TAG, "Error deleting docum132123123ent");
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -173,6 +175,8 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                         });
                     }
                 }
+                setbanned(userid);
+                Log.w(TAG, "This is re");
             }
         });
     }
@@ -286,14 +290,12 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         mCollectionUsers.document(userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
-
                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
                 deletereviews(userid);
                 userList.remove(position);
                 adapterBan.notifyDataSetChanged();
-                sendemail();
-                sendNotification(userid);
-                setbanned(userid);
+                //sendemail();
+                //sendNotification(userid);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -342,14 +344,17 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
     //qh - sets banned on the realtime database
     public void setbanned(final String userid){
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Member");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if(snapshot.getKey().equals(userid)) {
-                        databaseReference.child(userid).child("banned").setValue("true");
+                        Log.w(TAG, "SET BANNED");
+                        databaseReference.child(userid).child("banned").setValue(true);
+                        break;
                     }
                 }
+                return;
             }
 
             @Override

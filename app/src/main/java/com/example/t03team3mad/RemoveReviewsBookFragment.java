@@ -37,7 +37,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
+//qh - code to remove reviews
 public class RemoveReviewsBookFragment extends Fragment implements AdapterDeleteReview.OnReviewListener {
     private static final String TAG = "RemoveReviewsBook";
     private CollectionReference mCollectionBooksReviews = FirebaseFirestore.getInstance().collection("Reviews");

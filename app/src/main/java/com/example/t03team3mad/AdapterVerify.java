@@ -29,7 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
-
+//qh - adapter to verify books
 public class AdapterVerify extends RecyclerView.Adapter<AdapterVerify.ViewHolder>
 {
     List<String> search = new ArrayList<String>(){};

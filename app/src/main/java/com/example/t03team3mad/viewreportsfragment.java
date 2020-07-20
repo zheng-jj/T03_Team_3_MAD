@@ -232,12 +232,13 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
     //qh - sets banned on the realtime database
     public void setbanned(final String userid){
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Member");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     if(snapshot.getKey().equals(userid)) {
-                        databaseReference.child(userid).child("banned").setValue("true");
+                        databaseReference.child(userid).child("banned").setValue(true);
+                        break;
                     }
                 }
             }

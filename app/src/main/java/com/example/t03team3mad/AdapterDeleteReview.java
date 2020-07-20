@@ -35,6 +35,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+//qh - adapter for deleting reviews
 public class AdapterDeleteReview extends RecyclerView.Adapter<AdapterDeleteReview.ViewHolder>
 {
     private static final String TAG = "AdapterDeleteReview";
