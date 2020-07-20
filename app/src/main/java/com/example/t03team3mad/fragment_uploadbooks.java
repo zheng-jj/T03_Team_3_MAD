@@ -1,5 +1,4 @@
 package com.example.t03team3mad;
-
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,15 +8,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import androidx.fragment.app.Fragment;
-
 import com.example.t03team3mad.model.Book;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -48,7 +42,7 @@ public class fragment_uploadbooks extends Fragment {
                 bookdescription = view.findViewById(R.id.bookAbout);
                 bookpdate = view.findViewById(R.id.bookpdate);
                 bookgenre = view.findViewById(R.id.bookGenre);
-
+                //qh - make sure the users fill in everything
                 //qh - check if book already exist in api
                 Book currentbook = null;
                 AsyncTask<String, Void, Book> tasktogetbook = new APIaccess().execute(bookisbn.getText().toString());
@@ -108,6 +102,7 @@ public class fragment_uploadbooks extends Fragment {
         return view;
     }
 
+    //qh - adds the book to a seperate firestore collection for verification
     public void addtofirestore(String isbn, String name, String author, String description, String pdate, String genre){
         Map<String, Object> book = new HashMap<>();
         book.put("booktitle", name);

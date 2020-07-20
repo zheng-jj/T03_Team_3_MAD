@@ -23,6 +23,7 @@ public class FirebaseStorageImages extends AsyncTask<String,Void,String> {
         final FirebaseStorage storage = FirebaseStorage.getInstance();
         final Bitmap[] my_image = new Bitmap[1];
         final StorageReference ref = storage.getReference().child(imagename);
+
         Log.v(TAG, String.valueOf(ref.getParent()));
         File directory = new File("/data/data/com.example.t03team3mad/app_imageDir");
         directory.mkdirs();
@@ -39,6 +40,7 @@ public class FirebaseStorageImages extends AsyncTask<String,Void,String> {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+
             }
         });
         return filetosave.getAbsolutePath();

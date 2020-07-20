@@ -60,6 +60,8 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
     @Override
     public void onBindViewHolder(final AdapterNotification.ViewHolder viewHolder, final int position) {
         try {
+
+            //jj-loads the type of notification to be diplayed
             String notiname = mitemlist.get(position).getNotiname();
             Boolean bool = mitemlist.get(position).getBool();
 
@@ -69,17 +71,19 @@ public class AdapterNotification extends RecyclerView.Adapter<AdapterNotificatio
             final SharedPreferences topics = viewHolder.cardView.getContext().getSharedPreferences("topics", Context.MODE_PRIVATE);
 
             final SharedPreferences unsub = viewHolder.cardView.getContext().getSharedPreferences("Unsub", Context.MODE_PRIVATE);
-
+            //jj-updates the shared preferences based on the notification options(which will be used to unsubscribe when app is stopped)
             viewHolder.switchButton.setOnCheckedChangeListener(new SwitchButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(SwitchButton view, boolean isChecked) {
                     if(isChecked){
+                        //jj-updates shared preference
                         topics.edit().putBoolean(mitemlist.get(position).getSharedpreferencename(),true).commit();
                         for(String userid : MainActivity.loggedinuser.getfollowingstring().split(";")){
                             unsub.edit().putBoolean("User"+userid+mitemlist.get(position).getNotitype(),false).commit();
                         }
                     }
                     else{
+                        //jj-updates shared preference so that the particular notification will be unsubscribed to
                         topics.edit().putBoolean(mitemlist.get(position).getSharedpreferencename(),false).commit();
                         for(String userid : MainActivity.loggedinuser.getfollowingstring().split(";")){
                             unsub.edit().putBoolean("User"+userid+mitemlist.get(position).getNotitype(),true).commit();

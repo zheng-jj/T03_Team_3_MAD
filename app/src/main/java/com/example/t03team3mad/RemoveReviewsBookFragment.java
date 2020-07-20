@@ -51,7 +51,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
+//qh - allows admin to remove reviews
 public class RemoveReviewsBookFragment extends Fragment implements AdapterDeleteReview.OnReviewListener {
     private static final String TAG = "RemoveReviewsBook";
     private CollectionReference mCollectionBooksReviews = FirebaseFirestore.getInstance().collection("Reviews");
@@ -135,7 +135,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
         AlertDialog alert = builder.create();
         alert.show();
     }
-
+    //qh - deletes the reviews from the review collection on the firestore
     public void deletereview(final String specialstring){
         mCollectionBooksReviews.document(specialstring).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -150,7 +150,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
             }
         });
     }
-
+    //qh - deletes reviews from review subcollection in User collection on the firestore
     public void deletereviewsub(final String isbn, final String rid, final int position){
         mCollectionBooks.document(isbn).collection("Reviews").document(rid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override

@@ -55,7 +55,7 @@
             android:id="@+id/recommendbookrecyclerview"
 
             android:layout_width="match_parent"
-            android:layout_height="185dp"
+            android:layout_height="wrap_content"
             android:layout_below="@id/recommendedtext"
             android:layout_centerInParent="true"
             android:background="@drawable/border"

@@ -177,6 +177,7 @@ public class ViewPrice extends Fragment {
 //            }
             Document doc = null;
             try {
+                //jj-converts the XML string into a document
                 doc = builder.parse(new InputSource( new StringReader(XmlString)) );
 
                 if(doc!=null){
@@ -194,7 +195,7 @@ public class ViewPrice extends Fragment {
 
                     Node nNode = nList.item(temp);
                     System.out.println("\nCurrent Element :" + nNode.getNodeName());
-
+                    //jj- gets the data from the XML string
                     if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                         Element eElement = (Element) nNode;
                         System.out.println("vendor : "
@@ -204,6 +205,8 @@ public class ViewPrice extends Fragment {
                                 .getElementsByTagName("price")
                                 .item(0)
                                 .getTextContent());
+
+                        //jj-creates the new buy book object to be displayed in recycler view
                         String vendor = eElement.getElementsByTagName("vendor").item(0).getTextContent();
                         String condition = eElement.getElementsByTagName("condition").item(0).getTextContent();
                         String price = eElement.getElementsByTagName("price").item(0).getTextContent();
@@ -213,6 +216,7 @@ public class ViewPrice extends Fragment {
                         listofVendors.add(toadd);
                     }
                 }
+                //jj-notify the recyclerview on the new list of vendors
                 adapterBuyBook = new AdapterBuyBook(listofVendors,context);
                 recyclerView.setAdapter(adapterBuyBook);
             } catch (IOException e) {

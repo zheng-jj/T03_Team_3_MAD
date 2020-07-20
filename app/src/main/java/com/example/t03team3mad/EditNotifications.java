@@ -24,10 +24,13 @@ public class EditNotifications extends AppCompatActivity {
 
         SharedPreferences topics = getSharedPreferences("topics", Context.MODE_PRIVATE);
 
+        //jj-default values for notification
         Boolean reviewnoti = topics.getBoolean("reviewnoti",true);
         Boolean follownoti = topics.getBoolean("follownoti",true);
         Boolean favnoti = topics.getBoolean("favnoti",true);
 
+
+        //jj-add notification objects to be used in recyclerview
         notificationsettings.add(new notifications("Notify when users make reviews",reviewnoti,"reviewnoti","review"));
         notificationsettings.add(new notifications("Notify when users follow another user",follownoti,"follownoti","follow"));
         notificationsettings.add(new notifications("Notify when users favourites a book",favnoti,"favnoti","fav"));

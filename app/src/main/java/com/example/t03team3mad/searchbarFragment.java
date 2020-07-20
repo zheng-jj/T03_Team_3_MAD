@@ -9,22 +9,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SearchView;
-
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.t03team3mad.model.Book;
 import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -33,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+//qh - searches for Users and Books
 public class searchbarFragment extends Fragment implements AdapterSearch.OnSearchListener {
     AdapterSearch searchadapter;
     private static final String TAG = "searchbarFragment";
@@ -68,7 +61,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         });
         return view;
         }
-    //qh - takes the search query and displays them (can search for author , books and users)
+    //qh - takes the search query and displays them through the adapter
     public void doMySearch(String query, View view){
         progressbar.setVisibility(View.VISIBLE);
         if (searchClassList.isEmpty()){
@@ -96,7 +89,6 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         LinearLayoutManager searchlayout = new LinearLayoutManager(getActivity());
         searchresults.setLayoutManager(searchlayout);
         searchadapter  = new AdapterSearch(searchClassList,this, this.getContext());
-        //qh - gets users
         searchresults.setAdapter(searchadapter);
     }
 
@@ -231,7 +223,7 @@ public class searchbarFragment extends Fragment implements AdapterSearch.OnSearc
         });
     }
 
-
+    //qh - get image of the user
     public static String getimagesearch(SearchClass searchClass) throws ExecutionException, InterruptedException {
         String filename = "user" + searchClass.getId() +".jpg";
         //jj gets image from firebase and saves to local storage

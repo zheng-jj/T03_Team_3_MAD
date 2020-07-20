@@ -143,81 +143,108 @@ public class fragment_editUserBooks extends Fragment {
             if(isbn!=null) {
                 String[] isbns = isbn.split(";");
                 for (String isbntosearch : isbns) {
-                    if(isbntosearch==null||isbntosearch=="") {
+                    if(isbntosearch.equals(null)||isbntosearch.equals("")) {
                         continue;
                     }
-                    Log.v(TAG, "Searching api isbn =" + isbntosearch);
-                    //jj-sets the url to GET data as json
-                    URL url = new URL(apiurl + "books/v1/volumes?q=isbn:" + isbntosearch);
-                    Log.v(TAG, "url searching =" + url.toString());
-                    //jj-opens the connection
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("GET");
-                    int responsecode = conn.getResponseCode();
-                    //jj-checks if the response is successful
-                    if (responsecode != 200)
-                        throw new RuntimeException("HttpResponseCode: " + responsecode);
-                    else {
-                        //jj - gets the string from the url
-                        JSONObject bookjsonobj = null;
-                        InputStream stream = conn.getInputStream();
-                        reader = new BufferedReader(new InputStreamReader(stream));
+                    final Boolean[] uploaded = {false};
+                    Log.v(TAG,"ISBn="+isbntosearch);
+                    FirebaseFirestore.getInstance().collection("Book").document(isbntosearch).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if (documentSnapshot.exists()) {
+                                if (documentSnapshot.getBoolean("uploaded")) {
 
-                        StringBuffer buffer = new StringBuffer();
-                        String line = "";
-                        while ((line = reader.readLine()) != null) {
-                            buffer.append(line + "\n");
-                        }
-                        String newstring = buffer.toString();
-                        bookjsonobj = new JSONObject(newstring);
-                        //jj - use this get data from json object to parse into object
-                        if (bookjsonobj != null) {
-                            String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
-                            Log.v(TAG, "Creation");
-                            Log.v(TAG, booktitle);
+                                    uploaded[0] =true;
+                                    Book toadd = new Book();
+                                    toadd.setratng(documentSnapshot.getLong("TotalRating").intValue());
+                                    toadd.setBookabout(documentSnapshot.getString("bookabout"));
+                                    toadd.setBookauthor(documentSnapshot.getString("bookauthor"));
+                                    toadd.setBookgenre(documentSnapshot.getString("bookgenre"));
+                                    toadd.setPdate(documentSnapshot.getString("bookpdate"));
+                                    toadd.setBooktitle(documentSnapshot.getString("booktitle"));
+                                    toadd.setIsbn(documentSnapshot.getId());
+                                    userfav.add(toadd);
+                                } else {
 
-                            //qh - added this block of code because some books dont have value
-                            String bookauthor;
-                            if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("authors")) {
-                                bookauthor = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
-                            } else {
-                                bookauthor = "Author Data not Available";
-                            }
-                            Log.v(TAG, bookauthor);
-                            //qh - added this block of code because some books dont have value
-                            String genrelist = "";
-                            String bookgenre;
-                            if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("categories")) {
-                                JSONArray subjects = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("categories");
-                                //jj-loops through all the subjects in the list of subjects and adds to a string
-                                for (int i = 0; i < subjects.length(); i++) {
-                                    genrelist = genrelist + subjects.getString(i) + ";";
                                 }
-                                //jj-removes the last ";" at the end of list of genres
-                                bookgenre = genrelist.substring(0, genrelist.length() - 1);
                             } else {
-                                bookgenre = "Genres not available";
                             }
-
-                            //qh - added this block of code because some books dont have value
-                            String bookdes;
-                            if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("description")) {
-                                bookdes = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("description");
-                            } else {
-                                bookdes = "No Description";
-                            }
-                            String bookpdate = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
-
-                            //jj-creates the book object with json data
-
-                            Book x = new Book(booktitle, bookauthor, bookdes, bookgenre, bookpdate, isbntosearch);
-                            Log.v(TAG, "Book created =" + x.getIsbn() + "====" + x.getBookgenre() + "====" + x.getBooktitle() + "====" + x.getBookabout());
-                            Log.v(TAG, "added+" + x.getIsbn());
-                            userfav.add(x);
                         }
+                    });
+                    //jj- if book is not uploaded, search api
+                    if (!uploaded[0]) {
+                        Log.v(TAG, "Searching api isbn =" + isbntosearch);
+                        //jj-sets the url to GET data as json
+                        URL url = new URL(apiurl + "books/v1/volumes?q=isbn:" + isbntosearch);
+                        Log.v(TAG, "url searching =" + url.toString());
+                        //jj-opens the connection
+                        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestMethod("GET");
+                        int responsecode = conn.getResponseCode();
+                        //jj-checks if the response is successful
+                        if (responsecode != 200)
+                            throw new RuntimeException("HttpResponseCode: " + responsecode);
                         else {
-                            Book x = new Book("Book data not available", "Book data not available", "Book data not available", "Book data not available", "Book data not available", "Book data not available");
-                            userfav.add(x);
+                            //jj - gets the string from the url
+                            JSONObject bookjsonobj = null;
+                            InputStream stream = conn.getInputStream();
+                            reader = new BufferedReader(new InputStreamReader(stream));
+
+                            StringBuffer buffer = new StringBuffer();
+                            String line = "";
+                            while ((line = reader.readLine()) != null) {
+                                buffer.append(line + "\n");
+                            }
+                            String newstring = buffer.toString();
+                            bookjsonobj = new JSONObject(newstring);
+                            //jj - use this get data from json object to parse into object
+                            if (bookjsonobj != null) {
+                                String booktitle = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("title");
+                                Log.v(TAG, "Creation");
+                                Log.v(TAG, booktitle);
+
+                                //qh - added this block of code because some books dont have value
+                                String bookauthor;
+                                if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("authors")) {
+                                    bookauthor = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("authors").getString(0);
+                                } else {
+                                    bookauthor = "Author Data not Available";
+                                }
+                                Log.v(TAG, bookauthor);
+                                //qh - added this block of code because some books dont have value
+                                String genrelist = "";
+                                String bookgenre;
+                                if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("categories")) {
+                                    JSONArray subjects = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getJSONArray("categories");
+                                    //jj-loops through all the subjects in the list of subjects and adds to a string
+                                    for (int i = 0; i < subjects.length(); i++) {
+                                        genrelist = genrelist + subjects.getString(i) + ";";
+                                    }
+                                    //jj-removes the last ";" at the end of list of genres
+                                    bookgenre = genrelist.substring(0, genrelist.length() - 1);
+                                } else {
+                                    bookgenre = "Genres not available";
+                                }
+
+                                //qh - added this block of code because some books dont have value
+                                String bookdes;
+                                if (bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").has("description")) {
+                                    bookdes = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("description");
+                                } else {
+                                    bookdes = "No Description";
+                                }
+                                String bookpdate = bookjsonobj.getJSONArray("items").getJSONObject(0).getJSONObject("volumeInfo").getString("publishedDate");
+
+                                //jj-creates the book object with json data
+
+                                Book x = new Book(booktitle, bookauthor, bookdes, bookgenre, bookpdate, isbntosearch);
+                                Log.v(TAG, "Book created =" + x.getIsbn() + "====" + x.getBookgenre() + "====" + x.getBooktitle() + "====" + x.getBookabout());
+                                Log.v(TAG, "added+" + x.getIsbn());
+                                userfav.add(x);
+                            } else {
+                                Book x = new Book("Book data not available", "Book data not available", "Book data not available", "Book data not available", "Book data not available", "Book data not available");
+                                userfav.add(x);
+                            }
                         }
                     }
                 }
@@ -226,12 +253,34 @@ public class fragment_editUserBooks extends Fragment {
 
             bookadapter.mBooklist=userfav;
             bookadapter.notifyDataSetChanged();
+
+        }
+
+
+
+        //jj-method that calls the searchbook method and runs it in background
+        @Override
+        protected Void doInBackground(String... urls) {
+            try {
+                searchbookbyisbn(urls[0]);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (JSONException ex) {
+                ex.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void avoid) {
+
+            super.onPostExecute(avoid);
+
             final User finalUsertoEdit = usertoEdit2;
-
-
 
             //choose to remove/unremove books from user's list
             final ArrayList<Book> finalUserfav = userfav;
+
             //jj- moved on click listener here so that so it wont crash
             savebookchanges.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -272,26 +321,7 @@ public class fragment_editUserBooks extends Fragment {
                     MainActivity.addFragment(fragment_editUser,getActivity(),"EditUserBooks");
                 }
             });
-        }
 
-
-
-        //jj-method that calls the searchbook method and runs it in background
-        @Override
-        protected Void doInBackground(String... urls) {
-            try {
-                searchbookbyisbn(urls[0]);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            } catch (JSONException ex) {
-                ex.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void avoid) {
-            super.onPostExecute(avoid);
             dialog.dismiss();
         }
     }

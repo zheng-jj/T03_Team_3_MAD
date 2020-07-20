@@ -1,5 +1,4 @@
 package com.example.t03team3mad;
-
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
@@ -9,17 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.t03team3mad.model.Book;
-import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -44,7 +37,6 @@ import com.squareup.okhttp.Response;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -125,7 +117,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
     @Override
     public void onBanClick(final int position) throws InterruptedException {
         Log.d(TAG, "BanClick");
-        //qh - alert to confirm whether to verify the book
+        //qh - alert to confirm whether to ban the user
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Delete User");
         builder.setMessage("Delete User? (All reviews made by the user will be deleted)");
@@ -147,14 +139,14 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         AlertDialog alert = builder.create();
         alert.show();
     }
-
+    //qh - getting the user image
     public static String getimagesearch(User user) throws ExecutionException, InterruptedException {
         String filename = "user" + user.getUseridu() +".jpg";
         AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
         String path = task.get();
         return path;
     }
-
+    //qh - delete all reviews made by the user
     public void deletereviews(final String userid) {
         mCollectionReviews.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -289,6 +281,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         });
 
     }
+    //qh - deletes user from the user collection
     public void deleteuser(final String userid, final int position){
         mCollectionUsers.document(userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -365,8 +358,8 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
 
     }
 
-    //qh - sets banned on the realtime database
-    public void setbanned(final String userid){
+    //qh - sets banned on the realtime database so that the user cannot log in
+        public void setbanned(final String userid){
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Member");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

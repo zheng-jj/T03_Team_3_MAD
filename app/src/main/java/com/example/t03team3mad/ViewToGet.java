@@ -38,7 +38,7 @@ public class ViewToGet extends AppCompatActivity {
         setContentView(R.layout.activity_view_get_details);
         Log.v(TAG,"started view where to get books");
         Intent intent = getIntent();
-
+        //jj-book is taken from bundle
         Bundle PassedData = intent.getExtras().getBundle("Bundle");
         if(PassedData.getParcelable("book")!=null&&PassedData.getString("User_UID")!=null) {
             book = PassedData.getParcelable("book");
@@ -46,6 +46,9 @@ public class ViewToGet extends AppCompatActivity {
             String isbn = book.getIsbn();
 
         }
+
+
+        //jj-adds fragments to the pager items
         FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(), FragmentPagerItems.with(this)
                 .add("Buy Online", ViewPrice.class)

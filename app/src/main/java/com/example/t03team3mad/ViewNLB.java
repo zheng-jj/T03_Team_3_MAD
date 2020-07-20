@@ -71,6 +71,7 @@ public class ViewNLB extends Fragment {
                     for (DocumentSnapshot dss : data) {
                         Map items =  dss.getData();
                         for(Object itemnum : items.keySet()){
+                            //jj-creates the new NLB object
                             Map itemdetails = (Map) items.get(itemnum);
                             NLB toadd = new NLB(String.valueOf(itemdetails.get("branch")), itemnum.toString(),Boolean.valueOf((Boolean) itemdetails.get("avail")) ,String.valueOf(itemdetails.get("status")));
                             Log.v(TAG,toadd.getItemNo());

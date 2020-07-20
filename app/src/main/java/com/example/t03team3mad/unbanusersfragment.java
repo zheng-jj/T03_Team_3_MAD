@@ -126,7 +126,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
     @Override
     public void onBanClick(final int position) throws InterruptedException {
         Log.d(TAG, "BanClick");
-        //qh - alert to confirm whether to verify the book
+        //qh - alert to confirm admin wants to unban the user
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Restore User");
         builder.setMessage("Restore User?");
@@ -148,7 +148,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
         AlertDialog alert = builder.create();
         alert.show();
     }
-
+    //qh - gets image of the user
     public static String getimagesearch(User user) throws ExecutionException, InterruptedException {
         String filename = "user" + user.getUseridu() +".jpg";
         AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
@@ -187,6 +187,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
         });
 
     }
+    //qh - deletes User from the banned users subcollection
     public void deleteuser(final String userid, final int position){
         mCollectionBanned.document(userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
