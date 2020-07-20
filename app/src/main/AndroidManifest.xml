@@ -28,7 +28,7 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".feedActivity" />
+        <activity android:name=".feedfragment" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="93495175815235124141252356125" />

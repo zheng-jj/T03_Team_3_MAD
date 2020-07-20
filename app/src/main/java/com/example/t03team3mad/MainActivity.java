@@ -15,22 +15,17 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.example.t03team3mad.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.FirebaseOptions;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessaging;
-import com.google.firebase.messaging.FirebaseMessagingService;
 import com.roughike.bottombar.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -155,20 +150,15 @@ public class MainActivity extends AppCompatActivity implements FragmentManager.O
                 bottomBar.setOnTabReselectListener(new OnTabReselectListener() {
                     @Override
                     public void onTabReSelected(int tabId) {
-                        Intent feedActivity = new Intent(MainActivity.this, feedActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("user", loggedinuser);
-                        feedActivity.putExtras(bundle);
-
-                        startActivity(feedActivity);
+                        getSupportFragmentManager().popBackStack("FeedFragment",0);
+                        startuserfragment();
+                        try {
+                            getSupportFragmentManager().beginTransaction().show(getSupportFragmentManager().findFragmentByTag("FeedFragment")).commit();
+                        }catch (Exception e){}
                     }
                 });
-                Intent feedActivity = new Intent(MainActivity.this, feedActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putParcelable("user", loggedinuser);
-                feedActivity.putExtras(bundle);
-
-                startActivity(feedActivity);
+                startuserfragment();
+                getSupportFragmentManager().popBackStack("FeedFragment",0);
 
 
 

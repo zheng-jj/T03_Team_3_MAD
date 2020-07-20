@@ -1,8 +1,10 @@
 package com.example.t03team3mad;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +26,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -38,16 +41,39 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 //qh - code to remove reviews
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 public class RemoveReviewsBookFragment extends Fragment implements AdapterDeleteReview.OnReviewListener {
     private static final String TAG = "RemoveReviewsBook";
     private CollectionReference mCollectionBooksReviews = FirebaseFirestore.getInstance().collection("Reviews");
     private CollectionReference mCollectionBooks = FirebaseFirestore.getInstance().collection("Book");
     List<Review> reviewsList = new ArrayList<>();
     AdapterDeleteReview adapterdeletereview;
+    String email;
+    String password;
+    String To;
+    String Subject;
+    String msg;
+    Fragment f;
+    String uid;
+    String title;
+    String review;
+    private CollectionReference mCollectionRefusers = FirebaseFirestore.getInstance().collection("User");
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.fragment_removereviewsbook,container,false);
+        f = this;
         getReviewBooks();
         //qh - sets the recycler view
         RecyclerView removereviews = (RecyclerView)view.findViewById(R.id.removereviewbookrecycler);
@@ -79,9 +105,11 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
     @Override
     public void onReviewClick(final int position) throws InterruptedException {
         final String userid = Integer.toString(reviewsList.get(position).getReviewidu());
+        uid = userid;
         String reviewid = Integer.toString(reviewsList.get(position).getReviewidu());
         String isbn = reviewsList.get(position).getReviewisbn();
-
+        title = reviewsList.get(position).getReviewTitle();
+        review = reviewsList.get(position).getReviewtext();
         AlertDialog.Builder builder = new AlertDialog.Builder(this.getContext());
         builder.setTitle("Delete Review");
         builder.setMessage("Delete Review? (Deleted reviews cannot be restored)");
@@ -112,6 +140,7 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
         mCollectionBooksReviews.document(specialstring).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
+                getEmail();
                 Log.d("CHECKING", "Deleted First");
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -174,4 +203,99 @@ public class RemoveReviewsBookFragment extends Fragment implements AdapterDelete
         }.execute();
 
     }
+    public void sendemail(){
+        email = "bookapp1234@gmail.com";
+        password="bookapppassword";
+        Subject = "Book verification";
+        msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
+                "One of your review has violated our rules and we have made the decision to take it down."+System.lineSeparator()+ System.lineSeparator()+
+                "Details of the reviews are: "+System.lineSeparator()+ System.lineSeparator()+
+                "Book: "+ title +System.lineSeparator()+ System.lineSeparator()+
+                "Review: "+review+System.lineSeparator()+ System.lineSeparator()+
+                "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
+                "Regards,"+System.lineSeparator()+
+                "Admins";
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth","true");
+        properties.put("mail.smtp.starttls.enable","true");
+        properties.put("mail.smtp.host","smtp.gmail.com");
+        properties.put("mail.smtp.port","587");
+
+        Session session = Session.getInstance(properties, new Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(email,password);
+            }
+        });
+
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(email));
+            message.setRecipients(Message.RecipientType.TO,InternetAddress.parse(To));
+            message.setSubject(Subject);
+            message.setText(msg);
+            new SendMail().execute(message);
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    private class SendMail extends AsyncTask<Message,String,String>{
+        private ProgressDialog progressDialog;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressDialog = ProgressDialog.show(f.getContext(),"Please Wait","Sending Email...",true,false);
+        }
+
+        @Override
+        protected String doInBackground(Message... messages) {
+            try {
+                Transport.send(messages[0]);
+                return"Success";
+            } catch (MessagingException e) {
+                e.printStackTrace();
+                return "Error";
+            }
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            progressDialog.dismiss();
+            if(s.equals("Success")){
+                AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
+                builder.setCancelable(false);
+                builder.setTitle(Html.fromHtml("<font color='#509324'>Success</font>"));
+                builder.setMessage("User has been notified.");
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+
+                    }
+                });
+                builder.show();
+
+            }
+
+        }
+    }
+    public void getEmail(){
+
+        mCollectionRefusers.document(uid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                To = documentSnapshot.getString("email");
+                Log.d("Test","Email: " + To);
+                sendemail();
+            }
+        });
+
+
+    }
+
 }

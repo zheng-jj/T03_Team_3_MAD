@@ -78,6 +78,7 @@ public class fragment_user extends Fragment {
     AdapterBookMain bookadapter;
     View pageview;
     ImageView Pic;
+    Button reportuser;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         userfav = new ArrayList<>();
@@ -111,6 +112,19 @@ public class fragment_user extends Fragment {
                 //jj-updated the way we add fragments into the view
                 MainActivity.addFragment(fragment,getActivity(),"UserFragment");
             }
+            reportuser = view.findViewById(R.id.reportuser);
+            reportuser.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    reportuserfragment reportfragment = new reportuserfragment();
+                    //jj- bundle to be moved to fragment
+                    Bundle bundle3 = new Bundle();
+                    bundle3.putParcelable("userreport", usertoView);
+                    reportfragment.setArguments(bundle3);
+                    //jj-updated the way we add fragments into the view
+                    MainActivity.addFragment(reportfragment,getActivity(),"ReportFragment");
+                }
+            });
 
             //gets user object from database
             final Button followthisuser = view.findViewById(R.id.follow1);

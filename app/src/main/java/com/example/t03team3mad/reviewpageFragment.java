@@ -40,6 +40,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
@@ -87,9 +88,13 @@ public class reviewpageFragment extends Fragment {
         // jo - findviewbyids
         TextView booktitle = view.findViewById(R.id.rtitle);
         ImageView bookimage = view.findViewById(R.id.bookimg);
-        String filename = "book" + book.getIsbn() +".jpg";
-        Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-        bookimage.setImageBitmap(bmImg);
+        if(book.getimglink() == null || book.getimglink() == ""){
+            bookimage.setImageResource(R.drawable.empty);
+
+        }
+        else {
+            Picasso.with(this.getActivity()).load(book.getimglink()).into(bookimage);
+        }
         booktitle.setText(book.getBooktitle());
         // jo - recyclerview
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -111,7 +116,9 @@ public class reviewpageFragment extends Fragment {
             protected void onBindViewHolder(@NonNull ReviewViewHolder holder, int position, @NonNull final Reviews model) {
                 holder.uName.setText(model.getUname());
                 holder.uReview.setText(model.getReview());
-                String filename = "user" + (model.getIsbn())+".jpg";
+                Log.d("Review",model.getReview());
+                String filename = "user" + (model.getUid())+".jpg";
+
                 Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
                 holder.uPic.setImageBitmap(bmImg);
                 holder.points.setText(String.valueOf(model.getVote()));

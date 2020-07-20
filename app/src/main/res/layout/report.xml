@@ -1,44 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-        <TextView
+        android:orientation="vertical"
+        >
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="40dp"
-            android:text="Report Users"
-            android:textAlignment="center"
-            android:textSize="30sp">
+            android:layout_height="120dp"
+            android:background="#adcbe3"
+            android:gravity="center_vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
 
-        </TextView>
+
+                android:text="Report User"
+                android:textAlignment="center"
+                android:textSize="30sp"
+                >
+
+            </TextView>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+
+            android:gravity="center_vertical">
+            <TextView
+                android:textSize="35sp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="User's Name"
+                android:textAlignment="center"></TextView>
+
+        </LinearLayout>
+
+
         <EditText
+
             android:layout_width="300dp"
-            android:layout_height="75dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:hint="User's name"
+            android:id="@+id/nameuser"
             android:layout_gravity="center"></EditText>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical">
+            <TextView
+                android:textSize="35sp"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:text="Report"
+                android:textAlignment="center"></TextView>
+
+        </LinearLayout>
+
         <EditText
+
             android:layout_width="300dp"
-            android:layout_height="75dp"
-            android:layout_marginTop="20dp"
-            android:hint="User's ID"
+            android:layout_height="170dp"
+            android:layout_marginTop="30dp"
+            android:hint="Write the report here"
+            android:id="@+id/reportcontent"
             android:layout_gravity="center"></EditText>
-        <EditText
-            android:layout_width="300dp"
-            android:layout_height="75dp"
-            android:layout_marginTop="20dp"
-            android:hint="User's ID"
-            android:layout_gravity="center"></EditText>
+
         <Button
             android:layout_width="150dp"
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:hint="Report"
+            android:id="@+id/report"
             android:layout_gravity="center"></Button>
 
     </LinearLayout>
+
+
 </FrameLayout>
+

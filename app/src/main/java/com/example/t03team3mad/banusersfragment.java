@@ -74,6 +74,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
     String Subject;
     String msg;
     Fragment f;
+    User clickeduser;
     DatabaseReference databaseReference;
 
     @Override
@@ -131,10 +132,10 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         builder.setCancelable(false);
         builder.setPositiveButton("Delete", new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
-                User clickeduser = userList.get(position);
+                clickeduser = userList.get(position);
 
                 final String userid = Integer.toString(userList.get(position).getUseridu());
-                addtofirestorebanned(userid, position);
+                getEmail(userid, position);
 
             }
         });
@@ -184,8 +185,8 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
         Subject = "Banned from elib";
-        To = "swah_jian_oon@hotmail.com";
-        msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+"You have violated our rules and we have decided to take action and have banned your account."+System.lineSeparator()+ System.lineSeparator()+"If you have any issues regarding this ban, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+ "Regards,"+System.lineSeparator()+ System.lineSeparator()+"Admins";
+
+        msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+"You have violated our rules and we have decided to take action and have banned your account."+System.lineSeparator()+ System.lineSeparator()+"If you have any issues regarding this ban, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+ "Regards,"+System.lineSeparator()+"Admins";
         Properties properties = new Properties();
         properties.put("mail.smtp.auth","true");
         properties.put("mail.smtp.starttls.enable","true");
@@ -242,7 +243,7 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                 AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
                 builder.setCancelable(false);
                 builder.setTitle(Html.fromHtml("<font color='#509324'>Success</font>"));
-                builder.setMessage("Mail send successfully.");
+                builder.setMessage("User has been notified.");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -291,9 +292,13 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
             @Override
             public void onSuccess(Void aVoid) {
                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
+                sendemail();
                 deletereviews(userid);
                 userList.remove(position);
                 adapterBan.notifyDataSetChanged();
+
+
+                sendNotification(userid);
                 //sendemail();
                 //sendNotification(userid);
             }
@@ -303,6 +308,22 @@ public class banusersfragment extends Fragment implements AdapterBan.OnBanListen
                 Log.w(TAG, "Error deleting document", e);
             }
         });
+    }
+    public void getEmail(final String userid, final int position){
+        Log.d("Test","idu: "+String.valueOf(clickeduser.getUseridu()));
+        mCollectionUsers.document(String.valueOf(clickeduser.getUseridu())).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if(documentSnapshot.exists()){
+                    To = documentSnapshot.getString("email");
+                    Log.d("Test","Email: " + To);
+                }
+                addtofirestorebanned(userid,position);
+
+            }
+        });
+
+
     }
 
     //jj- the following is used for notifications

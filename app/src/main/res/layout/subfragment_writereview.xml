@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     >
 
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -14,66 +14,94 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2">
+            android:layout_weight="0.2"
+            android:background="#adcbe3"
+
+            >
 
             <ImageView
                 android:id="@+id/bookimg2"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="80dp"></ImageView>
+                android:layout_marginLeft="55dp"></ImageView>
 
             <TextView
                 android:id="@+id/rtitle2"
                 android:layout_width="180dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"></TextView>
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="20sp"></TextView>
 
 
         </LinearLayout>
-        <LinearLayout
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.8"
-            android:orientation="vertical">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.2"
-                android:orientation="horizontal"
-                android:gravity="center">
+            android:layout_weight="0.8">
 
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+            <RatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="wrap_content"
+                android:layout_height="74dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="68dp"
+                android:layout_marginEnd="86dp"
+                android:layout_marginBottom="360dp"
+                android:numStars="5"
+                android:stepSize="0.5"></RatingBar>
 
-                    android:numStars="5"
-                    android:stepSize="0.5" />
+            <TextView
+                android:layout_width="192dp"
+                android:layout_height="74dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="113dp"
+                android:layout_marginBottom="439dp"
+                android:text="Ratings"
+                android:textAlignment="center"
+                android:textSize="40sp"></TextView>
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="0.8"
-                android:orientation="vertical">
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:id="@+id/reviewinput"></EditText>
+            <TextView
+                android:layout_width="197dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="113dp"
+                android:layout_marginBottom="301dp"
+                android:text="Review"
+                android:textAlignment="center"
+                android:textSize="40sp"></TextView>
 
-                <Button
-                    android:id="@+id/enter"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:text="add"
-                    android:layout_gravity="center_horizontal"></Button>
+            <EditText
+                android:layout_width="306dp"
+                android:layout_height="168dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="49dp"
+                android:layout_marginBottom="124dp"
+                android:id="@+id/reviewinput"
+                android:hint="Review here"
+                android:textAlignment="textStart"></EditText>
+
+            <Button
+                android:layout_width="150dp"
+                android:layout_height="60dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginEnd="125dp"
+                android:layout_marginBottom="41dp"
+                android:text="Add"
+                android:textSize="20sp"
+                android:id="@+id/enter"></Button>
+        </RelativeLayout>
 
 
-            </LinearLayout>
-        </LinearLayout>
+    </LinearLayout>
 
 
-    </androidx.appcompat.widget.LinearLayoutCompat>
 </FrameLayout>

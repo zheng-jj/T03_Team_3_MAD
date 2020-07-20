@@ -8,9 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
@@ -35,6 +37,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -48,6 +51,7 @@ public class fragment_addreview extends Fragment {
     TextView rtitle2;
     Button enter;
     EditText editreview;
+
     String idu;
     String ISBN;
     int idr;
@@ -56,6 +60,7 @@ public class fragment_addreview extends Fragment {
     String review;
     String name;
     String title;
+    ImageView bookimage;
     int aid;
     int temp = 0;
     List<String> uids = new ArrayList<String>();
@@ -89,19 +94,41 @@ public class fragment_addreview extends Fragment {
         ISBN = book.getIsbn();
         Log.d("Test",ISBN);
         ratings = view.findViewById(R.id.ratingBar);
+        bookimage = view.findViewById(R.id.bookimg2);
+        if(book.getimglink() == null || book.getimglink() == ""){
+            bookimage.setImageResource(R.drawable.empty);
+
+        }
+        else {
+            Picasso.with(this.getActivity()).load(book.getimglink()).into(bookimage);
+        }
 
 
         // onclick listener for adding review + storing review into database
         enter.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                Log.v("Click","Button clicked");
-                sendNotification();
                 review = editreview.getText().toString();
-                ratevalue = ratings.getRating();
-                Log.v("RateValue", String.valueOf(ratevalue));
-                getidr();
+                Log.d("COUNT", String.valueOf(review.length()));
+                if(review.length()==0){
+                    Toast.makeText(getActivity().getApplicationContext(),"No empty input",Toast.LENGTH_SHORT).show();
 
-                getFragmentManager().popBackStack("HomeFragment",0);
+
+                }
+                else if(review.length() > 100){
+                    Toast.makeText(getActivity().getApplicationContext(),"Max word count 100",Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    sendNotification();
+
+                    ratevalue = ratings.getRating();
+                    Log.v("RateValue", String.valueOf(ratevalue));
+                    getidr();
+
+                    getFragmentManager().popBackStack("HomeFragment",0);
+
+                }
+
             }
         });
 
@@ -270,4 +297,5 @@ public class fragment_addreview extends Fragment {
         }.execute();
 
     }
+
 }

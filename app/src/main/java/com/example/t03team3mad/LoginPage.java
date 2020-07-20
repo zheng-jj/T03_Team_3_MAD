@@ -73,7 +73,7 @@ public class LoginPage extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         final String androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
-        Auto_login.edit().putBoolean("logged",false).apply();
+        //Auto_login.edit().putBoolean("logged",false).apply();
         //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){
             databaseReference.orderByChild("email").equalTo(user.getEmail()).addValueEventListener(new ValueEventListener() {

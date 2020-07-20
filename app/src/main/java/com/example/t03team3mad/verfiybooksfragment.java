@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldPath;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,6 +47,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
     private static final String TAG = "verifybooks";
     private CollectionReference mCollectionBooksNotVerified = FirebaseFirestore.getInstance().collection("BooksNotVerified");
     private CollectionReference mCollectionBook = FirebaseFirestore.getInstance().collection("Book");
+    private CollectionReference mCollectionBookuser = FirebaseFirestore.getInstance().collection("User");
     List<Book> tobeVerified = new ArrayList<>();
     AdapterVerify verifyadapter;
     String email;
@@ -56,7 +59,8 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
     String title;
     String about;
     String genre;
-
+    String userid;
+    List<String> ids = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.verifybooks,container,false);
@@ -82,6 +86,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
+                                ids.add(document.getString("uid"));
                                 Book newbook = new Book(document.getString("booktitle"),document.getString("bookauthor"),document.getString("bookabout"),document.getString("bookgenre"),document.getString("bookpdate"),document.getId());
                                 tobeVerified.add(newbook);
                             }
@@ -107,6 +112,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                 title = tobeVerified.get(position).getBooktitle();
                 about =tobeVerified.get(position).getBookabout();
                 genre = tobeVerified.get(position).getBookgenre();
+                userid = ids.get(position);
                 //qh - uploaded books are different from books retrieved from the api in that
                 //the data is stored directly in firestore. Books retrieved from api dont have any information stored in firestore.
                 Map<String, Object> book = new HashMap<>();
@@ -134,7 +140,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
 
                         tobeVerified.remove(position);
                         verifyadapter.notifyDataSetChanged();
-                        sendemail(position);
+                        getEmail(position);
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -173,7 +179,6 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
         email = "bookapp1234@gmail.com";
         password="bookapppassword";
         Subject = "Book verification";
-        To = "swah_jian_oon@hotmail.com";
         msg="Dear Sir/Madam," + System.lineSeparator() +System.lineSeparator()+
             "The book you have submitted has been verified and added into the app."+System.lineSeparator()+ System.lineSeparator()+
             "Details of the book are: "+System.lineSeparator()+ System.lineSeparator()+
@@ -181,7 +186,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                 "Book About: " + about+System.lineSeparator()+ System.lineSeparator()+
                 "Book Genre: " + genre+System.lineSeparator()+ System.lineSeparator()+
 
-            "If you have any issues regarding this ban, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
+            "If you have any issues regarding this issue, please reply to this email."+System.lineSeparator()+ System.lineSeparator()+
             "Regards,"+System.lineSeparator()+
             "Admins";
         Properties properties = new Properties();
@@ -239,7 +244,7 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
                 AlertDialog.Builder builder = new AlertDialog.Builder(f.getContext());
                 builder.setCancelable(false);
                 builder.setTitle(Html.fromHtml("<font color='#509324'>Success</font>"));
-                builder.setMessage("Mail send successfully.");
+                builder.setMessage("User has been notified.");
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -253,4 +258,18 @@ public class verfiybooksfragment extends Fragment implements AdapterVerify.OnVer
 
         }
     }
+    public void getEmail(final int position){
+        Log.d("Test","uid: " +userid);
+        mCollectionBookuser.document(userid).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                To = documentSnapshot.getString("email");
+                Log.d("Test","Email: " + To);
+                sendemail(position);
+            }
+        });
+
+
+    }
+    
 }
