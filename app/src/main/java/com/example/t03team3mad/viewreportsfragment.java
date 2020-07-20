@@ -174,7 +174,8 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
                         user.put("role", "User");
                         user.put("email", document.getString("email"));
                         mCollectionBanned.document(document.getId()).set(user);
-                        sendemail();
+                        //qh - removed this because it causes crash
+                        //sendemail();
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");
@@ -201,6 +202,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
                         //qh - this removes the item from the recycler view
                         reports.remove(position);
                         viewreportsadapter.notifyDataSetChanged();
+                        deletereviews(userid);
                         setbanned(userid);
                     }
                 }).addOnFailureListener(new OnFailureListener() {

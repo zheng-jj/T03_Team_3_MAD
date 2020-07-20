@@ -36,7 +36,8 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="Title: "
-                android:textStyle="bold|italic" />
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/useridview"
@@ -44,7 +45,8 @@
                 android:layout_height="wrap_content"
                 android:padding="5dp"
                 android:text="User : "
-                android:textStyle="bold|italic"
+                android:textColor="#000000"
+                android:textStyle="bold"
                 android:textSize="12dp" />
             <TextView
                 android:id="@+id/reviewview"

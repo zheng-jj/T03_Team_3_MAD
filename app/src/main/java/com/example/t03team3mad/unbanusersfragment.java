@@ -173,7 +173,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
                         user.put("role", "User");
                         user.put("email", document.getString("email"));
                         mCollectionUsers.document(document.getId()).set(user);
-                        sendemail();
+                        //sendemail();
                         deleteuser(userid, position);
                     } else {
                         Log.d(TAG, "No such document");
