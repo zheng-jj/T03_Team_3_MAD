@@ -1,6 +1,4 @@
 package com.example.t03team3mad;
-
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -8,29 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.t03team3mad.model.Book;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+//qh - this links to all the other admin actions
 public class adminhomepagefragment extends Fragment {
     private static final String TAG = "AdminHome";
     Button verify;
@@ -43,7 +21,7 @@ public class adminhomepagefragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         final View view = inflater.inflate(R.layout.adminhomepage,container,false);
 
-        //qh - verify button
+        //qh - button to go and verify uploaded books
         verify = view.findViewById(R.id.verifyoption);
         verify.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +29,7 @@ public class adminhomepagefragment extends Fragment {
                 String role = MainActivity.loggedinuser.getAdmin();
                 if (role.equals("Admin")){
                     //qh - make sure users are admins
-                    verfiybooksfragment nextFragment = new verfiybooksfragment();  //will go the fragment where it will display all the books of that genre
+                    verfiybooksfragment nextFragment = new verfiybooksfragment();
                     MainActivity.addFragment(nextFragment,getActivity(),"Verify Books");
                 }
                 Log.v(TAG,role);
@@ -60,7 +38,7 @@ public class adminhomepagefragment extends Fragment {
                 }
             }
         });
-
+        //qh - button to go to ban users
         ban = view.findViewById(R.id.deleteuser);
         ban.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +46,7 @@ public class adminhomepagefragment extends Fragment {
                 String role = MainActivity.loggedinuser.getAdmin();
                 if (role.equals("Admin")){
                     //qh - make sure users are admins
-                    banusersfragment nextFragment = new banusersfragment();  //will go the fragment where it will display all the books of that genre
+                    banusersfragment nextFragment = new banusersfragment();
                     MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
                 }
                 Log.v(TAG,role);
@@ -77,7 +55,7 @@ public class adminhomepagefragment extends Fragment {
                 }
             }
         });
-
+        //qh - button to go and remove reviews
         reviews = view.findViewById(R.id.removereview);
         reviews.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +63,7 @@ public class adminhomepagefragment extends Fragment {
                 String role = MainActivity.loggedinuser.getAdmin();
                 if (role.equals("Admin")){
                     //qh - make sure users are admins
-                    RemoveReviewsBookFragment nextFragment = new RemoveReviewsBookFragment();  //will go the fragment where it will display all the books of that genre
+                    RemoveReviewsBookFragment nextFragment = new RemoveReviewsBookFragment();
                     MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
                 }
                 Log.v(TAG,role);
@@ -94,7 +72,7 @@ public class adminhomepagefragment extends Fragment {
                 }
             }
         });
-
+        //qh - button to go and unban banned users
         unbanbutton = view.findViewById(R.id.unbanusers);
         unbanbutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +80,7 @@ public class adminhomepagefragment extends Fragment {
                 String role = MainActivity.loggedinuser.getAdmin();
                 if (role.equals("Admin")){
                     //qh - make sure users are admins
-                    unbanusersfragment nextFragment = new unbanusersfragment();  //will go the fragment where it will display all the books of that genre
+                    unbanusersfragment nextFragment = new unbanusersfragment();
                     MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
                 }
                 Log.v(TAG,role);
@@ -111,7 +89,7 @@ public class adminhomepagefragment extends Fragment {
                 }
             }
         });
-
+        //qh - button to go and view all reports made
         viewreports = view.findViewById(R.id.viewreports);
         viewreports.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -119,7 +97,7 @@ public class adminhomepagefragment extends Fragment {
                 String role = MainActivity.loggedinuser.getAdmin();
                 if (role.equals("Admin")){
                     //qh - make sure users are admins
-                    viewreportsfragment nextFragment = new viewreportsfragment();  //will go the fragment where it will display all the books of that genre
+                    viewreportsfragment nextFragment = new viewreportsfragment();
                     MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
                 }
                 Log.v(TAG,role);

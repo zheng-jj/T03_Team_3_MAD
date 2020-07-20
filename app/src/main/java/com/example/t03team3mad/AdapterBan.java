@@ -1,35 +1,22 @@
 package com.example.t03team3mad;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.LayoutInflater;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.t03team3mad.model.Author;
-import com.example.t03team3mad.model.Book;
-import com.example.t03team3mad.model.SearchClass;
 import com.example.t03team3mad.model.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
-import com.squareup.picasso.Picasso;
 
 //qh - adapter for banning users
 public class AdapterBan extends RecyclerView.Adapter<AdapterBan.ViewHolder>
@@ -88,6 +75,7 @@ public class AdapterBan extends RecyclerView.Adapter<AdapterBan.ViewHolder>
 
     @Override
     public void onBindViewHolder(AdapterBan.ViewHolder viewHolder, int position) {
+        //qh - to make sure it wont crash
         if (userlist.get(position).getUsername() == null) {
             viewHolder.texttitle.setText("no username");
         }
@@ -111,9 +99,6 @@ public class AdapterBan extends RecyclerView.Adapter<AdapterBan.ViewHolder>
             e.printStackTrace();
         }
         Log.v(TAG,"image id being used = user+"+ userlist.get(position).getUseridu());
-        //String filename = "user" +Integer.toString(user.getUseridu()) +".jpg";
-        //jj gets image from firebase and saves to local storage
-        //sets the profile image
         File check = new File(path);
         int count = 2;
         while(count>0){

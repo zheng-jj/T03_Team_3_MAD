@@ -127,7 +127,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
         alert.show();
     }
 
-    //qh- get all reports
+    //qh- get all reports from the Reports collection on the firestore
     public void getallreports () {
         mCollectionReports
                 .get()
@@ -158,6 +158,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
                 });
     }
 
+    //qh - adds the user to the banned user collection on the firestore
     public void addtofirestorebanned(final String userid, final int position){
         DocumentReference docRef = mCollectionUsers.document(userid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -189,7 +190,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
         });
 
     }
-
+    //qh - removes users from the User collection on the firestore
     public void deleteuser(final String userid, final int position){
         mCollectionUsers.document(userid).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
@@ -223,7 +224,7 @@ public class viewreportsfragment extends Fragment implements AdapterViewReports.
             }
         });
     }
-
+    //qh - removes all reviews made by the user
     public void deletereviews(final String userid) {
         mCollectionReviews.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
