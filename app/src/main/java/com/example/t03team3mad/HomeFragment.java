@@ -168,12 +168,11 @@ public class HomeFragment extends Fragment implements AdapterGenreInHomeFragment
                 }
                 Log.v(TAG,role);
                 if (role.equals("User")){
+                    adminbutton.setVisibility(View.GONE);
                     Toast.makeText(getContext(), "Only admins can access this page!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
-
         return view;
     }
 
