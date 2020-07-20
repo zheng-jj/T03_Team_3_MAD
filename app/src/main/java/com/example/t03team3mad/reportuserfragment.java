@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -65,18 +67,31 @@ public class reportuserfragment extends Fragment {
             @Override
             public void onClick(View v) {
                 reason = String.valueOf(report.getText());
-                final Map<String, Object> data = new HashMap<String,Object>();
-                data.put("uid",String.valueOf(MainActivity.loggedinuser.getUseridu()));
-                data.put("uname",String.valueOf(MainActivity.loggedinuser.getUsername()));
-                data.put("aid",String.valueOf(user.getUseridu()));
-                data.put("aname",user.getUsername());
-                data.put("reason",String.valueOf(report.getText()));
-                mCollectionRef.add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        sendemail();
-                    }
-                });
+                if(reason.length()==0){
+                    Toast.makeText(getActivity().getApplicationContext(),"No empty input",Toast.LENGTH_SHORT).show();
+
+
+                }
+                else if(reason.length() > 100){
+                    Toast.makeText(getActivity().getApplicationContext(),"Max word count 100",Toast.LENGTH_SHORT).show();
+
+                }
+                else{
+                    final Map<String, Object> data = new HashMap<String,Object>();
+                    data.put("uid",String.valueOf(MainActivity.loggedinuser.getUseridu()));
+                    data.put("uname",String.valueOf(MainActivity.loggedinuser.getUsername()));
+                    data.put("aid",String.valueOf(user.getUseridu()));
+                    data.put("aname",user.getUsername());
+                    data.put("reason",String.valueOf(report.getText()));
+                    mCollectionRef.add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            sendemail();
+                        }
+                    });
+
+                }
+
 
 
             }
