@@ -23,6 +23,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -51,6 +56,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
     private CollectionReference mCollectionReviews = FirebaseFirestore.getInstance().collection("Reviews");
     List<User> userList = new ArrayList<>();
     AdapterBan adapterBan;
+    DatabaseReference databaseReference;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -160,6 +166,7 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
                 Log.d(TAG, "DocumentSnapshot successfully deleted!");
                 userList.remove(position);
                 adapterBan.notifyDataSetChanged();
+                setunbanned(userid);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -204,5 +211,25 @@ public class unbanusersfragment extends Fragment implements AdapterBan.OnBanList
             }
         }.execute();
 
+    }
+    //qh - sets unbanned on the realtime database
+    public void setunbanned(final String userid){
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Member");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    if(snapshot.getKey().equals(userid)) {
+                        databaseReference.child(userid).child("banned").setValue("false");
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+
+        });
     }
 }

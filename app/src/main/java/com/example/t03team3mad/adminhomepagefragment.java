@@ -37,6 +37,7 @@ public class adminhomepagefragment extends Fragment {
     Button ban;
     Button reviews;
     Button unbanbutton;
+    Button viewreports;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -107,6 +108,23 @@ public class adminhomepagefragment extends Fragment {
                 Log.v(TAG,role);
                 if (role.equals("User")){
                     Toast.makeText(getContext(), "Only admins can remove reviews!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        viewreports = view.findViewById(R.id.viewreports);
+        viewreports.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String role = MainActivity.loggedinuser.getAdmin();
+                if (role.equals("Admin")){
+                    //qh - make sure users are admins
+                    viewreportsfragment nextFragment = new viewreportsfragment();  //will go the fragment where it will display all the books of that genre
+                    MainActivity.addFragment(nextFragment,getActivity(),"Ban Users");
+                }
+                Log.v(TAG,role);
+                if (role.equals("User")){
+                    Toast.makeText(getContext(), "Only admins can view reports!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
