@@ -37,7 +37,6 @@
 
         <ImageView
             android:adjustViewBounds="true"
-            android:scaleType="fitXY"
             android:id="@+id/userPic"
             android:layout_width="85dp"
             android:layout_height="85dp"

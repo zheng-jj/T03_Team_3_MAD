@@ -418,6 +418,7 @@ public class fragment_user extends Fragment {
                 Pic.setImageBitmap(BitmapFactory.decodeFile(path));
                 Pic.invalidate();
                 if(Pic.getDrawable() != null){
+                    Pic.setBackgroundResource(0);
                     TimeUnit.MILLISECONDS.sleep(100);
                     Pic.setImageBitmap(BitmapFactory.decodeFile(path));
                     break;
