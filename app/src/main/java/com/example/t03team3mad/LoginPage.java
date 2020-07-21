@@ -94,6 +94,7 @@ public class LoginPage extends AppCompatActivity {
 
                             Bundle bundle = new Bundle();
                             bundle.putString("User_UID", uid);
+                            Auto_login.edit().putBoolean("logged",true).apply();
                             Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
                             MainActivity.putExtra("User_UID", bundle);
                             Log.v(TAG, "sending this uid to main activity " + uid);
@@ -104,8 +105,6 @@ public class LoginPage extends AppCompatActivity {
                             Log.v(TAG, "Account has been logged in another device.Please login again");
                             Toast.makeText(LoginPage.this, "Account has been logged in another device.Please login again", Toast.LENGTH_SHORT).show();
                             Auto_login.edit().putBoolean("logged", false).apply();
-                            Intent MainActivity = new Intent(LoginPage.this, LoginPage.class);
-                            startActivity(MainActivity);
                         }
                         finish();
                     }
@@ -161,7 +160,7 @@ public class LoginPage extends AppCompatActivity {
                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                         if(snapshot.child("banned").getValue().toString().equals("false")) {
                                             uid = snapshot.getKey();
-                                            String name = snapshot.child("name").getValue().toString();
+                                           // String name = snapshot.child("name").getValue().toString();
                                             String number = snapshot.child("phonenumber").getValue().toString();
 
                                             //Chris - show that it works
@@ -176,22 +175,22 @@ public class LoginPage extends AppCompatActivity {
                                             SharedPreferences.Editor editor = Auto_login.edit();
                                             editor.putString("UserID", uid).apply();
                                             //Chris - Check if user record is already recorded in the local database or not
-                                            Boolean CheckIfRecordExisted = CheckRecord(uid);
-                                            if (!CheckIfRecordExisted) {
-                                                insertUser(uid, name, "About", null, null);
-                                                Log.v(TAG, "Inserted Successfully");
-                                            } else {
-                                                Log.v(TAG, "User Record Is Already Inserted");
-                                            }
+                                           // Boolean CheckIfRecordExisted = CheckRecord(uid);
+                                          //  if (!CheckIfRecordExisted) {
+                                          //      insertUser(uid, name, "About", null, null);
+                                        //        Log.v(TAG, "Inserted Successfully");
+                                        //    } else {
+                                      //          Log.v(TAG, "User Record Is Already Inserted");
+                                       //     }
                                             databaseReference.child(uid).child("deviceID").setValue(androidId);
                                             //Chris - if login is successful
                                             progressBar.setVisibility(View.INVISIBLE);
 
-                                            Log.v(TAG, "Requesting OTP");
-                                            Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
+                                            //Log.v(TAG, "Requesting OTP");
+                                            //Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
 
                                             //Chris - Intent to homepage and pass user id to it
-                                            Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
+                                            Intent MainActivity = new Intent(LoginPage.this, MainActivity.class);
                                             MainActivity.putExtra("User_UID", bundle);
                                             MainActivity.putExtra("PhoneNo", bundle2);
 

@@ -85,10 +85,11 @@ public class RegisterPage extends AppCompatActivity {
             @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
-                String email, password, name, confirmPassword;
+                String email, password, name, confirmPassword,phoneno;
                 email = EnterEmail.getText().toString();
                 password = EnterPassword.getText().toString();
                 name = EnterName.getText().toString();
+                phoneno=phone.getText().toString();
                 confirmPassword = ConfirmPassword.getText().toString();
                 number=cp.getFullNumber();
                 //Chris - Verification for inputs
@@ -103,11 +104,12 @@ public class RegisterPage extends AppCompatActivity {
                     Toast.makeText(RegisterPage.this, "Email Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(number.equals("")){
+                if(phoneno.equals("")){
                     Log.v(TAG, "Number Required");//Chris - Check for empty Inputs
-                    Toast.makeText(RegisterPage.this, "Number Required", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterPage.this, "Phone Number Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 if (password.equals(""))//Chris - Check for empty Inputs
                 {
                     Log.v(TAG, "Password Required");

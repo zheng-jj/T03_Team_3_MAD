@@ -156,7 +156,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                                             //Chris - find user id for the login user
                                             databaseReference.orderByChild("email").equalTo(useremail).addValueEventListener(new ValueEventListener() {
                                                 @Override
-                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
                                                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                                         //Chris - if login is successful
                                                         user.updatePassword(ConfirmPassword).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -165,9 +165,10 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                                 if (task.isSuccessful()) {
                                                                     Log.d(TAG, "User password updated.");
                                                                     databaseReference.child(uid).child("password").setValue(ConfirmPassword);
+                                                                    databaseReference.child(uid).child("deviceID").setValue("0");
+                                                                    Intent MainActivity = new Intent(ResetPasswordPage.this, LoginPage.class);
                                                                     MailApi confirmation = new MailApi(ResetPasswordPage.this, useremail, "Reset BookApp Password", "Dear Sir/Madam,\n\nYour password has recently been reset"+"\n\nRegards,\nAdmins");
                                                                     confirmation.execute();
-                                                                    Intent MainActivity = new Intent(ResetPasswordPage.this, LoginPage.class);
                                                                     startActivity(MainActivity);
                                                                 }
                                                             }
@@ -180,6 +181,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                 public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                                 }
+
                                             });
 
                                         }
@@ -190,6 +192,7 @@ public class ResetPasswordPage extends AppCompatActivity {
 
                                     }
                                 });
+
                             }
                         }
                     });

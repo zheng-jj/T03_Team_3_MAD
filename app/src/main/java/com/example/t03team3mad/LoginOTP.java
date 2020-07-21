@@ -38,6 +38,7 @@ public class LoginOTP extends AppCompatActivity {
         random = new Random().nextInt(10000) + 1000;
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(loggedinuserID, null, String.valueOf(random), null, null);
+        
 //chris- check otp
      sendcode.setOnClickListener(new View.OnClickListener() {
          @Override
