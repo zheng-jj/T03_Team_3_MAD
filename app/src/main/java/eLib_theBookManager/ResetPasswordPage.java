@@ -82,6 +82,8 @@ public class ResetPasswordPage extends AppCompatActivity {
                                 }
                             }
 
+
+
                         }
 
                         @Override
@@ -164,6 +166,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                                 }
                                                             }
                                                         });
+                                                        break;
                                                     }
                                                 }
 
