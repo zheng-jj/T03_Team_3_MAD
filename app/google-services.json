@@ -8,9 +8,46 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:296793201193:android:ec58c3795f5b111e871a38",
+        "android_client_info": {
+          "package_name": "com.T03G3.eLibtheBookManager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "296793201193-2s8di4h900ovl7nvbtepnetb61h4c62g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.T03G3.eLibtheBookManager",
+            "certificate_hash": "7a793275793dbf3b71d0a7ba067745248515cf96"
+          }
+        },
+        {
+          "client_id": "296793201193-cla7k0cn7ch0uf4fig2mei2cgkle3uii.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFx_OER1evnvrokL7ez3miEGqH2LLCW-o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "296793201193-cla7k0cn7ch0uf4fig2mei2cgkle3uii.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:296793201193:android:677d0a12110ec1a5871a38",
         "android_client_info": {
-          "package_name": "com.example.t03team3mad"
+          "package_name": "com.T03G3.eLibtheBookManager"
         }
       },
       "oauth_client": [
@@ -18,7 +55,7 @@
           "client_id": "296793201193-stgkt0poelbspj7e7vefd19927e9m4f3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.example.t03team3mad",
+            "package_name": "com.T03G3.eLibtheBookManager",
             "certificate_hash": "7a793275793dbf3b71d0a7ba067745248515cf96"
           }
         },

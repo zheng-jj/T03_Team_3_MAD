@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.t03team3mad">
+    package="com.T03G3.eLibtheBookManager">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.SEND_SMS"/>
@@ -13,11 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".LoginOTP"/>
-        <activity android:name=".EditNotifications" />
-        <activity android:name=".ViewToGet" />
-        <activity android:name=".ResetPasswordPage" />
-        <activity android:name=".LoginPage">
+        <activity android:name="com.T03G3.eLibtheBookManager.LoginOTP"/>
+        <activity android:name="com.T03G3.eLibtheBookManager.EditNotifications" />
+        <activity android:name="com.T03G3.eLibtheBookManager.ViewToGet" />
+        <activity android:name="com.T03G3.eLibtheBookManager.ResetPasswordPage" />
+        <activity android:name="com.T03G3.eLibtheBookManager.LoginPage">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
 
@@ -26,16 +26,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterPage" />
+        <activity android:name="com.T03G3.eLibtheBookManager.RegisterPage" />
         <activity
-            android:name=".MainActivity"
+            android:name="com.T03G3.eLibtheBookManager.MainActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".feedfragment" />
+        <activity android:name="com.T03G3.eLibtheBookManager.feedfragment" />
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="93495175815235124141252356125" />
         <service
-            android:name=".MyFirebaseMessagingService"
+            android:name="com.T03G3.eLibtheBookManager.MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
