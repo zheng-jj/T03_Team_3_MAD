@@ -104,6 +104,11 @@ public class RegisterPage extends AppCompatActivity {
                     Toast.makeText(RegisterPage.this, "Phone Number Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
+                if(phoneno.length()<7 ||phoneno.length()>15 ){
+                    Log.v(TAG, "Phone is not valid");//Chris - Check for empty Inputs
+                    Toast.makeText(RegisterPage.this, "Phone is not valid", Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
                 if (password.equals(""))//Chris - Check for empty Inputs
                 {

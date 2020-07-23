@@ -46,7 +46,7 @@ public class LoginOTP extends AppCompatActivity {
         random = new Random().nextInt(10000) + 1000;
         //Chris-send sms and get permission
         SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(PhoneNumber, null, String.valueOf(random), null, null);
+        smsManager.sendTextMessage(PhoneNumber, null, "Your OTP Is "+ random, null, null);
 //chris- check otp
         sendcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -57,7 +57,7 @@ public class LoginOTP extends AppCompatActivity {
                     Log.v(TAG,"Enter OTP to proceed");
                     return;
                 }
-                if (!otp.equals(otp)) {
+                if (!otp.equals(String.valueOf(random))) {
                     Toast.makeText(LoginOTP.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
                     Log.v(TAG,"Incorrect OTP");
                     return;

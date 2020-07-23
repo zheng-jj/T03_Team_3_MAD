@@ -35,6 +35,7 @@ public class ResetPasswordPage extends AppCompatActivity {
     DatabaseReference databaseReference;
     String otp;
     String uid,oldpassword,useremail;
+    Boolean True= true;
     long maxid = 0;
     private static final String TAG = "";
     @Override
@@ -66,20 +67,25 @@ public class ResetPasswordPage extends AppCompatActivity {
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                                 if(snapshot.child("email").getValue().toString().equals(useremail)) {
+
                                     uid = snapshot.getKey();
                                     oldpassword=snapshot.child("password").getValue().toString();
+
                                     //Chris- get random number as otp
                                     int random = new Random().nextInt(10000) + 1000;
                                     otp = String.valueOf(random);
+
                                     //Chris- send otp to user's email
-                                    MailApi email= new MailApi(ResetPasswordPage.this,useremail,"Reset BookApp Password","Hi\nYour OTP To Reset Password is "+otp);
-                                    email.execute();
+                                    MailApi fd= new MailApi(ResetPasswordPage.this,useremail,"Reset BookApp Password","Dear Sir/Mdm\n\nYour OTP To Reset Password is " +otp+"\n\n Regards,\n Admins");
+                                    fd.execute();
+
                                     resetemail.setVisibility(View.GONE);
                                     reset.setVisibility(View.GONE);
                                     proceed.setVisibility(View.VISIBLE);
                                     code.setVisibility(View.VISIBLE);
-
+                                    break;
                                 }
+
                             }
 
 
@@ -100,14 +106,18 @@ public class ResetPasswordPage extends AppCompatActivity {
             public void onClick(View v) {
                 //Chris- check otp input
                 String Code = code.getText().toString().trim();
+
                 if (Code.equals("")) {
                     Toast.makeText(ResetPasswordPage.this, "Enter OTP to proceed", Toast.LENGTH_SHORT).show();
                     Log.v(TAG,"Enter OTP to proceed");
                 }
+
                 if (!Code.equals(otp)) {
                     Toast.makeText(ResetPasswordPage.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
                     Log.v(TAG,"Incorrect OTP");
+
                 }
+
                 else {
                     code.setVisibility(View.GONE);
                     proceed.setVisibility(View.GONE);
@@ -122,21 +132,23 @@ public class ResetPasswordPage extends AppCompatActivity {
                             //Chris- check inputs
                             if(Password.equals("")){
                                 Toast.makeText(ResetPasswordPage.this, "Must enter a password", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             if(ConfirmPassword.equals("")){
                                 Toast.makeText(ResetPasswordPage.this, "Must Confirm the password", Toast.LENGTH_SHORT).show();
+                                return;
                             }
                             if (Password.length() < 6)//Chris - to check password hit the minimal characters of the password requirement
                             {
                                 Log.v(TAG, "Password is must be at least contain 6 characters");
                                 Toast.makeText(ResetPasswordPage.this, "Password is must be at least contain 6 characters", Toast.LENGTH_SHORT).show();
-
+                                return;
                             }
                             if (!ConfirmPassword.equals(Password))//Chris - To Confirm password
                             {
                                 Log.v(TAG, "Password Do Not Match");
                                 Toast.makeText(ResetPasswordPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
-
+                                return;
                             }
                             else{
                                 //Chris- login using user's past password
@@ -156,17 +168,26 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                             @Override
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()) {
+                                                                    //chris - to make it oni email once even if it lagged
+                                                                    if (True==true) {
+                                                                        MailApi confirmation = new MailApi(ResetPasswordPage.this, useremail, "Reset BookApp Password", "Dear Sir/Mdm\n\nYour password has recently be reset\n\n Regards,\n Admins");
+                                                                        confirmation.execute();
+                                                                        True=false;
+                                                                    }
+
                                                                     Log.d(TAG, "User password updated.");
+                                                                    Toast.makeText(ResetPasswordPage.this, "User password update", Toast.LENGTH_SHORT).show();
                                                                     databaseReference.child(uid).child("password").setValue(ConfirmPassword);
-                                                                    MailApi confirmation = new MailApi(ResetPasswordPage.this, useremail, "Reset BookApp Password", "Hi\nYour password has recently be reset");
-                                                                    confirmation.execute();
+
                                                                     Intent MainActivity = new Intent(ResetPasswordPage.this, LoginPage.class);
                                                                     startActivity(MainActivity);
 
+
+
                                                                 }
+
                                                             }
                                                         });
-                                                        break;
                                                     }
                                                 }
 
@@ -180,6 +201,7 @@ public class ResetPasswordPage extends AppCompatActivity {
                                         else {
                                             Log.v(TAG,"Reset Failed");
                                             Toast.makeText(ResetPasswordPage.this, "Reset Failed", Toast.LENGTH_LONG).show();
+                                            return;
                                         }
 
                                     }

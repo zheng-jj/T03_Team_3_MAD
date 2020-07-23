@@ -112,8 +112,12 @@ public class LoginPage extends AppCompatActivity {
                 }
             });
         }
-        ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+        if (ActivityCompat.checkSelfPermission(LoginPage.this,
+                Manifest.permission.SEND_SMS) !=
+                PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
 
+        }
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,7 +173,7 @@ public class LoginPage extends AppCompatActivity {
                                             if (ActivityCompat.checkSelfPermission(LoginPage.this,
                                                     Manifest.permission.SEND_SMS) !=
                                                     PackageManager.PERMISSION_GRANTED) {
-                                                ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS, Manifest.permission.READ_SMS}, PackageManager.PERMISSION_GRANTED);
+                                                ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
                                                 progressBar.setVisibility(View.INVISIBLE);
 
                                                 if (ActivityCompat.checkSelfPermission(LoginPage.this,
@@ -186,32 +190,34 @@ public class LoginPage extends AppCompatActivity {
 
                                             }
                                             else {
+
                                                 //Chris -  save user id in shared preference
-                                                SharedPreferences.Editor editor = Auto_login.edit();
-                                                editor.putString("UserID", uid).apply();
-                                                //Chris - Check if user record is already recorded in the local database or not
-                                                //Boolean CheckIfRecordExisted = CheckRecord(uid);
-                                                //  if (!CheckIfRecordExisted) {
-                                                //        insertUser(uid, name, "About", null, null);
-                                                //        Log.v(TAG, "Inserted Successfully");
-                                                //    } else {
-                                                //         Log.v(TAG, "User Record Is Already Inserted");
-                                                //       }
+                                                    SharedPreferences.Editor editor = Auto_login.edit();
+                                                    editor.putString("UserID", uid).apply();
+                                                    //Chris - Check if user record is already recorded in the local database or not
+                                                    //Boolean CheckIfRecordExisted = CheckRecord(uid);
+                                                    //  if (!CheckIfRecordExisted) {
+                                                    //        insertUser(uid, name, "About", null, null);
+                                                    //        Log.v(TAG, "Inserted Successfully");
+                                                    //    } else {
+                                                    //         Log.v(TAG, "User Record Is Already Inserted");
+                                                    //       }
 
-                                                //Chris - if login is successful
-                                                progressBar.setVisibility(View.INVISIBLE);
+                                                    //Chris - if login is successful
+                                                    progressBar.setVisibility(View.INVISIBLE);
 
-                                                Log.v(TAG, "Requesting OTP");
-                                                Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
+                                                    Log.v(TAG, "Requesting OTP");
+                                                    Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
 
-                                                //Chris - Intent to homepage and pass user id to it
-                                                Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
-                                                MainActivity.putExtra("User_UID", bundle);
-                                                MainActivity.putExtra("PhoneNo", bundle2);
+                                                    //Chris - Intent to homepage and pass user id to it
+                                                    Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
+                                                    MainActivity.putExtra("User_UID", bundle);
+                                                    MainActivity.putExtra("PhoneNo", bundle2);
 
-                                                Log.v(TAG, "sending this uid to main activity " + uid);
-                                                startActivity(MainActivity);
-                                                finish();
+                                                    Log.v(TAG, "sending this uid to main activity " + uid);
+                                                    startActivity(MainActivity);
+                                                    finish();
+
                                             }
                                         }
                                         else {
