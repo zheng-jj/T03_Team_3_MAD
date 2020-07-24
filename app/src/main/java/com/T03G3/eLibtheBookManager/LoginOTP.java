@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +23,7 @@ public class LoginOTP extends AppCompatActivity {
     int random;
     SharedPreferences Auto_login;
     DatabaseReference databaseReference;
+    Boolean emailsent;
     private static final String TAG = "";
 
     @Override
@@ -34,19 +34,24 @@ public class LoginOTP extends AppCompatActivity {
         sendcode = findViewById(R.id.SubmitCode);
         Auto_login=getSharedPreferences("LoginButton",MODE_PRIVATE);
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
+        //Chris- get device id that is logging in
         final String androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
         Intent intent = getIntent();
-        final Bundle uid = intent.getExtras().getBundle("User_UID");
-        final String UID = uid.getString("User_UID");
-        Bundle Number = intent.getExtras().getBundle("PhoneNo");
-        String PhoneNumber = Number.getString("PhoneNo");
-
+        final Bundle bundle = intent.getExtras().getBundle("User_UID");
+        final String UID = bundle.getString("User_UID");
+        final String Email = bundle.getString("email");
         //Chris- get random number for otp
+        emailsent=true;
         random = new Random().nextInt(10000) + 1000;
-        //Chris-send sms and get permission
-        SmsManager smsManager = SmsManager.getDefault();
-        smsManager.sendTextMessage(PhoneNumber, null, "Your OTP Is "+ random, null, null);
+
+        //chris - make sure only one email is being sent
+        if(emailsent==true){
+            MailApi fd= new MailApi(LoginOTP.this,Email,"eLibTheBookManager Login OTP","Dear Sir/Mdm\n\nYour OTP to login is " +random+"\n\n Regards,\n Admins");
+            fd.execute();
+            emailsent=false;
+
+        }
 //chris- check otp
         sendcode.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +73,7 @@ public class LoginOTP extends AppCompatActivity {
                     Log.v(TAG,"Successfully Logged In");
                     databaseReference.child(UID).child("deviceID").setValue(androidId);
                     Intent MainActivity = new Intent(LoginOTP.this, MainActivity.class);
-                    MainActivity.putExtra("User_UID", uid);
+                    MainActivity.putExtra("User_UID", UID);
                     startActivity(MainActivity);
                     finish();
                 }

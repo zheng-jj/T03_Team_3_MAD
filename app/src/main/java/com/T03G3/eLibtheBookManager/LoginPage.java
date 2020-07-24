@@ -1,10 +1,8 @@
 package com.T03G3.eLibtheBookManager;
 
-import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -16,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -43,6 +40,7 @@ public class LoginPage extends AppCompatActivity {
     String uid;
     DatabaseReference databaseReference;
     ProgressBar progressBar;
+
     //jj-constructors to get the context of the login page from other fragments
     public LoginPage(Context context)
     {
@@ -75,6 +73,7 @@ public class LoginPage extends AppCompatActivity {
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         final String androidId = Settings.Secure.getString(getContentResolver(),
                 Settings.Secure.ANDROID_ID);
+
         //Auto_login.edit().putBoolean("logged",false).apply();
         //Chris - User is already logged in
         if(Auto_login.getBoolean("logged",false)){
@@ -112,12 +111,7 @@ public class LoginPage extends AppCompatActivity {
                 }
             });
         }
-        if (ActivityCompat.checkSelfPermission(LoginPage.this,
-                Manifest.permission.SEND_SMS) !=
-                PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
 
-        }
         //Chris -Login button listener
         LoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,7 +154,6 @@ public class LoginPage extends AppCompatActivity {
                                         if(snapshot.child("banned").getValue().toString().equals("false")) {
                                             uid = snapshot.getKey();
                                             String name = snapshot.child("name").getValue().toString();
-                                            String number = snapshot.child("phonenumber").getValue().toString();
 
                                             //Chris - show that it works
                                             Log.v(TAG, "the user id sent= " + uid);
@@ -168,61 +161,39 @@ public class LoginPage extends AppCompatActivity {
                                             //Chris -  save user id as bundle
                                             Bundle bundle = new Bundle();
                                             bundle.putString("User_UID", uid);
-                                            Bundle bundle2 = new Bundle();
-                                            bundle2.putString("PhoneNo", number);
-                                            if (ActivityCompat.checkSelfPermission(LoginPage.this,
-                                                    Manifest.permission.SEND_SMS) !=
-                                                    PackageManager.PERMISSION_GRANTED) {
-                                                ActivityCompat.requestPermissions(LoginPage.this, new String[]{Manifest.permission.SEND_SMS}, PackageManager.PERMISSION_GRANTED);
-                                                progressBar.setVisibility(View.INVISIBLE);
+                                            bundle.putString("email", email);
+                                            //Chris -  save user id in shared preference
+                                            SharedPreferences.Editor editor = Auto_login.edit();
+                                            editor.putString("UserID", uid).apply();
+                                            //Chris - Check if user record is already recorded in the local database or not
+                                            //Boolean CheckIfRecordExisted = CheckRecord(uid);
+                                            //  if (!CheckIfRecordExisted) {
+                                            //        insertUser(uid, name, "About", null, null);
+                                            //        Log.v(TAG, "Inserted Successfully");
+                                            //    } else {
+                                            //         Log.v(TAG, "User Record Is Already Inserted");
+                                            //       }
 
-                                                if (ActivityCompat.checkSelfPermission(LoginPage.this,
-                                                        Manifest.permission.SEND_SMS) !=
-                                                        PackageManager.PERMISSION_GRANTED) {
-                                                    Toast.makeText(LoginPage.this, "Must allow sms permission for app to verify your login", Toast.LENGTH_SHORT).show();
-                                                    Log.v(TAG,"Must allow sms permission for app to verify your login");
-                                                }
-                                                else{
-                                                    Toast.makeText(LoginPage.this, "Sms Permission Enabled. Login in again", Toast.LENGTH_SHORT).show();
-                                                    Log.v(TAG,"Sms Permission Enabled. Login in again");
-                                                }
+                                            //Chris - if login is successful
+                                            progressBar.setVisibility(View.INVISIBLE);
 
+                                            Log.v(TAG, "Requesting OTP");
+                                            Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
 
-                                            }
-                                            else {
+                                            //Chris - Intent to homepage and pass user id to it
+                                            Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
+                                            MainActivity.putExtra("User_UID", bundle);
+                                            MainActivity.putExtra("email", bundle);
+                                            Log.v(TAG, "sending this uid to main activity " + uid);
+                                            startActivity(MainActivity);
+                                            finish();
 
-                                                //Chris -  save user id in shared preference
-                                                    SharedPreferences.Editor editor = Auto_login.edit();
-                                                    editor.putString("UserID", uid).apply();
-                                                    //Chris - Check if user record is already recorded in the local database or not
-                                                    //Boolean CheckIfRecordExisted = CheckRecord(uid);
-                                                    //  if (!CheckIfRecordExisted) {
-                                                    //        insertUser(uid, name, "About", null, null);
-                                                    //        Log.v(TAG, "Inserted Successfully");
-                                                    //    } else {
-                                                    //         Log.v(TAG, "User Record Is Already Inserted");
-                                                    //       }
-
-                                                    //Chris - if login is successful
-                                                    progressBar.setVisibility(View.INVISIBLE);
-
-                                                    Log.v(TAG, "Requesting OTP");
-                                                    Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
-
-                                                    //Chris - Intent to homepage and pass user id to it
-                                                    Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
-                                                    MainActivity.putExtra("User_UID", bundle);
-                                                    MainActivity.putExtra("PhoneNo", bundle2);
-
-                                                    Log.v(TAG, "sending this uid to main activity " + uid);
-                                                    startActivity(MainActivity);
-                                                    finish();
-
-                                            }
                                         }
+
                                         else {
                                             progressBar.setVisibility(View.INVISIBLE);
                                             Toast.makeText(LoginPage.this, "User is banned", Toast.LENGTH_LONG).show();
+                                            Log.v(TAG, "User is banned");
                                         }
                                     }
                                 }

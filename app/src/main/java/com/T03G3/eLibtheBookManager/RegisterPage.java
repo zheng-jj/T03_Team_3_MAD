@@ -1,4 +1,3 @@
-
 package com.T03G3.eLibtheBookManager;
 
 import android.annotation.SuppressLint;
@@ -24,7 +23,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.hbb20.CountryCodePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -33,7 +31,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterPage extends AppCompatActivity {
-    EditText EnterEmail,EnterPassword,EnterName,ConfirmPassword,phone;
+    EditText EnterEmail,EnterPassword,EnterName,ConfirmPassword,uniquekey;
     Button RegisterButton;
     FirebaseAuth Auth;
     DatabaseReference databaseReference;
@@ -41,7 +39,6 @@ public class RegisterPage extends AppCompatActivity {
     User user;
     String number;
     ProgressBar progressBar;
-    CountryCodePicker cp;
     long maxid=0;
     private static final String TAG = "RegisterPage";
     @Override
@@ -54,9 +51,8 @@ public class RegisterPage extends AppCompatActivity {
         ConfirmPassword=findViewById(R.id.ConfirmPassword);
         RegisterButton=findViewById(R.id.RegisterButton);
         progressBar =  findViewById(R.id.progressBar);
-        phone = (EditText) findViewById(R.id.phoneText);
-        cp = (CountryCodePicker) findViewById(R.id.ccp);
-        cp.registerCarrierNumberEditText(phone);
+
+        uniquekey=findViewById(R.id.Key);
         Auth = FirebaseAuth.getInstance();
         databaseReference= FirebaseDatabase.getInstance().getReference().child("Member");
         member = new Member();
@@ -80,13 +76,12 @@ public class RegisterPage extends AppCompatActivity {
             @SuppressLint("ShowToast")
             @Override
             public void onClick(View v) {
-                String email, password, name, confirmPassword,phoneno;
+                String email, password, name, confirmPassword,KEY;
                 email = EnterEmail.getText().toString();
                 password = EnterPassword.getText().toString();
                 name = EnterName.getText().toString();
-                phoneno=phone.getText().toString();
+                KEY=uniquekey.getText().toString();
                 confirmPassword = ConfirmPassword.getText().toString();
-                number=cp.getFullNumber();
                 //Chris - Verification for inputs
                 //Chris - Check for empty Inputs
                 if (name.equals("")) {
@@ -99,16 +94,7 @@ public class RegisterPage extends AppCompatActivity {
                     Toast.makeText(RegisterPage.this, "Email Required", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                if(phoneno.equals("")){
-                    Log.v(TAG, "Number Required");//Chris - Check for empty Inputs
-                    Toast.makeText(RegisterPage.this, "Phone Number Required", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if(phoneno.length()<7 ||phoneno.length()>15 ){
-                    Log.v(TAG, "Phone is not valid");//Chris - Check for empty Inputs
-                    Toast.makeText(RegisterPage.this, "Phone is not valid", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+
 
                 if (password.equals(""))//Chris - Check for empty Inputs
                 {
@@ -135,7 +121,13 @@ public class RegisterPage extends AppCompatActivity {
                     Log.v(TAG, "Password Do Not Match");
                     Toast.makeText(RegisterPage.this, "Password Do Not Match", Toast.LENGTH_SHORT).show();
                     return;
-                } else {
+                }
+                //Chris- make sure key input isnt empty
+                if (KEY.equals("")) {
+                    Log.v(TAG, "KEY Required");
+                    Toast.makeText(RegisterPage.this, "KEY Required", Toast.LENGTH_SHORT).show();
+                    return;
+                }else {
                     progressBar.setVisibility(View.VISIBLE);//Chris - For user to know that the data is being processed
                     //Authentication
                     Auth.createUserWithEmailAndPassword(email, confirmPassword).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -150,13 +142,12 @@ public class RegisterPage extends AppCompatActivity {
                             } else {
                                 progressBar.setVisibility(View.INVISIBLE);
                                 //Chris - Register is successful,saving user details to firebase database
-                                number=cp.getFullNumberWithPlus();
                                 member.setName(EnterName.getText().toString());
                                 member.setEmail(EnterEmail.getText().toString());
                                 member.setPassword(EnterPassword.getText().toString());
                                 member.setDeviceID("0");
-                                member.setPhonenumber(number);
                                 member.setBanned(false);
+                                member.setUniKey(uniquekey.getText().toString());
                                 //Chris -  Customised user id,make sure no two users have the same user id
                                 String id = String.valueOf(maxid + 1);
                                 //Chris - Add the user to firebase database
@@ -185,6 +176,8 @@ public class RegisterPage extends AppCompatActivity {
                                             data.put("email",EnterEmail.getText().toString());
                                             docRef.set(data);
                                             //Go to login page after user successfully registered
+                                            Log.v(TAG,"Registered Successfully");
+                                            Toast.makeText(RegisterPage.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                                             Intent login = new Intent(RegisterPage.this, LoginPage.class);
                                             startActivity(login);
                                             finish();

@@ -6,7 +6,7 @@ public class Member {
     private String Androidid;
     private String ID;
     private String password;
-    private String phonenumber;
+    private String UniKey;
     private Boolean banned;
 
     public Member(){}
@@ -42,13 +42,14 @@ public class Member {
         Androidid = androidid;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getUniKey() {
+        return UniKey;
     }
 
-    public void setPhonenumber(String Phonenumber) {
-        phonenumber = Phonenumber;
+    public void setUniKey(String KEY) {
+        UniKey = KEY;
     }
+
     public String getBanned() {
         return String.valueOf(banned);
     }
