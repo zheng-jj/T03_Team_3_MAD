@@ -1,8 +1,12 @@
 package com.T03G3.eLibtheBookManager;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,30 +17,41 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.T03G3.eLibtheBookManager.model.Book;
+import com.T03G3.eLibtheBookManager.model.Review;
 import com.T03G3.eLibtheBookManager.model.Reviews;
 import com.T03G3.eLibtheBookManager.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 public class reviewpageFragment extends Fragment {
@@ -111,27 +126,52 @@ public class reviewpageFragment extends Fragment {
                 holder.uName.setText(model.getUname());
                 holder.uReview.setText(model.getReview());
                 Log.d("Review",model.getReview());
-                String filename = "user" + (model.getUid())+".jpg";
 
-                Bitmap bmImg = BitmapFactory.decodeFile("/data/data/com.example.t03team3mad/app_imageDir/"+filename);
-                holder.uPic.setImageBitmap(bmImg);
-                holder.points.setText(String.valueOf(model.getVote()));
-                // clicking name directs to user page
-                holder.uName.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String idu = String.valueOf(model.getUid());
-                        DatabaseAccess DBaccess = DatabaseAccess.getInstance(f.getActivity().getApplicationContext());
-                        DBaccess.open();
-                        User user = DBaccess.searchuserbyid(idu);
-                        Bundle bundle = new Bundle();
-                        bundle.putParcelable("searchuser", user);
-                        fragment_user upage = new fragment_user();
-                        upage.setArguments(bundle);
-                        //jj-updated the way we add fragments into the view
-                        MainActivity.addFragment(upage,f.getActivity(),"userpage");
+                String filename = "user" + model.getUid()+".jpg";
+                AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
+                String path = null;
+                try {
+                    path = task.get();
+                    File check = new File(path);
+                    int count = 2;
+                    while(count>0){
+                        Log.v(TAG,"user image is not saved yet");
+                        if(check.exists()) {
+                            holder.uPic.setImageBitmap(BitmapFactory.decodeFile(path));
+                            holder.uPic.invalidate();
+                            if(holder.uPic.getDrawable() != null){
+                                try {
+                                    TimeUnit.MILLISECONDS.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                holder.uPic.setImageBitmap(BitmapFactory.decodeFile(path));
+                                break;
+                            }
+                            else {
+                                continue;
+                            }
+                        }
+                        else{
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        count=count-1;
                     }
-                });
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+                // clicking name directs to user page
+                linktouser(holder.uName, model);
                 upvote(model,holder.upvote);
 
 
@@ -177,6 +217,7 @@ public class reviewpageFragment extends Fragment {
         super.onStart();
         adapter.startListening();
     }
+
     //get id of activity used to storing data
     public void getaid(final String id, final Map<String, Object> data3){
         mCollectionRefuser.document(id).collection("Activity").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -280,6 +321,26 @@ public class reviewpageFragment extends Fragment {
         });
 
     }
+    public void linktouser(final TextView b, Reviews review){
+        mCollectionRefuser.document(review.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(final DocumentSnapshot documentSnapshot) {
+                b.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        User user = new User(Integer.parseInt(documentSnapshot.getId()),documentSnapshot.getString("name"),documentSnapshot.getString("isbn"),documentSnapshot.getString("desc"));
+                        Bundle bundle = new Bundle();
+                        bundle.putParcelable("searchuser", user);
+                        fragment_user upage = new fragment_user();
+                        upage.setArguments(bundle);
+                        //jj-updated the way we add fragments into the view
+                        MainActivity.addFragment(upage,f.getActivity(),"userpage");
+                    }
+                });
+            }
+        });
+    }
+
 }
 
 
