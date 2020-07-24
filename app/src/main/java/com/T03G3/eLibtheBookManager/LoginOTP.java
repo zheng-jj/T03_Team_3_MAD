@@ -43,15 +43,15 @@ public class LoginOTP extends AppCompatActivity {
         final String Email = bundle.getString("email");
         //Chris- get random number for otp
         emailsent=true;
-        random = new Random().nextInt(10000) + 1000;
+        if(emailsent=true){
+             random = new Random().nextInt(10000) + 1000;
 
-        //chris - make sure only one email is being sent
-        if(emailsent==true){
+            //chris - make sure only one email is being sent
+
             MailApi fd= new MailApi(LoginOTP.this,Email,"eLibTheBookManager Login OTP","Dear Sir/Mdm\n\nYour OTP to login is " +random+"\n\n Regards,\n Admins");
             fd.execute();
-            emailsent=false;
-
         }
+        emailsent=false;
 //chris- check otp
         sendcode.setOnClickListener(new View.OnClickListener() {
             @Override
