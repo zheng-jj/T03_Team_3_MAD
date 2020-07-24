@@ -74,7 +74,7 @@ public class LoginOTP extends AppCompatActivity {
                     Log.v(TAG,"Successfully Logged In");
                     databaseReference.child(UID).child("deviceID").setValue(androidId);
                     Intent MainActivity = new Intent(LoginOTP.this, MainActivity.class);
-                    MainActivity.putExtra("User_UID", UID);
+                    MainActivity.putExtra("User_UID", bundle);
                     startActivity(MainActivity);
                     finish();
                 }
