@@ -50,8 +50,9 @@ public class LoginOTP extends AppCompatActivity {
 
             MailApi fd= new MailApi(LoginOTP.this,Email,"eLibTheBookManager Login OTP","Dear Sir/Mdm\n\nYour OTP to login is " +random+"\n\n Regards,\n Admins");
             fd.execute();
+
+            emailsent=false;
         }
-        emailsent=false;
 //chris- check otp
         sendcode.setOnClickListener(new View.OnClickListener() {
             @Override
