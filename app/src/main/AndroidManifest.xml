@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="eLib: The Book Manager"
+        android:label="20 eLib: The Book Manager"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
