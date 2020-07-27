@@ -33,7 +33,7 @@
             style="?android:attr/borderlessButtonStyle"
             android:textSize="14dp"
             android:text="Follow"
-
+            android:textColor="#000000"
 
             />
         <Button
@@ -62,7 +62,8 @@
             android:layout_marginStart="136dp"
             android:layout_marginTop="44dp"
             android:textStyle="bold"
-            android:text="user name" />
+            android:text="user name"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/userDescription"
@@ -70,7 +71,8 @@
             android:layout_height="35dp"
             android:layout_marginStart="136dp"
             android:layout_marginTop="106dp"
-            android:text="user name" />
+            android:text="user name"
+            android:textColor="#000000"/>
 
         <TextView
             android:layout_width="match_parent"
@@ -78,7 +80,8 @@
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:background="@layout/border"
-            android:layout_marginTop="170dp" />
+            android:layout_marginTop="170dp"
+            android:textColor="#000000"/>
 
         <TextView
             android:id="@+id/pastreviews"
@@ -90,7 +93,8 @@
             android:gravity="center_vertical"
             android:layout_marginTop="170dp"
             android:textStyle="bold"
-            android:text="Past Reviews" />
+            android:text="Past Reviews"
+            android:textColor="#000000"/>
 
         <androidx.core.widget.NestedScrollView
             android:id="@+id/userReviews"
@@ -130,7 +134,8 @@
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:padding="0dp"
-            android:text="Favourite Books" />
+            android:text="Favourite Books"
+            android:textColor="#000000"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:paddingRight="10dp"

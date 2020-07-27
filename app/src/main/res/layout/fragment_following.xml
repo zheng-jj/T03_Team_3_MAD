@@ -5,15 +5,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
-    <androidx.appcompat.widget.LinearLayoutCompat
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="62dp"
+            android:gravity="center"
+            android:paddingTop="10dp"
+            android:paddingBottom="5dp"
+            android:text="Users You Follow"
+            android:textColor="#000000"
+            android:textSize="20dp">
+        </TextView>
         <androidx.recyclerview.widget.RecyclerView
+            android:layout_below="@id/header"
             android:id="@+id/followerrecycler"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.8">
+            android:layout_height="wrap_content">
         </androidx.recyclerview.widget.RecyclerView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </RelativeLayout>
 </FrameLayout>
