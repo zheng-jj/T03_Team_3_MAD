@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Random;
 
 
 public class LoginPage extends AppCompatActivity {
@@ -41,7 +40,6 @@ public class LoginPage extends AppCompatActivity {
     String uid;
     DatabaseReference databaseReference;
     ProgressBar progressBar;
-    int random;
     //jj-constructors to get the context of the login page from other fragments
     public LoginPage(Context context)
     {
