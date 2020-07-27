@@ -91,7 +91,7 @@
             android:id="@+id/forgotPassword"
             android:layout_width="213dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="100dp"
+            android:layout_marginLeft="118dp"
             android:text="Forgot Password?"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="15dp"

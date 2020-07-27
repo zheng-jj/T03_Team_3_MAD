@@ -71,12 +71,13 @@ public class ResetPasswordPage extends AppCompatActivity {
                     databaseReference.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            int i=1;
                             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                                if(snapshot.child("email").getValue().toString().equals(useremail)) {
+                                if (snapshot.child("email").getValue().toString().equals(useremail)) {
 
                                     uid = snapshot.getKey();
-                                    oldpassword=snapshot.child("password").getValue().toString();
-                                    Key=snapshot.child("uniKey").getValue().toString();
+                                    oldpassword = snapshot.child("password").getValue().toString();
+                                    Key = snapshot.child("uniKey").getValue().toString();
 
 
                                     resetemail.setVisibility(View.GONE);
@@ -84,6 +85,14 @@ public class ResetPasswordPage extends AppCompatActivity {
                                     proceed.setVisibility(View.VISIBLE);
                                     accountKEY.setVisibility(View.VISIBLE);
                                     break;
+                                }
+                                //Chris - if email does not exist in database
+                                if (i == (int) dataSnapshot.getChildrenCount()&& !snapshot.child("email").getValue().toString().equals(useremail) ){
+                                    Toast.makeText(ResetPasswordPage.this, "Email does not exist", Toast.LENGTH_SHORT).show();
+                                    break;
+                                }
+                                else{
+                                    i+=1;
                                 }
 
                             }
@@ -222,7 +231,8 @@ public class ResetPasswordPage extends AppCompatActivity {
                                                         }
                                                     }
                                                 });
-                                            } else {
+                                            }
+                                            else {
                                                 Log.d(TAG, "Please try again later");
                                                 Toast.makeText(ResetPasswordPage.this, "Please try again later", Toast.LENGTH_SHORT).show();
                                                 Intent MainActivity = new Intent(ResetPasswordPage.this, LoginPage.class);
