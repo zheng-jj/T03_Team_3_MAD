@@ -12,27 +12,31 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.T03G3.eLibtheBookManager.LoginOTP"/>
-        <activity android:name="com.T03G3.eLibtheBookManager.EditNotifications" />
-        <activity android:name="com.T03G3.eLibtheBookManager.ViewToGet" />
-        <activity android:name="com.T03G3.eLibtheBookManager.ResetPasswordPage" />
-        <activity android:name="com.T03G3.eLibtheBookManager.LoginPage">
+        <activity android:name=".Login_OTP"/>
+        <activity android:name=".EditNotifications" />
+        <activity android:name=".ViewToGet" />
+        <activity android:name=".ResetPasswordPage" />
+        <activity android:name=".LoginPage">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.T03G3.eLibtheBookManager.RegisterPage" />
+        <activity android:name=".RegisterPage" />
         <activity
-            android:name="com.T03G3.eLibtheBookManager.MainActivity"
+            android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan" />
-        <activity android:name="com.T03G3.eLibtheBookManager.feedfragment" />
+        <activity android:name=".feedfragment" />
+
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
             android:value="93495175815235124141252356125" />
+
         <service
-            android:name="com.T03G3.eLibtheBookManager.MyFirebaseMessagingService"
+            android:name=".MyFirebaseMessagingService"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

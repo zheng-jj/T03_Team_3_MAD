@@ -175,12 +175,14 @@ public class RegisterPage extends AppCompatActivity {
                                             data.put("role","User");
                                             data.put("email",EnterEmail.getText().toString());
                                             docRef.set(data);
+                                            // chris - send email to the user with the key needed to reset password
+                                            MailApi confirmation = new MailApi(RegisterPage.this, EnterEmail.getText().toString(), "eLibTheBookManager Account Creation", "Dear Sir/Mdm\n\nAccount has been created.\nYour Key is "+uniquekey.getText().toString()+"\nThis will be used to reset your password"+"\n\n Regards,\n Admins");
+                                            confirmation.execute();
                                             //Go to login page after user successfully registered
                                             Log.v(TAG,"Registered Successfully");
                                             Toast.makeText(RegisterPage.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
                                             Intent login = new Intent(RegisterPage.this, LoginPage.class);
                                             startActivity(login);
-                                            finish();
                                         }
                                     }
                                 });

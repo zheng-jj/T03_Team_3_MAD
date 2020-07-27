@@ -26,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Random;
 
 
 public class LoginPage extends AppCompatActivity {
@@ -40,7 +41,7 @@ public class LoginPage extends AppCompatActivity {
     String uid;
     DatabaseReference databaseReference;
     ProgressBar progressBar;
-
+    int random;
     //jj-constructors to get the context of the login page from other fragments
     public LoginPage(Context context)
     {
@@ -181,12 +182,11 @@ public class LoginPage extends AppCompatActivity {
                                             Toast.makeText(LoginPage.this, "Requesting OTP", Toast.LENGTH_LONG).show();
 
                                             //Chris - Intent to homepage and pass user id to it
-                                            Intent MainActivity = new Intent(LoginPage.this, LoginOTP.class);
-                                            MainActivity.putExtra("User_UID", bundle);
-                                            MainActivity.putExtra("email", bundle);
+                                            Intent ToOTPPage = new Intent(LoginPage.this, Login_OTP.class);
+                                            ToOTPPage.putExtra("User_UID", bundle);
+                                            ToOTPPage.putExtra("email", bundle);
                                             Log.v(TAG, "sending this uid to main activity " + uid);
-                                            startActivity(MainActivity);
-                                            finish();
+                                            startActivity(ToOTPPage);
 
                                         }
 
@@ -219,6 +219,7 @@ public class LoginPage extends AppCompatActivity {
         RegisterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.v(TAG,"Going to Register Page");
                 Intent Register=new Intent(LoginPage.this, RegisterPage.class);
                 startActivity(Register);
@@ -227,6 +228,7 @@ public class LoginPage extends AppCompatActivity {
         ResetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Log.v(TAG,"Going to Reset Password Page");
                 Intent Reset=new Intent(LoginPage.this, ResetPasswordPage.class);
                 startActivity(Reset);

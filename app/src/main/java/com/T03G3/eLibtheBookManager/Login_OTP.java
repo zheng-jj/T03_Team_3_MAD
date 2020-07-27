@@ -17,13 +17,12 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Random;
 
-public class LoginOTP extends AppCompatActivity {
+public class Login_OTP extends AppCompatActivity {
     EditText Entercode;
     Button sendcode;
-    int random;
     SharedPreferences Auto_login;
     DatabaseReference databaseReference;
-    Boolean emailsent;
+    int random;
     private static final String TAG = "";
 
     @Override
@@ -41,43 +40,37 @@ public class LoginOTP extends AppCompatActivity {
         final Bundle bundle = intent.getExtras().getBundle("User_UID");
         final String UID = bundle.getString("User_UID");
         final String Email = bundle.getString("email");
-        //Chris- get random number for otp
-        emailsent=true;
-        if(emailsent=true){
-             random = new Random().nextInt(10000) + 1000;
+        random = new Random().nextInt(10000) + 1000;
 
-            //chris - make sure only one email is being sent
+        //chris - make sure only one email is being sent
+        MailApi fd = new MailApi(Login_OTP.this, Email, "eLibTheBookManager Login OTP", "Dear Sir/Mdm\n\nYour OTP to login is " + random + "\n\n Regards,\n Admins");
+        fd.execute();
 
-            MailApi fd= new MailApi(LoginOTP.this,Email,"eLibTheBookManager Login OTP","Dear Sir/Mdm\n\nYour OTP to login is " +random+"\n\n Regards,\n Admins");
-            fd.execute();
-
-            emailsent=false;
-        }
-//chris- check otp
+        //chris- check otp
         sendcode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String otp=Entercode.getText().toString().trim();
-                if(otp.equals("")){
-                    Toast.makeText(LoginOTP.this, "Enter OTP", Toast.LENGTH_SHORT).show();
-                    Log.v(TAG,"Enter OTP to proceed");
+                String otp = Entercode.getText().toString().trim();
+                if (otp.equals("")) {
+                    Toast.makeText(Login_OTP.this, "Enter OTP", Toast.LENGTH_SHORT).show();
+                    Log.v(TAG, "Enter OTP to proceed");
                     return;
                 }
                 if (!otp.equals(String.valueOf(random))) {
-                    Toast.makeText(LoginOTP.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
-                    Log.v(TAG,"Incorrect OTP");
+                    Toast.makeText(Login_OTP.this, "Incorrect OTP", Toast.LENGTH_SHORT).show();
+                    Log.v(TAG, "Incorrect OTP");
                     return;
                 }
-
                 else{
-                    Auto_login.edit().putBoolean("logged",true).apply();
-                    Log.v(TAG,"Successfully Logged In");
+                    Log.v(TAG, "Successfully Logged In");
                     databaseReference.child(UID).child("deviceID").setValue(androidId);
-                    Intent MainActivity = new Intent(LoginOTP.this, MainActivity.class);
+                    Auto_login.edit().putBoolean("logged", true).apply();
+                    Intent MainActivity = new Intent(Login_OTP.this, MainActivity.class);
                     MainActivity.putExtra("User_UID", bundle);
                     startActivity(MainActivity);
                     finish();
                 }
+
             }
         });
     }
