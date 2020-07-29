@@ -38,6 +38,7 @@
             android:layout_toRightOf="@id/img">
 
             <TextView
+                android:textColor="#000"
                 android:id="@+id/title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,6 +48,7 @@
                 android:textStyle="bold"></TextView>
 
             <TextView
+                android:textColor="#000"
                 android:id="@+id/bookdes"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
