@@ -19,6 +19,8 @@
             android:textSize="20dp"
             android:text="eLib: The Book Manager"></TextView>
         <TextView
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:layout_below="@id/header"
             android:id="@+id/genrestext"
             android:layout_width="match_parent"
@@ -39,6 +41,8 @@
             android:padding='5dp'
             android:scrollbars="none" />
         <TextView
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:layout_marginTop="10dp"
             android:layout_below="@id/genrelistrecyclerview"
             android:layout_width="match_parent"
@@ -64,7 +68,8 @@
 
         <TextView
             android:id="@+id/popularbookstext"
-
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/recommendbookrecyclerview"

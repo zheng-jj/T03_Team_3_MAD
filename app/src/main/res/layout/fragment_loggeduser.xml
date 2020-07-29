@@ -100,7 +100,9 @@
             android:layout_alignParentTop="true"
             android:padding="0dp"
             android:layout_marginTop="215dp"
-            android:textColor="#000000"/>
+            android:textColor="#000000"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"/>
         <TextView
             android:id="@+id/pastreviews"
             android:layout_width="match_parent"
@@ -125,6 +127,8 @@
             android:layout_below="@id/pastreviews"
             android:layout_marginTop="0dp">
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginLeft="10px"
+                android:layout_marginRight="10px"
                 android:background="@layout/border"
                 android:id="@+id/userreviewprofile"
                 android:layout_width="match_parent"
@@ -140,7 +144,9 @@
             android:layout_width="match_parent"
             android:layout_height="35dp"
             android:layout_below="@id/userReviews"
-            android:layout_marginTop="10dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"/>
 
         <TextView
             android:padding="0dp"
@@ -161,9 +167,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/favouritebooks"
-
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
+            android:layout_marginLeft="10px"
+            android:layout_marginRight="10px"
             android:background="@layout/border"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
