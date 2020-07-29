@@ -1,51 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/authorprofile"
+    android:id="@+id/searchbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".reviewpageFragment">
+    tools:context=".searchbarFragment">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:layout_width="match_parent"
-        android:layout_height="671dp"
-        android:orientation="vertical">
-
+    <RelativeLayout
+        android:layout_height="match_parent"
+        android:layout_width="match_parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:background="#adcbe3"
-
-            >
-
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:id="@+id/desc"
+            android:orientation="horizontal"
+            android:background="#adcbe3">
             <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:id="@+id/bookimg"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="55dp"
                 ></ImageView>
-
             <TextView
-                android:id="@+id/rtitle"
-                android:layout_width="180dp"
-                android:layout_height="45dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:textSize="20sp"
-                android:layout_marginTop="5dp"
-                ></TextView>
-
-
+                android:id="@+id/rtitle"></TextView>
         </LinearLayout>
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rRecyclerView"
-            android:layout_width="410dp"
-            android:layout_height="0dp"
-            android:layout_weight="0.8">
+            android:layout_below="@+id/desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
-        </androidx.recyclerview.widget.RecyclerView>
-    </androidx.appcompat.widget.LinearLayoutCompat>
+    </RelativeLayout>
 </FrameLayout>

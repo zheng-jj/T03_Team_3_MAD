@@ -58,6 +58,7 @@ public class reviewpageFragment extends Fragment {
     private static final String TAG = "authorprofileFragment";
     Map<Integer, Reviews> data = new HashMap<Integer, Reviews>();
     String name;
+    String setname;
     Fragment f;
     String isbn;
     String Title;
@@ -122,63 +123,16 @@ public class reviewpageFragment extends Fragment {
 
             @Override
             protected void onBindViewHolder(@NonNull ReviewViewHolder holder, int position, @NonNull final Reviews model) {
-                // set text for holders
-                holder.uName.setText(model.getUname());
-                holder.uReview.setText(model.getReview());
-                Log.d("Review",model.getReview());
 
-                String filename = "user" + model.getUid()+".jpg";
-                AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
-                String path = null;
-                try {
-                    path = task.get();
-                    File check = new File(path);
-                    int count = 2;
-                    while(count>0){
-                        Log.v(TAG,"user image is not saved yet");
-                        if(check.exists()) {
-                            holder.uPic.setImageBitmap(BitmapFactory.decodeFile(path));
-                            holder.uPic.invalidate();
-                            if(holder.uPic.getDrawable() != null){
-                                try {
-                                    TimeUnit.MILLISECONDS.sleep(100);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                                holder.uPic.setImageBitmap(BitmapFactory.decodeFile(path));
-                                break;
-                            }
-                            else {
-                                continue;
-                            }
-                        }
-                        else{
-                            try {
-                                Thread.sleep(100);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                        count=count-1;
-                    }
-                } catch (ExecutionException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+                getname(model,holder);
 
 
 
-
-                // clicking name directs to user page
-                linktouser(holder.uName, model);
-                upvote(model,holder.upvote);
 
 
 
             }
         };
-        mFirestoreList.setHasFixedSize(true);
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this.getActivity()));
         mFirestoreList.setAdapter(adapter);
 
@@ -339,6 +293,69 @@ public class reviewpageFragment extends Fragment {
                 });
             }
         });
+    }
+    public void getname(final Reviews model, final ReviewViewHolder holder){
+
+        mCollectionRefuser.document(model.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                setname = documentSnapshot.getString("name");
+                Log.d("Name",setname);
+                holder.uName.setText(setname);
+                holder.uReview.setText(model.getReview());
+                holder.points.setText(String.valueOf(model.getVote()));
+                Log.d("Review",model.getReview());
+
+                String filename = "user" + model.getUid()+".jpg";
+                AsyncTask<String, Void, String> task = new FirebaseStorageImages().execute(filename);
+                String path = null;
+                try {
+                    path = task.get();
+                    File check = new File(path);
+                    int count = 2;
+                    while(count>0){
+                        Log.v(TAG,"user image is not saved yet");
+                        if(check.exists()) {
+                            holder.uPic.setImageBitmap(BitmapFactory.decodeFile(path));
+                            holder.uPic.invalidate();
+                            if(holder.uPic.getDrawable() != null){
+                                try {
+                                    TimeUnit.MILLISECONDS.sleep(100);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                holder.uPic.setImageBitmap(BitmapFactory.decodeFile(path));
+                                break;
+                            }
+                            else {
+                                continue;
+                            }
+                        }
+                        else{
+                            try {
+                                Thread.sleep(100);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        count=count-1;
+                    }
+                } catch (ExecutionException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+                // clicking name directs to user page
+                linktouser(holder.uName, model);
+                upvote(model,holder.upvote);
+            }
+
+        });
+
     }
 
 }

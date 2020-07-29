@@ -77,7 +77,7 @@ public class feedfragment extends AppCompatActivity {
 
             }
         };
-        mFirestoreList.setHasFixedSize(true);
+
         mFirestoreList.setLayoutManager(new LinearLayoutManager(this));
         mFirestoreList.setAdapter(adapter);
 

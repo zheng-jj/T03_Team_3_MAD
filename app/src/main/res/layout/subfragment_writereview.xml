@@ -1,109 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/reviewpg"
+    android:id="@+id/searchbar"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    tools:context=".searchbarFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <RelativeLayout
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"
-            android:background="#adcbe3"
-
-            >
-
+            android:layout_height="100dp"
+            android:gravity="center"
+            android:id="@+id/desc2"
+            android:orientation="horizontal"
+            android:background="#adcbe3">
             <ImageView
+                android:layout_width="75dp"
+                android:layout_height="75dp"
                 android:id="@+id/bookimg2"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="55dp"></ImageView>
-
+                ></ImageView>
             <TextView
-                android:id="@+id/rtitle2"
-                android:layout_width="180dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="5dp"
-                android:textSize="20sp"></TextView>
-
-
+                android:textSize="30sp"
+                android:id="@+id/rtitle2"></TextView>
         </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.8">
 
-            <RatingBar
-                android:id="@+id/ratingBar"
-                android:layout_width="wrap_content"
-                android:layout_height="74dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginTop="68dp"
-                android:layout_marginEnd="86dp"
-                android:layout_marginBottom="360dp"
-                android:numStars="5"
-                android:stepSize="0.5"></RatingBar>
-
-            <TextView
-                android:layout_width="192dp"
-                android:layout_height="74dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="113dp"
-                android:layout_marginBottom="439dp"
-                android:text="Ratings"
-                android:textAlignment="center"
-                android:textSize="40sp"></TextView>
-
-            <TextView
-                android:layout_width="197dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="113dp"
-                android:layout_marginBottom="301dp"
-                android:text="Review"
-                android:textAlignment="center"
-                android:textSize="40sp"></TextView>
-
-            <EditText
-                android:layout_width="306dp"
-                android:layout_height="168dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="49dp"
-                android:layout_marginBottom="124dp"
-                android:id="@+id/reviewinput"
-                android:hint="Review here"
-                android:textAlignment="textStart"
-                android:maxLines="3"
-                android:inputType="text"></EditText>
-
-            <Button
-                android:layout_width="150dp"
-                android:layout_height="60dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="125dp"
-                android:layout_marginBottom="41dp"
-                android:text="Add"
-                android:textSize="20sp"
-                android:id="@+id/enter"></Button>
-        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/desc2"
+            android:layout_marginTop="40dp"
+            android:text="Ratings"
+            android:id="@+id/ratetext"
+            android:textSize="30sp"
+            android:layout_centerInParent="true"
+            ></TextView>
+        <RatingBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:layout_marginTop="40dp"
+            android:layout_below="@+id/ratetext"
+            android:layout_centerInParent="true"
+            android:id="@+id/ratingBar"></RatingBar>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ratingBar"
+            android:layout_marginTop="40dp"
+            android:text="Review"
+            android:layout_centerInParent="true"
+            android:id="@+id/reviewtext"
+            android:textSize="30sp"></TextView>
+        <EditText
+            android:layout_width="300dp"
+            android:layout_height="150dp"
+            android:maxLines="3"
+            android:layout_below="@+id/reviewtext"
+            android:layout_marginTop="40dp"
+            android:hint="Review Here"
+            android:id="@+id/reviewinput"
+            android:layout_centerInParent="true"
+            android:textSize="20sp"
+            android:inputType="text"></EditText>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Review"
+            android:layout_below="@+id/reviewinput"
+            android:id="@+id/enter"
+            android:layout_marginTop="20dp"
+            android:layout_centerInParent="true"
+            style="?android:attr/borderlessButtonStyle"
+            ></Button>
 
 
-    </LinearLayout>
-
-
+    </RelativeLayout>
 </FrameLayout>
