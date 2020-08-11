@@ -101,6 +101,22 @@ Created methods to search database for the search functionality
 
 Created User, Author, Book and Searchclass models
 
+ADVANCED
+--------
+Added Upload Books feature
+
+Added Verify Books feature
+
+Added Ban Users Feature
+
+Added Unban Users Feature
+
+Added View Reports Feature
+
+Brought Search over to API and Firestore
+
+Wrote methods to get book from API
+
 
 # Christopher Tey Weixian
 # Things Implemented:
