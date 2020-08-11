@@ -106,7 +106,7 @@ Linked book information fragment to its review page
 Linked clicking on name of reviewer on review page to the reviewer's profile
 
 # Chua Qi Heng
-# Things Implemented:
+Basic Features (Completed in Assignment 1):
 ---------------------
 Added parcelable to Book, Author and User classes so people can bring objects to another fragment
 
@@ -128,7 +128,7 @@ Created methods to search database for the search functionality
 
 Created User, Author, Book and Searchclass models
 
-ADVANCED
+Advanced Features (Completed in Assignment 2):
 --------
 Added Upload Books feature
 
@@ -142,7 +142,7 @@ Added View Reports Feature
 
 Brought Search over to API and Firestore
 
-Wrote methods to get book from API
+ASync method to retrieve specific book from google books api
 
 
 # Christopher Tey Weixian
