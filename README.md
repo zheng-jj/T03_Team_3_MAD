@@ -19,7 +19,7 @@ This application also allows users to manage the books they are interested in, o
 # Contributions
 
 # Zheng Jiong Jie
-# Things Implemented:
+# Things Implemented (Completed in Assignment 1):
 ---------------------
 Set up how fragments will be displayed
 
@@ -57,11 +57,13 @@ Custom Backstack
 
 Navigation
 
-# Advanced Features:
+# Advanced Features (Completed in Assignment 2):
 
-Moved user account data to firestore
+Moved all user account data to firestore
 
 Moved user profile image to firebase storage
+
+Moved user favourite books and follow users to firestore
 
 Enable notifications based on user actions (when users you follow do something, notifications are sent)
 
@@ -73,11 +75,11 @@ Async method to load book covers from respective URL links
 
 Created page to get details on where books can be obtained
 
-Async methods to get book prices from different vendors (from real online offers) using DirectTextBook ApI
+Async methods to get book prices from different vendors (from real online offers) using DirectTextBook ApI and load data in a recycler view
 
 Async methods to get eBook availability from Google Books API
 
-Get book availability from National Library Board (using NLB API)
+Get book availability from National Library Board (using NLB API) for each copy of the book available and load data in a recycler view
 
 # Swah Jian Oon
 # Things Implemented:
