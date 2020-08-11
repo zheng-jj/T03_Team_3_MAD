@@ -19,8 +19,10 @@ This application also allows users to manage the books they are interested in, o
 # Contributions
 
 # Zheng Jiong Jie
-# Things Implemented (Completed in Assignment 1):
+
+Basic Features (Completed in Assignment 1):
 ---------------------
+
 Set up how fragments will be displayed
 
 Created User page
