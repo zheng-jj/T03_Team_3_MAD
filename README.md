@@ -57,7 +57,8 @@ Custom Backstack
 
 Navigation
 
-# Advanced Features (Completed in Assignment 2):
+Advanced Features (Completed in Assignment 2):
+---------------------
 
 Moved all user account data to firestore
 
