@@ -128,3 +128,11 @@ Linked the 2 recycler view fragments to each other and linked the bookbygenre fr
 Created the recycler view for genre in the bookinfo fragment
 
 Created the adaptors of "AdaptorGenreInHomeFragment" ,"AdaptorGenre" and "AdaptorToViewBookBasedOnGenre".
+
+Created APIaccessSearchGenre
+
+Created LoginOTP page
+
+Created MailApi file
+
+Created ResetPasswordPage page
