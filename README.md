@@ -57,6 +57,28 @@ Custom Backstack
 
 Navigation
 
+# Advanced Features:
+
+Moved user account data to firestore
+
+Moved user profile image to firebase storage
+
+Enable notifications based on user actions (when users you follow do something, notifications are sent)
+
+Settings page to edit notifications to be recieved
+
+Async method to retrieve books from Google Books API
+
+Async method to load book covers from respective URL links
+
+Created page to get details on where books can be obtained
+
+Async methods to get book prices from different vendors (from real online offers) using DirectTextBook ApI
+
+Async methods to get eBook availability from Google Books API
+
+Get book availability from National Library Board (using NLB API)
+
 # Swah Jian Oon
 # Things Implemented:
 ---------------------
