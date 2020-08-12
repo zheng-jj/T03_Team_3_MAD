@@ -92,7 +92,7 @@ Added Feed page to know get more information on people you are following
 
 Feed page and review page uses firestore recycler adapter which has updates the recyclerview real-time
 
-Added email to user regarding admin actions from admin account
+Added email to user regarding admin actions from admin account using javamail
 
 
 # Swah Jian Oon
