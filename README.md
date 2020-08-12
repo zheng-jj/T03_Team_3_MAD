@@ -1,3 +1,5 @@
+Please note, Branchfix is the default branch rather than master
+
 # T03_Team_3_MAD
 
 Team members
