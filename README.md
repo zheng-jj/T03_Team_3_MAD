@@ -171,7 +171,7 @@ ASync method to retrieve specific book from google books api
 
 Implemented Admin and User roles to user
 
-Banned users cannot login
+
 
 
 # Christopher Tey Weixian
