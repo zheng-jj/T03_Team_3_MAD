@@ -133,7 +133,7 @@ Report users page
 # Chua Qi Heng
 Basic Features (Completed in Assignment 1):
 ---------------------
-Added parcelable to Book, Author and User classes so people can bring objects to another fragment
+Added parcelable to Book and User classes so people can bring objects to another fragment
 
 Added clicking functionality to adapters
 
@@ -143,15 +143,11 @@ Added method to save images to internal storage
 
 Added method to set image with String.
 
-Added recycler view for author to show published books.
-
-Created Author Info page and set all the information inside
-
-Passed object information to Book, Author and User Info so that other people can use the info
+Passed object information to Book and User Info so that other people can use the info
 
 Created methods to search database for the search functionality
 
-Created User, Author, Book and Searchclass models
+Created User, Book and Searchclass models
 
 Advanced Features (Completed in Assignment 2):
 --------
@@ -167,11 +163,16 @@ Added View Reports Feature
 
 Brought Search over to API and Firestore
 
+Modified code so that API books searched can get info and pass to bookinfo fragment
+
+Allowed Uploaded books to interact properly with actions
+
 ASync method to retrieve specific book from google books api
 
 Implemented Admin and User roles to user
 
-Change ban status of user in real time database
+Banned users cannot login
+
 
 # Christopher Tey Weixian
 # Things Implemented:
@@ -216,6 +217,4 @@ Added the need to enter an unique key in account registering page
 
 Account created will be given user role and email will be send with account key to the user after registering.
 
-Change the retrival of the recommended books displayed from local database to firestore
-
-Banned users cannot login
+Change the retrival of the recommedated books displayed from local database to firestore
