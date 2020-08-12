@@ -19,8 +19,10 @@ This application also allows users to manage the books they are interested in, o
 # Contributions
 
 # Zheng Jiong Jie
-# Things Implemented:
+
+Basic Features (Completed in Assignment 1):
 ---------------------
+
 Set up how fragments will be displayed
 
 Created User page
@@ -57,6 +59,44 @@ Custom Backstack
 
 Navigation
 
+Added upvoting of reviews
+
+Advanced Features (Completed in Assignment 2):
+---------------------
+
+Moved all user account data to firestore
+
+Moved user profile image to firebase storage
+
+Moved user favourite books and follow users to firestore
+
+Moved reviews to firestore
+
+Enable notifications based on user actions (when users you follow do something, notifications are sent)
+
+Settings page to edit notifications to be recieved
+
+Async method to retrieve books from Google Books API
+
+Async method to load book covers from respective URL links
+
+Created page to get details on where books can be obtained
+
+Async methods to get book prices from different vendors (from real online offers) using DirectTextBook ApI and load data in a recycler view
+
+Async methods to get eBook availability from Google Books API
+
+Get book availability from National Library Board (using NLB API) for each copy of the book available and load data in a recycler view
+
+Added Feed page to know get more information on people you are following
+
+Feed page and review page uses firestore recycler adapter which has updates the recyclerview real-time
+
+Added email to user regarding admin actions from admin account using javamail
+
+Report form to report user abuse which can be banned by admin
+
+
 # Swah Jian Oon
 # Things Implemented:
 ---------------------
@@ -78,8 +118,20 @@ Linked book information fragment to its review page
 
 Linked clicking on name of reviewer on review page to the reviewer's profile
 
+Added Feed page for following people you know
+
+Changed from normal recyclerview to firestore recyclerview for real-time updates for feed and reviews
+
+Added upvoting of reviews
+
+Implemented emailing methods
+
+Created popular books recyclerview for homepage
+
+Report users page
+
 # Chua Qi Heng
-# Things Implemented:
+Basic Features (Completed in Assignment 1):
 ---------------------
 Added parcelable to Book, Author and User classes so people can bring objects to another fragment
 
@@ -100,6 +152,26 @@ Passed object information to Book, Author and User Info so that other people can
 Created methods to search database for the search functionality
 
 Created User, Author, Book and Searchclass models
+
+Advanced Features (Completed in Assignment 2):
+--------
+Added Upload Books feature
+
+Added Verify Books feature
+
+Added Ban Users Feature
+
+Added Unban Users Feature
+
+Added View Reports Feature
+
+Brought Search over to API and Firestore
+
+ASync method to retrieve specific book from google books api
+
+Implemented Admin and User roles to user
+
+Banned users cannot login
 
 
 # Christopher Tey Weixian
@@ -129,10 +201,20 @@ Created the recycler view for genre in the bookinfo fragment
 
 Created the adaptors of "AdaptorGenreInHomeFragment" ,"AdaptorGenre" and "AdaptorToViewBookBasedOnGenre".
 
-Created APIaccessSearchGenre
+Advanced Features (Completed in Assignment 2):
+--------
+Login otp page
 
-Created LoginOTP page
+Reset password page
 
-Created MailApi file
+Check deviceid when auto logging in
 
-Created ResetPasswordPage page
+Retrieve all the books by the genre pressed by the user from the API
+
+Mail api file
+
+Added the need to enter an unique key in account registering page
+
+Account created will be given user role and email will be send with account key to the user after registering.
+
+Change the retrival of the recommedated books displayed from local database to firestore
