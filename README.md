@@ -171,8 +171,7 @@ ASync method to retrieve specific book from google books api
 
 Implemented Admin and User roles to user
 
-Banned users cannot login
-
+Change ban status of user in real time database
 
 # Christopher Tey Weixian
 # Things Implemented:
@@ -217,4 +216,6 @@ Added the need to enter an unique key in account registering page
 
 Account created will be given user role and email will be send with account key to the user after registering.
 
-Change the retrival of the recommedated books displayed from local database to firestore
+Change the retrival of the recommended books displayed from local database to firestore
+
+Banned users cannot login
