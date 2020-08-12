@@ -94,6 +94,8 @@ Feed page and review page uses firestore recycler adapter which has updates the 
 
 Added email to user regarding admin actions from admin account using javamail
 
+Report form to report user abuse which can be banned by admin
+
 
 # Swah Jian Oon
 # Things Implemented:
@@ -125,6 +127,8 @@ Added upvoting of reviews
 Implemented emailing methods
 
 Created popular books recyclerview for homepage
+
+Report users page
 
 # Chua Qi Heng
 Basic Features (Completed in Assignment 1):
