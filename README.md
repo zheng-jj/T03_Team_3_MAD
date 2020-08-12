@@ -171,8 +171,7 @@ ASync method to retrieve specific book from google books api
 
 Implemented Admin and User roles to user
 
-
-
+Banned users wil be removed from search, following lists and will not be able to interact with others on the app.
 
 # Christopher Tey Weixian
 # Things Implemented:
