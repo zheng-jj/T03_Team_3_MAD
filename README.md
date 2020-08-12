@@ -59,6 +59,8 @@ Custom Backstack
 
 Navigation
 
+Added upvoting of reviews
+
 Advanced Features (Completed in Assignment 2):
 ---------------------
 
@@ -67,6 +69,8 @@ Moved all user account data to firestore
 Moved user profile image to firebase storage
 
 Moved user favourite books and follow users to firestore
+
+Moved reviews to firestore
 
 Enable notifications based on user actions (when users you follow do something, notifications are sent)
 
@@ -83,6 +87,13 @@ Async methods to get book prices from different vendors (from real online offers
 Async methods to get eBook availability from Google Books API
 
 Get book availability from National Library Board (using NLB API) for each copy of the book available and load data in a recycler view
+
+Added Feed page to know get more information on people you are following
+
+Feed page and review page uses firestore recycler adapter which has updates the recyclerview real-time
+
+Added email to user regarding admin actions from admin account
+
 
 # Swah Jian Oon
 # Things Implemented:
@@ -104,6 +115,16 @@ Created add review page
 Linked book information fragment to its review page 
 
 Linked clicking on name of reviewer on review page to the reviewer's profile
+
+Added Feed page for following people you know
+
+Changed from normal recyclerview to firestore recyclerview for real-time updates for feed and reviews
+
+Added upvoting of reviews
+
+Implemented emailing methods
+
+Created popular books recyclerview for homepage
 
 # Chua Qi Heng
 Basic Features (Completed in Assignment 1):
