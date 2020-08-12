@@ -200,3 +200,21 @@ Linked the 2 recycler view fragments to each other and linked the bookbygenre fr
 Created the recycler view for genre in the bookinfo fragment
 
 Created the adaptors of "AdaptorGenreInHomeFragment" ,"AdaptorGenre" and "AdaptorToViewBookBasedOnGenre".
+
+Advanced Features (Completed in Assignment 2):
+--------
+Login otp page
+
+Reset password page
+
+Check deviceid when auto logging in
+
+Retrieve all the books by the genre pressed by the user from the API
+
+Mail api file
+
+Added the need to enter an unique key in account registering page
+
+Account created will be given user role and email will be send with account key to the user after registering.
+
+Change the retrival of the recommedated books displayed from local database to firestore
